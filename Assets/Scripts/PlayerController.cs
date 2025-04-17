@@ -4,33 +4,38 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movimento")]
-    public float moveSpeed = 5f;
-    public float jumpForce = 12f;
+    public float moveSpeed = 2.5f;
+    public float jumpForce = 6.5f;
 
-    [Header("Checagem de chão")]
-    public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
-    public LayerMask groundLayer;
-
-    [Header("Checagem de parede")]
-    public Transform wallCheckLeft;
-    public Transform wallCheckRight;
-    public float wallCheckDistance = 0.1f;
-    public LayerMask wallLayer;
-    public float wallSlideSpeed = 0.5f;
+    [Header("Wall Slide")]
+    public float wallSlideSpeed = 0.4f;
 
     [Header("Wall Jump")]
-    public Vector2 wallJumpForce = new Vector2(8f, 12f);
+    public float wallJumpingTime = 0.2f;
+    public float wallJumpingDuration = 0.4f;
+    public Vector2 wallJumpingPower = new Vector2(2.5f, 6.5f);
+
+    [Header("Checagem de chão/parede")]
+    public Transform groundCheck;
+    public Transform wallCheck;
+    public float checkRadius = 0.1f;
+    public LayerMask groundLayer;
+    public LayerMask wallLayer;
 
     private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer sr;
 
+    private float horizontal;
+    private bool isFacingRight = true;
     private bool isGrounded;
     private bool wasGrounded;
-    private bool isAttacking;
-    private bool isTouchingWall;
     private bool isWallSliding;
+    private bool isWallJumping;
+    private float wallJumpingDirection;
+    private float wallJumpingCounter;
+
+    private bool isAttacking;
 
     void Start()
     {
@@ -41,33 +46,75 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float moveInput = Input.GetAxisRaw("Horizontal");
+        
+        horizontal = Input.GetAxisRaw("Horizontal");
 
-        // Movimento horizontal
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        // Checa estados
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        bool isWalled = Physics2D.OverlapCircle(wallCheck.position, checkRadius, wallLayer);
 
-        // Flip do sprite normal
-        if (moveInput != 0 && !isWallSliding)
-            sr.flipX = moveInput < 0;
+        // Wall Slide
+        if (isWalled && !isGrounded && !isWallJumping)
+        {
+            isWallSliding = true;
+            rb.linearVelocity = new Vector2(0f, Mathf.Clamp(rb.linearVelocity.y, -wallSlideSpeed, float.MaxValue));
+            anim.Play("WallSlide");
 
-        // Pulo comum e wall jump
+            // Flip correto baseado na parede
+            if (wallCheck.position.x < transform.position.x)
+            {
+                // Parede à esquerda
+                if (!isFacingRight)
+                {
+                    isFacingRight = true;
+                    Flip();
+                }
+            }
+            else
+            {
+                // Parede à direita
+                if (isFacingRight)
+                {
+                    isFacingRight = false;
+                    Flip();
+                }
+            }
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+
+        // Wall Jump setup
+        if (isWallSliding)
+        {
+            wallJumpingDirection = -transform.localScale.x;
+            wallJumpingCounter = wallJumpingTime;
+
+            CancelInvoke(nameof(StopWallJumping));
+        }
+        else
+        {
+            wallJumpingCounter -= Time.deltaTime;
+        }
+
+        // Pulo
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (isWallSliding)
+            if (isWallSliding || (wallJumpingCounter > 0f && !isGrounded && isWalled))
             {
-                // Wall jump direção contrária à parede
-                if (Physics2D.Raycast(wallCheckLeft.position, Vector2.left, wallCheckDistance, wallLayer))
+                isWallJumping = true;
+                rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+                wallJumpingCounter = 0f;
+
+                if (transform.localScale.x != wallJumpingDirection)
                 {
-                    rb.linearVelocity = new Vector2(wallJumpForce.x, wallJumpForce.y); // pulo pra direita
-                    sr.flipX = false;
-                }
-                else if (Physics2D.Raycast(wallCheckRight.position, Vector2.right, wallCheckDistance, wallLayer))
-                {
-                    rb.linearVelocity = new Vector2(-wallJumpForce.x, wallJumpForce.y); // pulo pra esquerda
-                    sr.flipX = true;
+                    isFacingRight = !isFacingRight;
+                    Flip();
                 }
 
                 anim.SetTrigger("Jump");
+                Invoke(nameof(StopWallJumping), wallJumpingDuration);
             }
             else if (isGrounded)
             {
@@ -90,36 +137,48 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Wall Slide lógica
-        if (!isGrounded && isTouchingWall && rb.linearVelocity.y < 0)
+        // Flip durante movimentação normal
+        if (!isWallJumping && !isWallSliding && horizontal != 0f)
         {
-            isWallSliding = true;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -wallSlideSpeed);
-            anim.Play("WallSlide");
-
-            // Corrigir flip durante wall slide
-            if (Physics2D.Raycast(wallCheckLeft.position, Vector2.left, wallCheckDistance, wallLayer))
-                sr.flipX = true;
-            else if (Physics2D.Raycast(wallCheckRight.position, Vector2.right, wallCheckDistance, wallLayer))
-                sr.flipX = false;
-        }
-        else
-        {
-            isWallSliding = false;
+            if (horizontal < 0 && isFacingRight || horizontal > 0 && !isFacingRight)
+            {
+                isFacingRight = !isFacingRight;
+                Flip();
+            }
         }
 
-        // Atualiza parâmetros do Animator
-        anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
-        anim.SetFloat("YVelocity", rb.linearVelocity.y);
-        anim.SetBool("IsGrounded", isGrounded);
-
-        // Aterrissagem
+        // Aterrissagem (Land)
         if (!wasGrounded && isGrounded)
         {
             anim.SetTrigger("Land");
         }
-
         wasGrounded = isGrounded;
+
+        // Animações base
+        anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        anim.SetFloat("YVelocity", rb.linearVelocity.y);
+        anim.SetBool("IsGrounded", isGrounded);
+    }
+
+    private void FixedUpdate()
+    {
+        // NÃO sobrescreve velocity.x durante WallSlide
+        if (!isWallJumping && !isWallSliding)
+        {
+            rb.linearVelocity = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
+        }
+    }
+
+    private void StopWallJumping()
+    {
+        isWallJumping = false;
+    }
+
+    private void Flip()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x *= -1f;
+        transform.localScale = scale;
     }
 
     private IEnumerator ResetAttack(float delay)
@@ -129,41 +188,18 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Ataque destravado automaticamente.");
     }
 
-    void FixedUpdate()
-    {
-        // Checa chão
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-
-        // Checa parede com raycasts laterais
-        bool touchingLeft = Physics2D.Raycast(wallCheckLeft.position, Vector2.left, wallCheckDistance, wallLayer);
-        bool touchingRight = Physics2D.Raycast(wallCheckRight.position, Vector2.right, wallCheckDistance, wallLayer);
-        isTouchingWall = touchingLeft || touchingRight;
-
-        // Debug visual dos raycasts
-        Debug.DrawRay(wallCheckLeft.position, Vector2.left * wallCheckDistance, Color.cyan);
-        Debug.DrawRay(wallCheckRight.position, Vector2.right * wallCheckDistance, Color.cyan);
-    }
-
     void OnDrawGizmosSelected()
     {
-        // Visual do GroundCheck
         if (groundCheck != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
         }
 
-        // Visual dos WallChecks
-        if (wallCheckLeft != null)
+        if (wallCheck != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(wallCheckLeft.position, wallCheckLeft.position + Vector3.left * wallCheckDistance);
-        }
-
-        if (wallCheckRight != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(wallCheckRight.position, wallCheckRight.position + Vector3.right * wallCheckDistance);
+            Gizmos.DrawWireSphere(wallCheck.position, checkRadius);
         }
     }
 }
