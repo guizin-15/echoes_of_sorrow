@@ -26,7 +26,11 @@ public class PlayerController : MonoBehaviour
     private float jumpBufferCounter;
 
     [Header("Jump Custom")]
-    public float jumpCutMultiplier = 0.3f;
+    public float jumpCutMultiplier = 0.25f;
+
+    [Header("Coyote Time")]
+    public float coyoteTime = 0.15f;
+    private float coyoteCounter;
 
     [Header("Checagem de chão/parede")]
     public Transform groundCheck;
@@ -49,6 +53,8 @@ public class PlayerController : MonoBehaviour
     private float wallJumpingDirection;
     private float wallJumpingCounter;
 
+    private string _ultimoLadoDebug = "";
+
     private bool isAttacking;
 
     void Start()
@@ -67,6 +73,16 @@ public class PlayerController : MonoBehaviour
         // Checa estados com OverlapBox
         isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
         bool isWalled = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, wallLayer);
+
+        // Coyote Time
+        if (isGrounded)
+        {
+            coyoteCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteCounter -= Time.deltaTime;
+        }
 
         // Reset dash quando encostar no chão
         if (isGrounded || isWalled)
@@ -120,7 +136,7 @@ public class PlayerController : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        // Pulo (Wall jump ou chão com buffer)
+        // Pulo (Wall jump ou chão com buffer + coyote time)
         if (jumpBufferCounter > 0f)
         {
             if (isWallSliding || (wallJumpingCounter > 0f && !isGrounded && isWalled))
@@ -140,12 +156,13 @@ public class PlayerController : MonoBehaviour
                 anim.SetTrigger("Jump");
                 Invoke(nameof(StopWallJumping), wallJumpingDuration);
             }
-            else if (isGrounded)
+            else if (coyoteCounter > 0f)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.ResetTrigger("Land");
                 anim.SetTrigger("Jump");
                 jumpBufferCounter = 0f;
+                coyoteCounter = 0f;
             }
         }
 
@@ -156,25 +173,31 @@ public class PlayerController : MonoBehaviour
         }
 
         // Dash (permitido no ar ou em wall jump, apenas se puder)
-        if (Input.GetMouseButtonDown(1) && !isDashing && !isAttacking && !isWallSliding && canDash)
+        if (Input.GetMouseButtonDown(1) && !isDashing && !isWallSliding && canDash)
         {
             StartCoroutine(DoDash());
             return;
         }
 
-        // Ataque Slash
+        // Ataque (Slash se no chão, Sweep se no ar)
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
             AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-            bool canAttack = stateInfo.IsName("Idle") || stateInfo.IsName("Run");
+            bool canAttack = stateInfo.IsName("Idle") || stateInfo.IsName("Run") || stateInfo.IsName("Jump") || stateInfo.IsName("Fall");
 
             if (canAttack)
             {
-                anim.SetTrigger("Slash");
+                string triggerToUse = isGrounded ? "Slash" : "Sweep";
+
+                anim.SetTrigger(triggerToUse);
                 isAttacking = true;
-                StartCoroutine(ResetAttack(0.2f));
+
+                // Duração do ataque: 0.4s sweep, 0.4s slash — ajustável se quiser separar
+                float duration = triggerToUse == "Sweep" ? 0.4f : 0.4f;
+                StartCoroutine(ResetAttack(duration));
             }
         }
+
 
         // Flip durante movimentação normal
         if (!isWallJumping && !isWallSliding && horizontal != 0f)
@@ -184,6 +207,13 @@ public class PlayerController : MonoBehaviour
                 isFacingRight = !isFacingRight;
                 Flip();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            isFacingRight = !isFacingRight;
+            Flip();
+            Debug.Log("Flip manual executado. Agora virado para: " + (isFacingRight ? "Direita" : "Esquerda"));
         }
 
         // Aterrissagem
@@ -199,6 +229,14 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("YVelocity", rb.linearVelocity.y);
         anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsWallSliding", isWallSliding);
+
+        // DEBUG: Mostrar lado que o player está virado
+        string ladoAtual = isFacingRight ? "Direita" : "Esquerda";
+        if (_ultimoLadoDebug != ladoAtual)
+        {
+            Debug.Log("Player está virado para: " + ladoAtual);
+            _ultimoLadoDebug = ladoAtual;
+        }
     }
 
     private IEnumerator DoDash()
