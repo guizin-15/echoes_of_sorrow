@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // Ataque (Slash se no chão, Sweep se no ar)
+        // Ataque (Slash no chão, Sweep no ar, Slice no ar com S pressionado)
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
             AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
@@ -187,14 +187,24 @@ public class PlayerController : MonoBehaviour
 
             if (canAttack)
             {
-                string triggerToUse = isGrounded ? "Slash" : "Sweep";
+                string triggerToUse = "";
+
+                if (isGrounded)
+                {
+                    triggerToUse = "Slash";
+                }
+                else if (Input.GetKey(KeyCode.W))
+                {
+                    triggerToUse = "Slice"; // Novo ataque mirando pra baixo
+                }
+                else
+                {
+                    triggerToUse = "Sweep"; // Ataque aéreo padrão
+                }
 
                 anim.SetTrigger(triggerToUse);
                 isAttacking = true;
-
-                // Duração do ataque: 0.4s sweep, 0.4s slash — ajustável se quiser separar
-                float duration = triggerToUse == "Sweep" ? 0.4f : 0.4f;
-                StartCoroutine(ResetAttack(duration));
+                StartCoroutine(ResetAttack(0.4f)); // Mesma duração
             }
         }
 
@@ -214,6 +224,11 @@ public class PlayerController : MonoBehaviour
             isFacingRight = !isFacingRight;
             Flip();
             Debug.Log("Flip manual executado. Agora virado para: " + (isFacingRight ? "Direita" : "Esquerda"));
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            anim.SetTrigger("Slice"); // Novo ataque mirando pra baixo
         }
 
         // Aterrissagem
