@@ -21,6 +21,13 @@ public class PlayerController : MonoBehaviour
     public float wallJumpingDuration = 0.4f;
     public Vector2 wallJumpingPower = new Vector2(2f, 6.5f);
 
+    [Header("Jump Buffer")]
+    public float jumpBufferTime = 0.2f;
+    private float jumpBufferCounter;
+
+    [Header("Jump Custom")]
+    public float jumpCutMultiplier = 0.3f;
+
     [Header("Checagem de chão/parede")]
     public Transform groundCheck;
     public Transform wallCheck;
@@ -41,9 +48,6 @@ public class PlayerController : MonoBehaviour
     private bool isWallJumping;
     private float wallJumpingDirection;
     private float wallJumpingCounter;
-
-    private float wallStickTime = 0.2f;
-    private float wallStickCounter;
 
     private bool isAttacking;
 
@@ -68,6 +72,16 @@ public class PlayerController : MonoBehaviour
         if (isGrounded || isWalled)
         {
             canDash = true;
+        }
+
+        // Jump Buffer input
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
         }
 
         // Wall Slide
@@ -106,14 +120,15 @@ public class PlayerController : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        // Pulo
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Pulo (Wall jump ou chão com buffer)
+        if (jumpBufferCounter > 0f)
         {
             if (isWallSliding || (wallJumpingCounter > 0f && !isGrounded && isWalled))
             {
                 isWallJumping = true;
                 rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
                 wallJumpingCounter = 0f;
+                jumpBufferCounter = 0f;
 
                 if (transform.localScale.x != wallJumpingDirection)
                 {
@@ -121,14 +136,23 @@ public class PlayerController : MonoBehaviour
                     Flip();
                 }
 
+                anim.ResetTrigger("Land");
                 anim.SetTrigger("Jump");
                 Invoke(nameof(StopWallJumping), wallJumpingDuration);
             }
             else if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                anim.ResetTrigger("Land");
                 anim.SetTrigger("Jump");
+                jumpBufferCounter = 0f;
             }
+        }
+
+        // Corta o pulo se soltar o botão enquanto ainda estiver subindo
+        if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
         }
 
         // Dash (permitido no ar ou em wall jump, apenas se puder)
@@ -152,20 +176,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Ataque Sweep
-        // if (Input.GetMouseButtonDown(1) && !isAttacking)
-        // {
-        //     AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-        //     bool canAttack = stateInfo.IsName("Idle") || stateInfo.IsName("Run");
-
-        //     if (canAttack)
-        //     {
-        //         anim.SetTrigger("Sweep");
-        //         isAttacking = true;
-        //         StartCoroutine(ResetAttack(0.5f));
-        //     }
-        // }
-
         // Flip durante movimentação normal
         if (!isWallJumping && !isWallSliding && horizontal != 0f)
         {
@@ -176,6 +186,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // Aterrissagem
         if (!wasGrounded && isGrounded)
         {
             anim.SetTrigger("Land");
