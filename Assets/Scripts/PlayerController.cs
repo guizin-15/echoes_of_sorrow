@@ -3,6 +3,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Dash")]
+    public float dashSpeed = 8f;
+    public float dashDuration = 0.2f;
+    private bool isDashing;
+    private bool canDash = true;
+
     [Header("Movimento")]
     public float moveSpeed = 2.5f;
     public float jumpForce = 6.5f;
@@ -18,7 +24,8 @@ public class PlayerController : MonoBehaviour
     [Header("Checagem de chão/parede")]
     public Transform groundCheck;
     public Transform wallCheck;
-    public float checkRadius = 0.1f;
+    public Vector2 groundCheckSize = new Vector2(0.4f, 0.1f);
+    public Vector2 wallCheckSize = new Vector2(0.1f, 0.7f);
     public LayerMask groundLayer;
     public LayerMask wallLayer;
 
@@ -46,38 +53,36 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
+        if (isDashing) return;
+
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        // Checa estados
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
-        bool isWalled = Physics2D.OverlapCircle(wallCheck.position, checkRadius, wallLayer);
+        // Checa estados com OverlapBox
+        isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
+        bool isWalled = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, wallLayer);
+
+        // Reset dash quando encostar no chão
+        if (isGrounded || isWalled)
+        {
+            canDash = true;
+        }
 
         // Wall Slide
         if (isWalled && !isGrounded && !isWallJumping)
         {
             isWallSliding = true;
             rb.linearVelocity = new Vector2(0f, Mathf.Clamp(rb.linearVelocity.y, -wallSlideSpeed, float.MaxValue));
-            anim.Play("WallSlide");
 
             // Flip correto baseado na parede
-            if (wallCheck.position.x < transform.position.x)
+            if (wallCheck.position.x < transform.position.x && isFacingRight)
             {
-                // Parede à esquerda
-                if (!isFacingRight)
-                {
-                    isFacingRight = true;
-                    Flip();
-                }
+                isFacingRight = false;
+                Flip();
             }
-            else
+            else if (wallCheck.position.x > transform.position.x && !isFacingRight)
             {
-                // Parede à direita
-                if (isFacingRight)
-                {
-                    isFacingRight = false;
-                    Flip();
-                }
+                isFacingRight = true;
+                Flip();
             }
         }
         else
@@ -123,6 +128,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // Dash (permitido no ar ou em wall jump, apenas se puder)
+        if (Input.GetMouseButtonDown(1) && !isDashing && !isAttacking && !isWallSliding && canDash)
+        {
+            StartCoroutine(DoDash());
+            return;
+        }
+
         // Ataque Slash
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
@@ -137,6 +149,20 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // Ataque Sweep
+        // if (Input.GetMouseButtonDown(1) && !isAttacking)
+        // {
+        //     AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        //     bool canAttack = stateInfo.IsName("Idle") || stateInfo.IsName("Run");
+
+        //     if (canAttack)
+        //     {
+        //         anim.SetTrigger("Sweep");
+        //         isAttacking = true;
+        //         StartCoroutine(ResetAttack(0.5f));
+        //     }
+        // }
+
         // Flip durante movimentação normal
         if (!isWallJumping && !isWallSliding && horizontal != 0f)
         {
@@ -147,22 +173,44 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Aterrissagem (Land)
         if (!wasGrounded && isGrounded)
         {
             anim.SetTrigger("Land");
         }
+
         wasGrounded = isGrounded;
 
         // Animações base
         anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
         anim.SetFloat("YVelocity", rb.linearVelocity.y);
         anim.SetBool("IsGrounded", isGrounded);
+        anim.SetBool("IsWallSliding", isWallSliding);
+    }
+
+    private IEnumerator DoDash()
+    {
+        isDashing = true;
+        isAttacking = true;
+        canDash = false;
+        anim.SetTrigger("Dash");
+
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+
+        float dashDirection = isFacingRight ? 1f : -1f;
+        rb.linearVelocity = new Vector2(dashDirection * dashSpeed, 0f);
+
+        yield return new WaitForSeconds(dashDuration);
+
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        isAttacking = false;
     }
 
     private void FixedUpdate()
     {
-        // NÃO sobrescreve velocity.x durante WallSlide
+        if (isDashing) return;
+
         if (!isWallJumping && !isWallSliding)
         {
             rb.linearVelocity = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
@@ -193,13 +241,13 @@ public class PlayerController : MonoBehaviour
         if (groundCheck != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+            Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
         }
 
         if (wallCheck != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(wallCheck.position, checkRadius);
+            Gizmos.DrawWireCube(wallCheck.position, wallCheckSize);
         }
     }
 }
