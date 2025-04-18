@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private bool canDash = true;
 
     [Header("Movimento")]
-    public float moveSpeed = 2.5f;
+    public float moveSpeed = 2f;
     public float jumpForce = 6.5f;
 
     [Header("Wall Slide")]
@@ -19,13 +19,13 @@ public class PlayerController : MonoBehaviour
     [Header("Wall Jump")]
     public float wallJumpingTime = 0.2f;
     public float wallJumpingDuration = 0.4f;
-    public Vector2 wallJumpingPower = new Vector2(2.5f, 6.5f);
+    public Vector2 wallJumpingPower = new Vector2(2f, 6.5f);
 
     [Header("Checagem de chão/parede")]
     public Transform groundCheck;
     public Transform wallCheck;
-    public Vector2 groundCheckSize = new Vector2(0.4f, 0.1f);
-    public Vector2 wallCheckSize = new Vector2(0.1f, 0.7f);
+    public Vector2 groundCheckSize = new Vector2(0.2f, 0.05f);
+    public Vector2 wallCheckSize = new Vector2(0.05f, 0.2f);
     public LayerMask groundLayer;
     public LayerMask wallLayer;
 
@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     private bool isWallJumping;
     private float wallJumpingDirection;
     private float wallJumpingCounter;
+
+    private float wallStickTime = 0.2f;
+    private float wallStickCounter;
 
     private bool isAttacking;
 
@@ -145,7 +148,7 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetTrigger("Slash");
                 isAttacking = true;
-                StartCoroutine(ResetAttack(0.4f));
+                StartCoroutine(ResetAttack(0.2f));
             }
         }
 
