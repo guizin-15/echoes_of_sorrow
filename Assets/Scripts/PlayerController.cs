@@ -4,14 +4,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Dash")]
-    public float dashSpeed = 8f;
+    public float dashSpeed = 35f;
     public float dashDuration = 0.2f;
     private bool isDashing;
     private bool canDash = true;
 
     [Header("Movimento")]
-    public float moveSpeed = 2f;
-    public float jumpForce = 6.5f;
+    public float moveSpeed = 8.75f;
+    public float jumpForce = 30f;
 
     [Header("Wall Slide")]
     public float wallSlideSpeed = 0.4f;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [Header("Wall Jump")]
     public float wallJumpingTime = 0.2f;
     public float wallJumpingDuration = 0.4f;
-    public Vector2 wallJumpingPower = new Vector2(2f, 6.5f);
+    public Vector2 wallJumpingPower = new Vector2(8.75f, 30f);
 
     [Header("Jump Buffer")]
     public float jumpBufferTime = 0.2f;
