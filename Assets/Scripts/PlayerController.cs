@@ -193,10 +193,6 @@ public class PlayerController : MonoBehaviour
                 {
                     triggerToUse = "Slash";
                 }
-                else if (Input.GetKey(KeyCode.W))
-                {
-                    triggerToUse = "Slice"; // Novo ataque mirando pra baixo
-                }
                 else
                 {
                     triggerToUse = "Sweep"; // Ataque aéreo padrão
@@ -224,11 +220,6 @@ public class PlayerController : MonoBehaviour
             isFacingRight = !isFacingRight;
             Flip();
             Debug.Log("Flip manual executado. Agora virado para: " + (isFacingRight ? "Direita" : "Esquerda"));
-        }
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            anim.SetTrigger("Slice"); // Novo ataque mirando pra baixo
         }
 
         // Aterrissagem
