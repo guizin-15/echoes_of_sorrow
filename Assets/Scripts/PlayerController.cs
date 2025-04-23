@@ -243,6 +243,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Player está virado para: " + ladoAtual);
             _ultimoLadoDebug = ladoAtual;
         }
+
     }
 
     private IEnumerator DoDash()
