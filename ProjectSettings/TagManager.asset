@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Parallax
+    uniqueID: 3557484275
+    locked: 0
   - name: Background
     uniqueID: 1917362849
     locked: 0
