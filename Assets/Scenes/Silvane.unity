@@ -1546,11 +1546,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a8644c39597340a1bfaa6f91ff17e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSpeed: 35
+  dashSpeed: 25
   dashDuration: 0.2
-  moveSpeed: 8.75
-  jumpForce: 23
-  wallSlideSpeed: 2.5
+  dashCooldown: 0.3
+  moveSpeed: 7.5
+  jumpForce: 21
+  wallSlideSpeed: 3
   wallJumpingTime: 1
   wallJumpingDuration: 0.1
   wallJumpingPower: {x: 2, y: 23}

@@ -6,8 +6,10 @@ public class PlayerController : MonoBehaviour
     [Header("Dash")]
     public float dashSpeed = 35f;
     public float dashDuration = 0.2f;
+    public float dashCooldown = 1f;
     private bool isDashing;
     private bool canDash = true;
+    private bool dashResetAvailable = true;
 
     [Header("Movimento")]
     public float moveSpeed = 8.75f;
@@ -54,7 +56,6 @@ public class PlayerController : MonoBehaviour
     private float wallJumpingCounter;
 
     private string _ultimoLadoDebug = "";
-
     private bool isAttacking;
 
     void Start()
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+        Application.targetFrameRate = 100;
     }
 
     void Update()
@@ -70,11 +72,9 @@ public class PlayerController : MonoBehaviour
 
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        // Checa estados com OverlapBox
         isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
         bool isWalled = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, wallLayer);
 
-        // Coyote Time
         if (isGrounded)
         {
             coyoteCounter = coyoteTime;
@@ -84,13 +84,13 @@ public class PlayerController : MonoBehaviour
             coyoteCounter -= Time.deltaTime;
         }
 
-        // Reset dash quando encostar no chão
-        if (isGrounded || isWalled)
+        // Reset dash se tocou no chão ou parede
+        if ((isGrounded || isWalled) && !dashResetAvailable)
         {
-            canDash = true;
+            dashResetAvailable = true;
+            Debug.Log("Dash resetado por chão ou parede.");
         }
 
-        // Jump Buffer input
         if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpBufferCounter = jumpBufferTime;
@@ -100,13 +100,11 @@ public class PlayerController : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        // Wall Slide
         if (isWalled && !isGrounded && !isWallJumping)
         {
             isWallSliding = true;
             rb.linearVelocity = new Vector2(0f, Mathf.Clamp(rb.linearVelocity.y, -wallSlideSpeed, float.MaxValue));
 
-            // Flip correto baseado na parede
             if (wallCheck.position.x < transform.position.x && isFacingRight)
             {
                 isFacingRight = false;
@@ -123,7 +121,6 @@ public class PlayerController : MonoBehaviour
             isWallSliding = false;
         }
 
-        // Wall Jump setup
         if (isWallSliding)
         {
             wallJumpingDirection = -transform.localScale.x;
@@ -136,7 +133,6 @@ public class PlayerController : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        // Pulo (Wall jump ou chão com buffer + coyote time)
         if (jumpBufferCounter > 0f)
         {
             if (isWallSliding || (wallJumpingCounter > 0f && !isGrounded && isWalled))
@@ -166,20 +162,17 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Corta o pulo se soltar o botão enquanto ainda estiver subindo
         if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
         }
 
-        // Dash (permitido no ar ou em wall jump, apenas se puder)
-        if (Input.GetMouseButtonDown(1) && !isDashing && !isWallSliding && canDash)
+        if (Input.GetMouseButtonDown(1) && !isDashing && !isWallSliding && canDash && dashResetAvailable)
         {
             StartCoroutine(DoDash());
             return;
         }
 
-        // Ataque (Slash no chão, Sweep no ar, Slice no ar com S pressionado)
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
             AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
@@ -187,25 +180,13 @@ public class PlayerController : MonoBehaviour
 
             if (canAttack)
             {
-                string triggerToUse = "";
-
-                if (isGrounded)
-                {
-                    triggerToUse = "Slash";
-                }
-                else
-                {
-                    triggerToUse = "Sweep"; // Ataque aéreo padrão
-                }
-
+                string triggerToUse = isGrounded ? "Slash" : "Sweep";
                 anim.SetTrigger(triggerToUse);
                 isAttacking = true;
-                StartCoroutine(ResetAttack(0.4f)); // Mesma duração
+                StartCoroutine(ResetAttack(0.4f));
             }
         }
 
-
-        // Flip durante movimentação normal
         if (!isWallJumping && !isWallSliding && horizontal != 0f)
         {
             if (horizontal < 0 && isFacingRight || horizontal > 0 && !isFacingRight)
@@ -222,7 +203,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Flip manual executado. Agora virado para: " + (isFacingRight ? "Direita" : "Esquerda"));
         }
 
-        // Aterrissagem
         if (!wasGrounded && isGrounded)
         {
             anim.SetTrigger("Land");
@@ -230,20 +210,17 @@ public class PlayerController : MonoBehaviour
 
         wasGrounded = isGrounded;
 
-        // Animações base
         anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
         anim.SetFloat("YVelocity", rb.linearVelocity.y);
         anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsWallSliding", isWallSliding);
 
-        // DEBUG: Mostrar lado que o player está virado
         string ladoAtual = isFacingRight ? "Direita" : "Esquerda";
         if (_ultimoLadoDebug != ladoAtual)
         {
             Debug.Log("Player está virado para: " + ladoAtual);
             _ultimoLadoDebug = ladoAtual;
         }
-
     }
 
     private IEnumerator DoDash()
@@ -251,6 +228,8 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         isAttacking = true;
         canDash = false;
+        dashResetAvailable = false;
+
         anim.SetTrigger("Dash");
 
         float originalGravity = rb.gravityScale;
@@ -264,6 +243,14 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = originalGravity;
         isDashing = false;
         isAttacking = false;
+
+        StartCoroutine(ResetDashCooldown());
+    }
+
+    private IEnumerator ResetDashCooldown()
+    {
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 
     private void FixedUpdate()
@@ -293,6 +280,12 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(delay);
         isAttacking = false;
         Debug.Log("Ataque destravado automaticamente.");
+    }
+
+    public void ResetDashByEnemyHit()
+    {
+        dashResetAvailable = true;
+        Debug.Log("Dash resetado por acerto em inimigo.");
     }
 
     void OnDrawGizmosSelected()
