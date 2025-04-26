@@ -1,25 +1,31 @@
 fileFormatVersion: 2
-guid: a7d73b5b3f8ce437aa159fa48249cafc
+guid: 9a6ac2e7171ac4be7a9df0224e4a0a38
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2825887164553070187
-    second: Glitch Samurai-Jump Glitch_0
+      213: -7445852550365235562
+    second: Blood hit 2_0
   - first:
-      213: 6508035301043658581
-    second: Glitch Samurai-Jump Glitch_1
+      213: 5727919722972364474
+    second: Blood hit 2_1
   - first:
-      213: -3590120614645032079
-    second: Glitch Samurai-Jump Glitch_2
+      213: -4915820469195671618
+    second: Blood hit 2_2
   - first:
-      213: -3646036555178817370
-    second: Glitch Samurai-Jump Glitch_3
+      213: 6531592237191252820
+    second: Blood hit 2_3
   - first:
-      213: 4078164841672214986
-    second: Glitch Samurai-Jump Glitch_4
+      213: -7050387499227817304
+    second: Blood hit 2_4
   - first:
-      213: -3882171176063355312
-    second: Glitch Samurai-Jump Glitch_5
+      213: -4498431346155350206
+    second: Blood hit 2_5
+  - first:
+      213: -8628240975822247499
+    second: Blood hit 2_6
+  - first:
+      213: 3815134115226923305
+    second: Blood hit 2_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -141,13 +147,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_0
+      name: Blood hit 2_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +162,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5997a75989e68c8d0800000000000000
-      internalID: -2825887164553070187
+      spriteID: 6963b852e840ba890800000000000000
+      internalID: -7445852550365235562
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_1
+      name: Blood hit 2_1
       rect:
         serializedVersion: 2
-        x: 140
+        x: 82
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 55fd86010af215a50800000000000000
-      internalID: 6508035301043658581
+      spriteID: abeb8b5e3a8ad7f40800000000000000
+      internalID: 5727919722972364474
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_2
+      name: Blood hit 2_2
       rect:
         serializedVersion: 2
-        x: 280
+        x: 164
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +206,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 17b964f72545d2ec0800000000000000
-      internalID: -3590120614645032079
+      spriteID: eb77ff1145f77cbb0800000000000000
+      internalID: -4915820469195671618
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_3
+      name: Blood hit 2_3
       rect:
         serializedVersion: 2
-        x: 420
+        x: 246
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,8 +228,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6a84a72121da66dc0800000000000000
-      internalID: -3646036555178817370
+      spriteID: 45bcb7ba880e4aa50800000000000000
+      internalID: 6531592237191252820
       vertices: []
       indices: 
       edges: []
@@ -232,7 +238,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 98e275900051148979507f3b6c2ce458
+    spriteID: 0e0394b6d83644e1ebea161451c9ee6c
     internalID: 0
     vertices: []
     indices: 
@@ -242,10 +248,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Glitch Samurai-Jump Glitch_0: -2825887164553070187
-      Glitch Samurai-Jump Glitch_1: 6508035301043658581
-      Glitch Samurai-Jump Glitch_2: -3590120614645032079
-      Glitch Samurai-Jump Glitch_3: -3646036555178817370
+      Blood hit 2_0: -7445852550365235562
+      Blood hit 2_1: 5727919722972364474
+      Blood hit 2_2: -4915820469195671618
+      Blood hit 2_3: 6531592237191252820
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

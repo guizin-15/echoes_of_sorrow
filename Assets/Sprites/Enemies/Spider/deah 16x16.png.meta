@@ -1,25 +1,22 @@
 fileFormatVersion: 2
-guid: a7d73b5b3f8ce437aa159fa48249cafc
+guid: 76297aa5d9c274a809704874328f30cd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2825887164553070187
-    second: Glitch Samurai-Jump Glitch_0
+      213: -6116030778478213940
+    second: deah 16x16_0
   - first:
-      213: 6508035301043658581
-    second: Glitch Samurai-Jump Glitch_1
+      213: 3600518683052838891
+    second: deah 16x16_1
   - first:
-      213: -3590120614645032079
-    second: Glitch Samurai-Jump Glitch_2
+      213: 4048363753946170862
+    second: deah 16x16_2
   - first:
-      213: -3646036555178817370
-    second: Glitch Samurai-Jump Glitch_3
+      213: 2327796249533022898
+    second: deah 16x16_3
   - first:
-      213: 4078164841672214986
-    second: Glitch Samurai-Jump Glitch_4
-  - first:
-      213: -3882171176063355312
-    second: Glitch Samurai-Jump Glitch_5
+      213: 8182595951819112958
+    second: deah 16x16_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -66,7 +63,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -141,89 +138,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_0
+      name: deah 16x16_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc4437d396e7f1ba0800000000000000
+      internalID: -6116030778478213940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deah 16x16_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bef85867aac97f130800000000000000
+      internalID: 3600518683052838891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deah 16x16_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee54783926dae2830800000000000000
+      internalID: 4048363753946170862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deah 16x16_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b207e21b5efd4020800000000000000
+      internalID: 2327796249533022898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deah 16x16_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef14ab83aab6e8170800000000000000
+      internalID: 8182595951819112958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deah 16x16_5
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 140
-        height: 46
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5997a75989e68c8d0800000000000000
-      internalID: -2825887164553070187
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_1
-      rect:
-        serializedVersion: 2
-        x: 140
-        y: 0
-        width: 140
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 55fd86010af215a50800000000000000
-      internalID: 6508035301043658581
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_2
-      rect:
-        serializedVersion: 2
-        x: 280
-        y: 0
-        width: 140
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 17b964f72545d2ec0800000000000000
-      internalID: -3590120614645032079
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_3
-      rect:
-        serializedVersion: 2
-        x: 420
-        y: 0
-        width: 140
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6a84a72121da66dc0800000000000000
-      internalID: -3646036555178817370
+      spriteID: acb4391af5e6c4150a51a621a513dcd5
+      internalID: -988103585
       vertices: []
       indices: 
       edges: []
@@ -232,7 +273,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 98e275900051148979507f3b6c2ce458
+    spriteID: 618c5375ee85d4758b713debdb6df65f
     internalID: 0
     vertices: []
     indices: 
@@ -242,10 +283,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Glitch Samurai-Jump Glitch_0: -2825887164553070187
-      Glitch Samurai-Jump Glitch_1: 6508035301043658581
-      Glitch Samurai-Jump Glitch_2: -3590120614645032079
-      Glitch Samurai-Jump Glitch_3: -3646036555178817370
+      deah 16x16_0: -6116030778478213940
+      deah 16x16_1: 3600518683052838891
+      deah 16x16_2: 4048363753946170862
+      deah 16x16_3: 2327796249533022898
+      deah 16x16_4: 8182595951819112958
+      deah 16x16_5: -988103585
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

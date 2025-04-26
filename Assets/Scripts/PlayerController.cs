@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Vida")]
+    public int maxHealth = 4;
+    private int currentHealth;
+    private bool isDead = false;
+
+    [Header("Reação a Dano")]
+    public float damagePushForceX = 5f;
+    public float damagePushForceY = 2f;
+
     [Header("Dash")]
     public float dashSpeed = 35f;
     public float dashDuration = 0.2f;
@@ -42,6 +51,11 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
     public LayerMask wallLayer;
 
+    [Header("Ataque")]
+    public Transform attackPoint;
+    public Vector2 attackBoxSize = new Vector2(1f, 0.5f);
+    public LayerMask enemyLayer;
+
     private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer sr;
@@ -57,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private string _ultimoLadoDebug = "";
     private bool isAttacking;
+    private bool isTakingDamage = false;
 
     void Start()
     {
@@ -64,10 +79,12 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         Application.targetFrameRate = 100;
+        currentHealth = maxHealth;
     }
 
     void Update()
     {
+        if (isDead || isTakingDamage) return;
         if (isDashing) return;
 
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -88,7 +105,6 @@ public class PlayerController : MonoBehaviour
         if ((isGrounded || isWalled) && !dashResetAvailable)
         {
             dashResetAvailable = true;
-            Debug.Log("Dash resetado por chão ou parede.");
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -183,6 +199,7 @@ public class PlayerController : MonoBehaviour
                 string triggerToUse = isGrounded ? "Slash" : "Sweep";
                 anim.SetTrigger(triggerToUse);
                 isAttacking = true;
+                PerformAttack(); // Aqui ataca fisicamente os inimigos
                 StartCoroutine(ResetAttack(0.4f));
             }
         }
@@ -200,7 +217,6 @@ public class PlayerController : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             Flip();
-            Debug.Log("Flip manual executado. Agora virado para: " + (isFacingRight ? "Direita" : "Esquerda"));
         }
 
         if (!wasGrounded && isGrounded)
@@ -218,8 +234,17 @@ public class PlayerController : MonoBehaviour
         string ladoAtual = isFacingRight ? "Direita" : "Esquerda";
         if (_ultimoLadoDebug != ladoAtual)
         {
-            Debug.Log("Player está virado para: " + ladoAtual);
             _ultimoLadoDebug = ladoAtual;
+        }
+    }
+
+    private void PerformAttack()
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(attackPoint.position, attackBoxSize, 0f, enemyLayer);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            enemy.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -255,6 +280,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDead || isTakingDamage) return;
         if (isDashing) return;
 
         if (!isWallJumping && !isWallSliding)
@@ -279,13 +305,59 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         isAttacking = false;
-        Debug.Log("Ataque destravado automaticamente.");
     }
 
     public void ResetDashByEnemyHit()
     {
         dashResetAvailable = true;
-        Debug.Log("Dash resetado por acerto em inimigo.");
+    }
+
+    public void TakeDamage()
+    {
+        if (isDead || isTakingDamage) return;
+
+        currentHealth--;
+        anim.SetTrigger("Damage");
+        isTakingDamage = true;
+
+        // Aplica o empurrão para trás e para cima se ainda estiver vivo
+        if (currentHealth > 1)
+        {
+            rb.linearVelocity = Vector2.zero; // Zera o movimento antes do empurrão
+            float pushDirection = isFacingRight ? -1f : 1f; // Corrige para empurrar para trás corretamente
+            Vector2 pushForce = new Vector2(pushDirection * damagePushForceX, damagePushForceY);
+            rb.AddForce(pushForce, ForceMode2D.Impulse);
+        }
+
+        StartCoroutine(RecoverFromDamage(0.5f));
+        // Temporariamente desabilitado para testar movimento durante dano
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private IEnumerator RecoverFromDamage(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isTakingDamage = false;
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        anim.SetTrigger("Die");
+        gameObject.layer = LayerMask.NameToLayer("Dead");
+        // Você pode querer desativar o movimento ou dash aqui depois, se preferir
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("EnemyAttack"))
+        {
+            TakeDamage();
+        }
     }
 
     void OnDrawGizmosSelected()
@@ -300,6 +372,12 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(wallCheck.position, wallCheckSize);
+        }
+
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube(attackPoint.position, attackBoxSize);
         }
     }
 }

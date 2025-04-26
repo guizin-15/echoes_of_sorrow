@@ -1,25 +1,13 @@
 fileFormatVersion: 2
-guid: a7d73b5b3f8ce437aa159fa48249cafc
+guid: 101bfe162003a45aaa871714e1880d8c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2825887164553070187
-    second: Glitch Samurai-Jump Glitch_0
+      213: 7993362969640317897
+    second: Electric Hit 1_0
   - first:
-      213: 6508035301043658581
-    second: Glitch Samurai-Jump Glitch_1
-  - first:
-      213: -3590120614645032079
-    second: Glitch Samurai-Jump Glitch_2
-  - first:
-      213: -3646036555178817370
-    second: Glitch Samurai-Jump Glitch_3
-  - first:
-      213: 4078164841672214986
-    second: Glitch Samurai-Jump Glitch_4
-  - first:
-      213: -3882171176063355312
-    second: Glitch Samurai-Jump Glitch_5
+      213: 3547889505628404166
+    second: Electric Hit 1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -141,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_0
+      name: Electric Hit 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +144,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5997a75989e68c8d0800000000000000
-      internalID: -2825887164553070187
+      spriteID: 9c33c2e25412eee60800000000000000
+      internalID: 7993362969640317897
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_1
+      name: Electric Hit 1_1
       rect:
         serializedVersion: 2
-        x: 140
+        x: 82
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,52 +166,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 55fd86010af215a50800000000000000
-      internalID: 6508035301043658581
+      spriteID: 6c9315535b2ac3130800000000000000
+      internalID: 3547889505628404166
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_2
+      name: Electric Hit 1_2
       rect:
         serializedVersion: 2
-        x: 280
+        x: 164
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 17b964f72545d2ec0800000000000000
-      internalID: -3590120614645032079
+      spriteID: 71ee5ecb996684862b5d61bf5d249d9d
+      internalID: 177571085
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Glitch Samurai-Jump Glitch_3
+      name: Electric Hit 1_3
       rect:
         serializedVersion: 2
-        x: 420
+        x: 246
         y: 0
-        width: 140
-        height: 46
+        width: 82
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6a84a72121da66dc0800000000000000
-      internalID: -3646036555178817370
+      spriteID: 5664487e943494281bba249973cad95f
+      internalID: -178435438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Electric Hit 1_4
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 0
+        width: 82
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b190c9ad55e684e2c9a0016496d137a3
+      internalID: 1578175599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Electric Hit 1_5
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 0
+        width: 82
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9696f39f10d9342f8889417744617cbb
+      internalID: 816736664
       vertices: []
       indices: 
       edges: []
@@ -232,7 +264,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 98e275900051148979507f3b6c2ce458
+    spriteID: 22831b1e676684d28a4d92c5081179a1
     internalID: 0
     vertices: []
     indices: 
@@ -242,10 +274,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Glitch Samurai-Jump Glitch_0: -2825887164553070187
-      Glitch Samurai-Jump Glitch_1: 6508035301043658581
-      Glitch Samurai-Jump Glitch_2: -3590120614645032079
-      Glitch Samurai-Jump Glitch_3: -3646036555178817370
+      Electric Hit 1_0: 7993362969640317897
+      Electric Hit 1_1: 3547889505628404166
+      Electric Hit 1_2: 177571085
+      Electric Hit 1_3: -178435438
+      Electric Hit 1_4: 1578175599
+      Electric Hit 1_5: 816736664
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
