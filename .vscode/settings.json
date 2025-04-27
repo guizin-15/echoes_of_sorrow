@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "echoes_of_sorrow.sln"
+    "dotnet.defaultSolution": "EchoesOfSorrow.sln"
 }

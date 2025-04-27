@@ -79,8 +79,11 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         Application.targetFrameRate = 100;
+
+        DontDestroyOnLoad(gameObject);
         currentHealth = maxHealth;
     }
+
 
     void Update()
     {
@@ -317,26 +320,28 @@ public class PlayerController : MonoBehaviour
         if (isDead || isTakingDamage) return;
 
         currentHealth--;
+        Debug.Log("Vida atual do Noon: " + currentHealth);
+        FindAnyObjectByType<VidaUIController>().UpdateVida();
+
         anim.SetTrigger("Damage");
         isTakingDamage = true;
 
-        // Aplica o empurrão para trás e para cima se ainda estiver vivo
         if (currentHealth > 1)
         {
-            rb.linearVelocity = Vector2.zero; // Zera o movimento antes do empurrão
-            float pushDirection = isFacingRight ? -1f : 1f; // Corrige para empurrar para trás corretamente
+            rb.linearVelocity = Vector2.zero;
+            float pushDirection = isFacingRight ? -1f : 1f;
             Vector2 pushForce = new Vector2(pushDirection * damagePushForceX, damagePushForceY);
             rb.AddForce(pushForce, ForceMode2D.Impulse);
         }
 
         StartCoroutine(RecoverFromDamage(0.5f));
-        // Temporariamente desabilitado para testar movimento durante dano
 
         if (currentHealth <= 0)
         {
             Die();
         }
     }
+
 
     private IEnumerator RecoverFromDamage(float delay)
     {
@@ -380,4 +385,10 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawWireCube(attackPoint.position, attackBoxSize);
         }
     }
+
+    public int CurrentHealth
+    {
+        get { return currentHealth; }
+    }
+
 }
