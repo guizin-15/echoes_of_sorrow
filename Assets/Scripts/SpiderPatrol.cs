@@ -8,21 +8,25 @@ public class SpiderPatrol : EnemyBase
     public float projectileSpeed = 5f;
     public float projectileCooldown = 1.5f;
     private float projectileCooldownTimer = 0f;
+    private bool isAttacking = false; // Variable to track if the spider is attacking
 
     protected override void Update()
     {
         base.Update();
 
-        if (isAttacking && !isTakingDamage && isGrounded)
+        if (isDead || isTakingDamage || !isGrounded) return;
+
+        if (isPlayerDetected)
         {
-            if (projectileCooldownTimer <= 0f)
-            {
-                ShootProjectile();
-                projectileCooldownTimer = projectileCooldown;
-            }
-            else
+            if (isAttacking)
             {
                 projectileCooldownTimer -= Time.deltaTime;
+
+                if (projectileCooldownTimer <= 0f)
+                {
+                    ShootProjectile();
+                    projectileCooldownTimer = projectileCooldown;
+                }
             }
         }
     }
@@ -39,6 +43,11 @@ public class SpiderPatrol : EnemyBase
             float direction = isFacingRight ? 1f : -1f;
             prb.linearVelocity = new Vector2(direction * projectileSpeed, 0f);
         }
+    }
+
+    protected override bool CanMove()
+    {
+        return !isPlayerDetected;
     }
 
     public override void OnDrawGizmosSelected()

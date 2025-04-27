@@ -19,9 +19,9 @@ public abstract class EnemyBase : MonoBehaviour
     public Transform player;
     public float detectionRadius = 5f;
 
-    [Header("Reação a Dano")]
-    public float damagePushForceX = 5f;
-    public float damagePushForceY = 5f;
+    [Header("Vida")]
+    public int maxHealth = 2;
+    protected int currentHealth;
 
     protected Rigidbody2D rb;
     protected Animator anim;
@@ -33,13 +33,10 @@ public abstract class EnemyBase : MonoBehaviour
     protected bool isWallAhead;
     protected bool isEdgeAhead;
     protected bool isPlayerDetected;
-
-    protected bool isPreparingAttack = false;
-    protected bool isAttacking = false;
     protected bool isTakingDamage = false;
     protected bool isDead = false;
-
-    protected int health = 2;
+    // Se verdadeiro, o colisor será desativado quando o inimigo morrer.
+    [SerializeField] protected bool disableColliderOnDeath = true;
 
     protected virtual void Start()
     {
@@ -53,96 +50,123 @@ public abstract class EnemyBase : MonoBehaviour
         {
             player = playerObject.transform;
         }
+
+        currentHealth = maxHealth;
     }
 
     protected virtual void Update()
     {
+
         isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
         anim.SetBool("IsGrounded", isGrounded);
 
-        if (isDead && isGrounded)
-        {
-            anim.SetTrigger("Death");
-            gameObject.layer = LayerMask.NameToLayer("Dead");
-            this.enabled = false;
-        }
+        if (isDead) return;
 
-        if (isTakingDamage && isGrounded)
+        // Enquanto estiver tomando dano, bloqueia movimentação e flip
+        if (isTakingDamage)
         {
-            isTakingDamage = false;
-            anim.SetBool("IsTakingDamage", false);
-        }
-
-        if (isTakingDamage || !isGrounded) return;
-
-        isWallAhead = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, wallLayer);
-        isEdgeAhead = Physics2D.OverlapBox(edgeCheck.position, edgeCheckSize, 0f, groundLayer);
-
-        if (player != null)
-        {
-            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-            isPlayerDetected = distanceToPlayer <= detectionRadius;
-            anim.SetBool("isPlayerDetected", isPlayerDetected);
-        }
-        else
-        {
-            isPlayerDetected = false;
-            anim.SetBool("isPlayerDetected", false);
-        }
-
-        if (isPlayerDetected)
-        {
-            if (!isPreparingAttack && !isAttacking)
+            if (isGrounded && Mathf.Abs(rb.linearVelocity.y) < 0.01f)
             {
-                isPreparingAttack = true;
-                isAttacking = true;
+                isTakingDamage = false;
+                anim.SetBool("IsTakingDamage", false);
+            }
+            else
+            {
+                return; // interrompe Update até fim do knockback
+            }
+        }
+
+        if (!isTakingDamage && isGrounded)
+        {
+            if (isTakingDamage || !isGrounded) return;
+
+            isWallAhead = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, wallLayer);
+            isEdgeAhead = Physics2D.OverlapBox(edgeCheck.position, edgeCheckSize, 0f, groundLayer);
+
+            if (player != null)
+            {
+                float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+                isPlayerDetected = distanceToPlayer <= detectionRadius;
+                anim.SetBool("isPlayerDetected", isPlayerDetected);
+            }
+            else
+            {
+                isPlayerDetected = false;
+                anim.SetBool("isPlayerDetected", false);
+            }
+
+            if (CanMove())
+            {
+                if (!isEdgeAhead || isWallAhead)
+                {
+                    Flip();
+                }
+
+                float direction = isFacingRight ? 1f : -1f;
+                rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
+            }
+            else
+            {
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-                anim.SetTrigger("PrepAttack");
-                anim.SetBool("IsAttacking", true);
             }
-
-            if ((player.position.x > transform.position.x && !isFacingRight) ||
-                (player.position.x < transform.position.x && isFacingRight))
-            {
-                Flip();
-            }
-        }
-        else
-        {
-            isPreparingAttack = false;
-            isAttacking = false;
-            anim.SetBool("IsAttacking", false);
-
-            if (!isEdgeAhead || isWallAhead)
-            {
-                Flip();
-            }
-
-            float direction = isFacingRight ? 1f : -1f;
-            rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
         }
     }
+
+    protected virtual void Die()
+    {
+        if (isDead) return;
+        isDead = true;   // <-- AQUI!!
+        anim.SetTrigger("Death"); // <-- já toca animação aqui
+        OnDeath();       // chama comportamento customizado
+    }
+
+    // Método virtual que cada inimigo vai poder sobrescrever
+    protected virtual void OnDeath()
+    {
+        // Nada aqui. Deixa para os filhos fazerem algo.
+    }
+
 
     public virtual void TakeDamage()
     {
         if (isDead) return;
 
-        anim.SetTrigger("Damage");
-        isTakingDamage = true;
-        anim.SetBool("IsTakingDamage", true);
-        health--;
+        if (currentHealth > 1) // ainda tem vida depois de tomar dano
+        {
+            anim.SetTrigger("Damage");
+            anim.SetBool("IsTakingDamage", true);
+            isTakingDamage = true;
+        }
 
-        float pushDirection = isFacingRight ? -1f : 1f;
-        Vector2 pushForce = health <= 0
-            ? new Vector2(pushDirection * damagePushForceX, 0f)
-            : new Vector2(pushDirection * damagePushForceX, damagePushForceY);
+        currentHealth--;
+
+        rb.linearVelocity = Vector2.zero;                 // zera movimento atual
+
+        // +1 se o player está à direita, -1 se está à esquerda
+        float pushDirection = Mathf.Sign(transform.position.x - player.position.x);
+
+        Vector2 pushForce;
+
+        if (currentHealth <= 0)
+        {
+            pushForce = new Vector2(pushDirection * 5f, 0f);  // morte: só X
+        }
+        else
+        {
+            pushForce = new Vector2(pushDirection * 5f, 5f);  // dano normal: X e Y
+        }
 
         rb.AddForce(pushForce, ForceMode2D.Impulse);
 
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
-            isDead = true;
+            Die();  // <-- agora sim, depois de empurrar!
         }
+    }
+
+    protected virtual bool CanMove()
+    {
+        return true;
     }
 
     protected void Flip()
