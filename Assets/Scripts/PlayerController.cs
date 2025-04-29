@@ -339,6 +339,8 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+
+        FindAnyObjectByType<VidaUIController>().UpdateVida();
     }
 
     private IEnumerator RecoverFromDamage(float delay)
