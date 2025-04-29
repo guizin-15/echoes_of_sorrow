@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5089616323216234496}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 1627400714969195704}
   - component: {fileID: 3386350734143320407}
   - component: {fileID: 3085753012209347717}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Caged Shocker
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -250,6 +250,8 @@ MonoBehaviour:
   detectionRadius: 8
   maxHealth: 5
   disableColliderOnDeath: 1
+  coinPrefab: {fileID: 0}
+  coinsToDrop: 1
   attackRange: 2.5
   attackCooldown: 0.5
   slideDistance: 1.5
@@ -266,7 +268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8974969258096395693}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +299,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4281648002951062041}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: EdgeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +331,7 @@ GameObject:
   m_Component:
   - component: {fileID: 461228373964148348}
   - component: {fileID: 200564933336929143}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

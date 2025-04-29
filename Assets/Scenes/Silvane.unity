@@ -18375,6 +18375,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Caged Spider
       objectReference: {fileID: 0}
+    - target: {fileID: 3381859532668089034, guid: f8f8ac5b5cc454da980cc5fb9dadeed8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4665291377736480745, guid: f8f8ac5b5cc454da980cc5fb9dadeed8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7906129433967121512, guid: f8f8ac5b5cc454da980cc5fb9dadeed8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8044430204230708996, guid: f8f8ac5b5cc454da980cc5fb9dadeed8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

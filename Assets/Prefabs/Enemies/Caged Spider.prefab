@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1768021477571231097}
   - component: {fileID: 4897730465240496951}
   - component: {fileID: 8659859424507802890}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Caged Spider
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -145,6 +145,8 @@ MonoBehaviour:
   detectionRadius: 6
   maxHealth: 3
   disableColliderOnDeath: 1
+  coinPrefab: {fileID: 0}
+  coinsToDrop: 1
 --- !u!50 &4897730465240496951
 Rigidbody2D:
   serializedVersion: 5
@@ -227,7 +229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5154592181371049177}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,7 +260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3871388474090727891}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: EdgeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5062907182742068495}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
