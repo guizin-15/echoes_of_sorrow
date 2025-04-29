@@ -1475,9 +1475,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 163571381917238186, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 163571381917238186, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 297217025
+      objectReference: {fileID: 0}
+    - target: {fileID: 654946152819201350, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 775480221195655453, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: m_Name
       value: Caged Shocker (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 775480221195655453, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2743178115332378666, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: player
@@ -1485,11 +1505,19 @@ PrefabInstance:
       objectReference: {fileID: 1643627323}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: maxHealth
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: moveSpeed
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: coinPrefab
+      value: 
+      objectReference: {fileID: 1766797298142993584, guid: 45cf8cdde5d4c4a6fa4abb27613dcb91, type: 3}
+    - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: coinsToDrop
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: disableColliderOnDeath
@@ -1534,6 +1562,14 @@ PrefabInstance:
     - target: {fileID: 3628219476642467923, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4849346706373545000, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511312865701409330, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

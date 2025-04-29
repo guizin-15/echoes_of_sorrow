@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// CagedShocker – inimigo parado em sua gaiola que dá choques rápidos ou um ataque forte.  test
+/// CagedShocker – inimigo parado em sua gaiola que dá choques rápidos ou um ataque forte.
 /// Deriva de EnemyBase e respeita as seguintes regras:
 /// • Knock‑back normal apenas quando morre.
 /// • Ao tomar dano vivo, não há knock‑back; ele congela e depois executa um Fast Attack aleatório.

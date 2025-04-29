@@ -38,6 +38,10 @@ public abstract class EnemyBase : MonoBehaviour
     // Se verdadeiro, o colisor será desativado quando o inimigo morrer.
     [SerializeField] protected bool disableColliderOnDeath = true;
 
+    [Header("Drops")]
+    public GameObject coinPrefab;   // Prefab da moeda (opcional)
+    public int coinsToDrop = 1;     // Quantidade de moedas a dropar
+
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -117,6 +121,25 @@ public abstract class EnemyBase : MonoBehaviour
         if (isDead) return;
         isDead = true;   // <-- AQUI!!
         anim.SetTrigger("Death"); // <-- já toca animação aqui
+
+        // --- Drop de moedas -----------------------------------------//
+        if (coinPrefab != null && coinsToDrop > 0)
+        {
+            for (int i = 0; i < coinsToDrop; i++)
+            {
+                Vector2 offset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(0.1f, 0.3f));
+                GameObject coin = Instantiate(coinPrefab, (Vector2)transform.position + offset, Quaternion.identity);
+
+                // Aplica pequena força para espalhar (se tiver Rigidbody2D)
+                Rigidbody2D crb = coin.GetComponent<Rigidbody2D>();
+                if (crb != null)
+                {
+                    Vector2 force = new Vector2(Random.Range(-4f, 5f), Random.Range(4f, 10f));
+                    crb.AddForce(force, ForceMode2D.Impulse);
+                }
+            }
+        }
+
         OnDeath();       // chama comportamento customizado
     }
 

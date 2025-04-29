@@ -12,7 +12,7 @@ public class VidaUIController : MonoBehaviour
     {
         for (int i = 0; i < fragmentos.Length; i++)
         {
-            if (i < player.CurrentHealth)
+            if (i < player.currentHealth)
             {
                 fragmentos[i].sprite = fragmentoCheio;
             }

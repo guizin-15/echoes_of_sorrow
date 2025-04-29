@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: 1e0a9e052446ff643b6d73a2170a9d23
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - fragmentoCheio: {fileID: 2598849717660255997, guid: 5bb307bb5c6baac42906a355c388a8b4, type: 3}
+  - fragmentoVazio: {fileID: 4590961213960091577, guid: b2975c9ab7da4a341bf1c421c92ddbca, type: 3}
+  - player: {fileID: 8115552501538075440, guid: ec29aa935ba184313b82403857367116, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

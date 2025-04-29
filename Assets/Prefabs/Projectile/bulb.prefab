@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8380770808255686098}
   - component: {fileID: 6622800276179804889}
   - component: {fileID: -4308502804031656828}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: bulb
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
@@ -76,8 +76,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 297217025
-  m_SortingLayer: 3
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -532920208944238326, guid: 19ffb138155aa4ef1b55f0bbbc6a1659, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
