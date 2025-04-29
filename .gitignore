@@ -47,3 +47,12 @@ Assets/AssetStoreTools*
 
 # Crashlytics generated files
 crashlytics-build.properties
+
+# VSCode
+.vscode/
+
+# Unity settings locais
+UserSettings/
+
+# Arquivos de crash do Unity
+*.blob
