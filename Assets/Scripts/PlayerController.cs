@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Som de Passos")]
+    public AudioClip footstepClip;
+    private AudioSource audioSource;
+
     [Header("Vida")]
     public int maxHealth = 4;
     public int currentHealth;
@@ -83,6 +87,7 @@ public class PlayerController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         Application.targetFrameRate = 100;
         currentHealth = maxHealth;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -94,6 +99,18 @@ public class PlayerController : MonoBehaviour
 
         isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
         bool isWalled = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, wallLayer);
+
+        bool isWalking = Mathf.Abs(horizontal) > 0.1f && isGrounded && !isWallSliding && !isDashing;
+
+        if (isWalking && !audioSource.isPlaying)
+        {
+            audioSource.clip = footstepClip;
+            audioSource.Play();
+        }
+        else if (!isWalking && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
 
         if (isGrounded)
         {
