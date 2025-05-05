@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Som de Coleta de Moeda")]
-    public AudioClip coinCollectClip;
-
-    [Header("Som de Passos")]
+    [Header("Sons")]
     public AudioClip footstepClip;
-    [HideInInspector] public AudioSource audioSource;
+    public AudioClip attackClip;
+
+    private AudioSource audioSource;
 
     [Header("Vida")]
     public int maxHealth = 4;
@@ -263,6 +262,8 @@ public class PlayerController : MonoBehaviour
 
     private void PerformAttack()
     {
+        SoundManager.Instance.PlaySound(attackClip);
+
         Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(attackPoint.position, attackBoxSize, 0f, enemyLayer);
 
         foreach (Collider2D enemy in hitEnemies)
@@ -270,6 +271,7 @@ public class PlayerController : MonoBehaviour
             enemy.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
         }
     }
+
 
     private IEnumerator DoDash()
     {
