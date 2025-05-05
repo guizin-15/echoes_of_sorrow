@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
             _ultimoLadoDebug = ladoAtual;
         }
     }
-
+ 
     private void PerformAttack()
     {
         SoundManager.Instance.PlaySound(attackClip);
