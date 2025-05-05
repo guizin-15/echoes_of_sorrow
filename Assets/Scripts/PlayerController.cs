@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Som de Coleta de Moeda")]
+    public AudioClip coinCollectClip;
+
     [Header("Som de Passos")]
     public AudioClip footstepClip;
-    private AudioSource audioSource;
+    [HideInInspector] public AudioSource audioSource;
 
     [Header("Vida")]
     public int maxHealth = 4;

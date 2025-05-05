@@ -54,6 +54,11 @@ public class Coin : MonoBehaviour
                 if (pc != null)
                 {
                     pc.coinsCollected++;
+
+                    if (pc.coinCollectClip != null && pc.audioSource != null)
+                    {
+                        pc.audioSource.PlayOneShot(pc.coinCollectClip);
+                    }
                 }
                 Destroy(gameObject);
             }

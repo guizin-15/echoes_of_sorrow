@@ -18426,6 +18426,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: d6614f6561628a04d91db303aa3dc6e3, type: 3}
     - target: {fileID: 8115552501538075440, guid: ec29aa935ba184313b82403857367116, type: 3}
+      propertyPath: coinCollectClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 93f84d53203f0b840a20b171d201bc6f, type: 3}
+    - target: {fileID: 8115552501538075440, guid: ec29aa935ba184313b82403857367116, type: 3}
       propertyPath: enemyLayer.m_Bits
       value: 128
       objectReference: {fileID: 0}
