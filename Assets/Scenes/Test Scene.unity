@@ -53383,12 +53383,16 @@ PrefabInstance:
       value: Caged Shocker
       objectReference: {fileID: 0}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 765540738}
+    - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: coinPrefab
       value: 
       objectReference: {fileID: 1766797298142993584, guid: 45cf8cdde5d4c4a6fa4abb27613dcb91, type: 3}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: attackRange
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: coinsToDrop
@@ -53396,7 +53400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: detectionRadius
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3628219476642467923, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: m_LocalPosition.x
