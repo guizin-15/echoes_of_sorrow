@@ -9,6 +9,7 @@ public class Coin : MonoBehaviour
     [Header("Attraction Settings")]
     public float attractionSpeed = 8f;    // Velocidade de atração
     public float attractionRadius = 2f;   // Raio de ativação da atração
+    public float attractionDelay = 5f;    // Tempo antes de permitir a atração
     private float collectionDelay = 0.5f; // Delay antes de poder ser coletada
     private float spawnTime;
 
@@ -25,7 +26,8 @@ public class Coin : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if (!isAttracted && distanceToPlayer <= attractionRadius)
+        // Verifica se o tempo de delay para atração já passou
+        if (!isAttracted && Time.time >= spawnTime + attractionDelay && distanceToPlayer <= attractionRadius)
         {
             isAttracted = true;
             rb.gravityScale = 0f; // Desliga a gravidade só quando começa a ser atraída
