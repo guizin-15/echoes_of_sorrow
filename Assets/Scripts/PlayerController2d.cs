@@ -1,21 +1,16 @@
-// PlayerController2D.cs (v1.5 – Movimento, Ataque e Dano)
+// PlayerController2D.cs ─ v2.2
 // -----------------------------------------------------------------------------
-// Controlador 2D completo: movimentação, pulo duplo, wall-slide, dash,
-// dois ataques (Slice & Slash), sistema de vida/dano e dano em inimigos.
-// -----------------------------------------------------------------------------
-// Parametros esperados no Animator Controller (case-sensitive):
-// • float   Speed
-// • bool    IsGrounded
-// • bool    IsFalling
-// • bool    IsWallSliding
-// • trigger Jump
-// • trigger Dash
-// • trigger Slice
-// • trigger Slash
-// • trigger Damage
-// • trigger Die
+// • Movimento 2D completo (run, jump, double-jump, wall-slide, wall-jump)       |
+// • Dash normal (RMB) – bloqueado se o jogador estiver atacando                |
+// • Ataques Slice ↔ Slash em ciclo                                             |
+// • Combo: Slice → dash curto (comboDash) → Slash (parado)                     |
+// • Ataques aéreos condicionais: subindo = Slash | caindo = Slice              |
+// • Movimento horizontal só é congelado quando atacando NO CHÃO                |
+// • Hitboxes independentes para Slice e Slash                                  |
+// • Vida, dano, morte, cancelamento de combos ao sofrer dano                   |
 // -----------------------------------------------------------------------------
 
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -23,55 +18,73 @@ using UnityEngine;
 public class PlayerController2D : MonoBehaviour
 {
     #region === Configurações no Inspector ===
+    /* ---------- Movimento / Aceleração ---------- */
     [Header("Movimentação")]
-    [SerializeField] private float runMaxSpeed = 8f;
+    [SerializeField] private float runMaxSpeed     = 8f;
     [SerializeField] private float runAcceleration = 60f;
     [SerializeField] private float runDeceleration = 48f;
     [SerializeField, Range(0f, 1f)] private float accelInAir = .45f;
     [SerializeField, Range(0f, 1f)] private float decelInAir = .45f;
 
     [Header("Pulo")]
-    [SerializeField] private float jumpForce = 16f;
-    [SerializeField] private float coyoteTime = 0.15f;
+    [SerializeField] private float jumpForce      = 16f;
+    [SerializeField] private float coyoteTime     = 0.15f;
     [SerializeField] private float jumpBufferTime = 0.15f;
     [SerializeField, Range(0f, 1f)] private float jumpCutMultiplier = 0.5f;
 
     [Header("Pulo Duplo")]
     [SerializeField] private int extraJumps = 1;
 
+    /* ---------- Dash normal ---------- */
     [Header("Dash")]
-    [SerializeField] private float dashSpeed = 22f;
+    [SerializeField] private float dashSpeed    = 22f;
     [SerializeField] private float dashDuration = 0.18f;
     [SerializeField] private float dashCooldown = 0.8f;
 
-    [Header("Wall Slide & Jump")]
-    [SerializeField] private float wallSlideSpeed = 3f;
-    [SerializeField] private Vector2 wallJumpForce = new Vector2(14f, 16f);
-    [SerializeField] private float wallJumpTime = 0.2f;
+    /* ---------- Dash do combo ---------- */
+    [Header("Combo Dash (antes do Slash)")]
+    [SerializeField] private float comboDashSpeed    = 10f;
+    [SerializeField] private float comboDashDuration = 0.2f;
 
+    /* ---------- Wall-slide / Wall-jump ---------- */
+    [Header("Wall Slide & Jump")]
+    [SerializeField] private float  wallSlideSpeed = 3f;
+    [SerializeField] private Vector2 wallJumpForce = new Vector2(14f, 16f);
+    [SerializeField] private float  wallJumpTime   = 0.2f;
+
+    /* ---------- Checagens ---------- */
     [Header("Checagens (Empty Children)")]
-    [SerializeField] private Transform groundCheck = null;
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.2f, 0.05f);
+    [SerializeField] private Transform groundCheck   = null;
+    [SerializeField] private Vector2   groundCheckSize = new Vector2(0.2f, 0.05f);
     [Space(4)]
-    [SerializeField] private Transform wallCheck = null;
-    [SerializeField] private Vector2 wallCheckSize = new Vector2(0.05f, 0.2f);
+    [SerializeField] private Transform wallCheck     = null;
+    [SerializeField] private Vector2   wallCheckSize = new Vector2(0.05f, 0.2f);
     [Space(4)]
     [SerializeField] private LayerMask groundLayer;
 
-    // === ATAQUES ============================================================
-    [Header("Ataque")]
-    [SerializeField] private float sliceCooldown = 0.9f;           // Cooldown Slice
-    [SerializeField] private float sliceFreezeTime = 0.6f;         // Congelamento Slice
-    [SerializeField] private float slashCooldown = 0.35f;          // Cooldown Slash
-    [SerializeField] private Transform attackPoint = null;         // Pivô da hitbox
-    [SerializeField] private Vector2 attackBoxSize = new Vector2(1f, 0.5f);
+    /* ---------- Ataques ---------- */
+    [Header("Slice")]
+    [SerializeField] private float sliceCooldown   = 0.9f;
+    [SerializeField] private float sliceFreezeTime = 0.6f;
+
+    [Header("Slash")]
+    [SerializeField] private float slashCooldown   = 0.35f;
+    [SerializeField] private float slashDuration   = 0.3f;
+
+    /* ---------- Hitboxes ---------- */
+    [Header("Hitboxes")]
+    [SerializeField] private Transform sliceAttackPoint = null;
+    [SerializeField] private Vector2   sliceBoxSize     = new Vector2(1.2f, 0.6f);
+    [Space(4)]
+    [SerializeField] private Transform slashAttackPoint = null;
+    [SerializeField] private Vector2   slashBoxSize     = new Vector2(1.0f, 1.0f);
     [SerializeField] private LayerMask enemyLayer;
 
-    // === VIDA / DANO ========================================================
+    /* ---------- Vida ---------- */
     [Header("Vida")]
-    public int maxHealth = 4;
-    public int currentHealth;
-    private bool isDead = false;
+    public  int  maxHealth = 4;
+    public  int  currentHealth;
+    private bool isDead         = false;
     private bool isTakingDamage = false;
 
     [Header("Reação a Dano")]
@@ -81,58 +94,58 @@ public class PlayerController2D : MonoBehaviour
 
     #region === Variáveis internas ===
     private Rigidbody2D rb;
-    private Animator animator;
+    private Animator    animator;
     private bool isFacingRight = true;
 
     private Vector2 moveInput;
-    private float lastOnGroundTime;
-    private float jumpBufferCounter;
+    private float   lastOnGroundTime;
+    private float   jumpBufferCounter;
 
-    // Estados
-    private bool isGrounded;                 // usado pelo Animator
-    private bool isJumping;
-    private bool isWallSliding;
-    private bool isWallJumping;
+    /* Movimento */
+    private bool  isGrounded;
+    private bool  isJumping;
+    private bool  isWallSliding;
+    private bool  isWallJumping;
     private float wallJumpCounter;
-    private bool canDash = true;
-    private bool isDashing;
+    private bool  canDash = true;
+    private bool  isDashing;
+    private bool  isComboDashing;
+    private int   jumpsLeft;
 
-    private int jumpsLeft;                   // pulo duplo
-
-    // Ataques
+    /* Ataques */
     private float lastSliceTime;
     private float lastSlashTime;
     private bool  isSliceFrozen;
+    private bool  isSlashActive;
+    private bool  queuedSlashAfterSlice;
+    private bool  queuedSliceAfterSlash;
+    private bool  isPerformingSlice;
+    private bool  isPerformingSlash;
     #endregion
 
-    #region === Inicialização ===
+    #region === Inicialização & Loop ===
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>() ?? gameObject.AddComponent<Rigidbody2D>();
+        rb       = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        rb.gravityScale = 4f;
+        rb.gravityScale   = 4f;
         rb.freezeRotation = true;
-        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        rb.interpolation  = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-        jumpsLeft = extraJumps;
-
-        // Vida
         currentHealth = maxHealth;
+        jumpsLeft     = extraJumps;
     }
-    #endregion
 
-    #region === Loop principal ===
     private void Update()
     {
-        if (isDead) return;          // Personagem morto - nenhuma lógica roda
+        if (isDead) return;
+
         HandleTimers();
 
-        if (!isTakingDamage)        // Durante dano, ignora entrada do jogador
-            ReadInput();
-        else
-            moveInput.x = 0f;
+        if (!isTakingDamage) ReadInput();
+        else                 moveInput.x = 0f;
 
         CheckCollisions();
         HandleJump();
@@ -143,22 +156,26 @@ public class PlayerController2D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDashing) return;
+        if (isDashing || isComboDashing) return;
         ApplyHorizontalMovement();
         ApplyWallSlide();
     }
     #endregion
 
-    #region === Métodos privados ===
-    // ---------------- Timers ----------------
+    #region === Utilidades ===
+    private bool IsAttacking()
+        => isSliceFrozen || isSlashActive || isComboDashing ||
+           isPerformingSlice || isPerformingSlash;
+    #endregion
+
+    #region === Timers / Entrada ===
     private void HandleTimers()
     {
-        lastOnGroundTime -= Time.deltaTime;
+        lastOnGroundTime  -= Time.deltaTime;
         jumpBufferCounter -= Time.deltaTime;
         if (isWallJumping) wallJumpCounter -= Time.deltaTime;
     }
 
-    // ---------------- Entrada ----------------
     private void ReadInput()
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
@@ -169,33 +186,36 @@ public class PlayerController2D : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0f && !isWallJumping)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
 
-        // Dash só é permitido se não estiver em wall-slide
-        if (Input.GetMouseButtonDown(1) && canDash && !isWallSliding)
+        /* Dash normal bloqueado se atacando */
+        if (Input.GetMouseButtonDown(1) && canDash && !isWallSliding && !IsAttacking())
             StartCoroutine(Dash());
     }
+    #endregion
 
-    // ----------- Checagens de colisão -----------
+    #region === Checagens de Colisão ===
     private void CheckCollisions()
     {
         bool groundedNow = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
-        bool onWall = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, groundLayer);
+        bool onWall      = Physics2D.OverlapBox(wallCheck.position,  wallCheckSize,  0f, groundLayer);
 
         if (groundedNow)
         {
             lastOnGroundTime = coyoteTime;
-            jumpsLeft = extraJumps;
-            canDash = true;
+            jumpsLeft  = extraJumps;
+            canDash    = true;
         }
 
-        isGrounded = groundedNow;
+        isGrounded    = groundedNow;
         isWallSliding = onWall && !groundedNow && rb.linearVelocity.y < 0f && !isWallJumping;
     }
+    #endregion
 
-    // ---------------- Movimentação ----------------
+    #region === Movimento Horizontal & Wall Slide ===
     private void ApplyHorizontalMovement()
     {
-        if (isSliceFrozen || isTakingDamage) return;  // Slice ou Dano bloqueiam movimento
-        if (isWallJumping) return;
+        /* Bloqueia somente se estiver atacando E no chão */
+        if (isGrounded && IsAttacking() || isTakingDamage) return;
+        if (isWallJumping)                                 return;
 
         bool onWall = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, groundLayer);
         if (onWall && !isWallJumping)
@@ -205,9 +225,9 @@ public class PlayerController2D : MonoBehaviour
         }
 
         float targetSpeed = moveInput.x * runMaxSpeed;
-        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? runAcceleration : runDeceleration;
+        float accelRate   = Mathf.Abs(targetSpeed) > 0.01f ? runAcceleration : runDeceleration;
         if (lastOnGroundTime <= 0f)
-            accelRate *= (Mathf.Abs(targetSpeed) > 0.01f) ? accelInAir : decelInAir;
+            accelRate *= Mathf.Abs(targetSpeed) > 0.01f ? accelInAir : decelInAir;
 
         float speedDiff = targetSpeed - rb.linearVelocity.x;
         rb.AddForce(speedDiff * accelRate * Vector2.right, ForceMode2D.Force);
@@ -221,26 +241,18 @@ public class PlayerController2D : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, yVel);
         }
     }
+    #endregion
 
-    // ---------------- Pulo & Wall Jump ----------------
+    #region === Pulos ===
     private void HandleJump()
     {
-        if (isDashing || isSliceFrozen || isTakingDamage) return; // Bloqueios
+        if (IsAttacking() || isDashing || isTakingDamage) return;
 
         if (jumpBufferCounter > 0f)
         {
-            if (lastOnGroundTime > 0f)
-            {
-                PerformGroundJump();
-            }
-            else if (isWallSliding)
-            {
-                PerformWallJump();
-            }
-            else if (jumpsLeft > 0)
-            {
-                PerformDoubleJump();
-            }
+            if (lastOnGroundTime > 0f)      PerformGroundJump();
+            else if (isWallSliding)         PerformWallJump();
+            else if (jumpsLeft > 0)         PerformDoubleJump();
         }
 
         if (isWallJumping && wallJumpCounter <= 0f)
@@ -251,7 +263,7 @@ public class PlayerController2D : MonoBehaviour
     {
         isJumping = true;
         jumpBufferCounter = 0f;
-        lastOnGroundTime = 0f;
+        lastOnGroundTime  = 0f;
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
@@ -269,7 +281,9 @@ public class PlayerController2D : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(new Vector2(wallJumpForce.x * dir, wallJumpForce.y), ForceMode2D.Impulse);
 
-        if ((dir > 0 && !isFacingRight) || (dir < 0 && isFacingRight)) Flip();
+        if ((dir > 0 && !isFacingRight) || (dir < 0 && isFacingRight))
+            Flip();
+
         animator.SetTrigger("Jump");
     }
 
@@ -283,178 +297,275 @@ public class PlayerController2D : MonoBehaviour
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         animator.SetTrigger("Jump");
     }
+    #endregion
 
-    // ---------------- Dash ----------------
-    private System.Collections.IEnumerator Dash()
+    #region === Dash normal ===
+    private IEnumerator Dash()
     {
-        canDash = false;
+        canDash   = false;
         isDashing = true;
         animator.SetTrigger("Dash");
 
-        float dashDir = isFacingRight ? 1f : -1f;
-        float startTime = Time.time;
+        rb.linearVelocity = Vector2.zero;
+
+        float dir = isFacingRight ? 1f : -1f;
         float storedGravity = rb.gravityScale;
         rb.gravityScale = 0f;
-        rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
+        rb.linearVelocity = new Vector2(dir * dashSpeed, 0f);
 
-        while (Time.time - startTime < dashDuration)
-            yield return null;
+        yield return new WaitForSeconds(dashDuration);
 
         rb.gravityScale = storedGravity;
         isDashing = false;
     }
+    #endregion
 
-    // ---------------- Animator ----------------
+    #region === Animator ===
     private void UpdateAnimator()
     {
-        animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
-        animator.SetBool("IsGrounded", isGrounded);
-        animator.SetBool("IsFalling", rb.linearVelocity.y < -0.1f && !isGrounded);
-        animator.SetBool("IsWallSliding", isWallSliding);
+        animator.SetFloat("Speed",         Mathf.Abs(rb.linearVelocity.x));
+        animator.SetBool ("IsGrounded",    isGrounded);
+        animator.SetBool ("IsFalling",     rb.linearVelocity.y < -0.1f && !isGrounded);
+        animator.SetBool ("IsWallSliding", isWallSliding);
     }
+    #endregion
 
-    // -------------- Ataques (Slice / Slash) --------------
+    #region === Ataques ===
     private void HandleAttacks()
     {
-        // Restrição: não pode atacar se estiver em wall-slide ou sofrendo dano
-        if (Input.GetMouseButtonDown(0) && !isWallSliding && !isTakingDamage)
-        {
-            if (isGrounded)
-            {
-                // --- SLICE --------------------------------------------------------------
-                if (Time.time >= lastSliceTime + sliceCooldown)
-                {
-                    animator.SetTrigger("Slice");
-                    lastSliceTime = Time.time;
-                    PerformAttack();
-                    StartCoroutine(FreezeDuringSlice());
-                }
-            }
-            else
-            {
-                // --- SLASH --------------------------------------------------------------
-                if (Time.time >= lastSlashTime + slashCooldown)
-                {
-                    animator.SetTrigger("Slash");
-                    lastSlashTime = Time.time;
-                    PerformAttack();
-                }
-            }
-        }
+        if (!Input.GetMouseButtonDown(0) || isWallSliding || isTakingDamage) return;
+
+        if (isSliceFrozen)                        { queuedSlashAfterSlice = true; return; }
+        if (isSlashActive || isComboDashing)      { queuedSliceAfterSlash = true; return; }
+
+        if (isGrounded)            TryExecuteSlice();         // chão = Slice
+        else if (rb.linearVelocity.y > 0.1f) TryExecuteSlash();   // subindo = Slash
+        else                       TryExecuteSlice();         // caindo = Slice
     }
 
-    // Área de dano do ataque
-    private void PerformAttack()
+    /* ---------- Slice ---------- */
+    private void TryExecuteSlice()
     {
-        if (attackPoint == null) return;
+        if (Time.time < lastSliceTime + sliceCooldown || isSlashActive) return;
 
-        Collider2D[] hits = Physics2D.OverlapBoxAll(
-            attackPoint.position,
-            attackBoxSize,
-            0f,
-            enemyLayer);
+        isPerformingSlice  = true;
+        isPerformingSlash  = false;
+        lastSliceTime      = Time.time;
+        animator.SetTrigger("Slice");
 
-        foreach (Collider2D hit in hits)
-            hit.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+        PerformAttack();
+
+        if (isGrounded) StartCoroutine(FreezeDuringSlice());
+        else            StartCoroutine(EndAirSlice());
     }
 
-    // Congela movimentação horizontal durante parte do Slice
-    private System.Collections.IEnumerator FreezeDuringSlice()
+    private IEnumerator FreezeDuringSlice()
     {
         isSliceFrozen = true;
-
-        // Zera velocidade horizontal
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         moveInput.x = 0f;
 
         yield return new WaitForSeconds(sliceFreezeTime);
-        isSliceFrozen = false;
+
+        isSliceFrozen     = false;
+        isPerformingSlice = false;
+
+        if (queuedSlashAfterSlice && !isTakingDamage)
+            StartCoroutine(ComboDashThenSlash());
+
+        queuedSlashAfterSlice = false;
     }
 
-    // ---------------- Vida / Dano ----------------
+    private IEnumerator EndAirSlice()
+    {
+        yield return new WaitForSeconds(sliceFreezeTime);
+        isPerformingSlice = false;
+    }
+
+    /* ---------- Slash ---------- */
+    private void TryExecuteSlash()
+    {
+        if (Time.time < lastSlashTime + slashCooldown || isSliceFrozen) return;
+        ExecuteSlash();
+    }
+
+    private void ExecuteSlash()
+    {
+        isPerformingSlash = true;
+        isPerformingSlice = false;
+        isSlashActive     = true;
+        lastSlashTime     = Time.time;
+
+        if (isGrounded)
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+
+        animator.SetTrigger("Slash");
+
+        PerformAttack();
+        StartCoroutine(EndSlashAfterTime());
+    }
+
+    private IEnumerator EndSlashAfterTime()
+    {
+        yield return new WaitForSeconds(slashDuration);
+        isSlashActive     = false;
+        isPerformingSlash = false;
+
+        if (queuedSliceAfterSlash && !isTakingDamage)
+            StartCoroutine(ExecuteSliceAfterCooldown());
+
+        queuedSliceAfterSlash = false;
+    }
+
+    /* ---------- Combo Dash → Slash ---------- */
+    private IEnumerator ComboDashThenSlash()
+    {
+        float waitCD = Mathf.Max(0f, (lastSlashTime + slashCooldown) - Time.time);
+        if (waitCD > 0f) yield return new WaitForSeconds(waitCD);
+
+        isComboDashing = true;
+        float dir = isFacingRight ? 1f : -1f;
+        float storedGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        rb.linearVelocity = new Vector2(dir * comboDashSpeed, 0f);
+
+        yield return new WaitForSeconds(comboDashDuration);
+
+        rb.gravityScale = storedGravity;
+        isComboDashing = false;
+
+        ExecuteSlash();  // Slash parado
+    }
+
+    /* ---------- Aux ---------- */
+    private IEnumerator ExecuteSliceAfterCooldown()
+    {
+        float wait = Mathf.Max(0f, (lastSliceTime + sliceCooldown) - Time.time);
+        if (wait > 0f) yield return new WaitForSeconds(wait);
+        TryExecuteSlice();
+    }
+    #endregion
+
+    #region === Hitbox ===
+    private void PerformAttack()
+    {
+        Collider2D[] hits = null;
+
+        if (isPerformingSlice && sliceAttackPoint)
+            hits = Physics2D.OverlapBoxAll(sliceAttackPoint.position, sliceBoxSize, 0f, enemyLayer);
+        else if (isPerformingSlash && slashAttackPoint)
+            hits = Physics2D.OverlapBoxAll(slashAttackPoint.position, slashBoxSize, 0f, enemyLayer);
+
+        if (hits == null) return;
+        foreach (Collider2D h in hits)
+            h.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+    }
+    #endregion
+
+    #region === Vida / Dano / Morte ===
     public void TakeDamage()
     {
         if (isDead || isTakingDamage) return;
 
+        bool willDie = currentHealth <= 1;
         currentHealth--;
+
+        var ui = FindAnyObjectByType<VidaUIController>();
+        if (ui) ui.UpdateVida();
+
+        if (willDie) { StartCoroutine(Die()); return; }
+
         animator.SetTrigger("Damage");
         isTakingDamage = true;
 
-        // Knockback (empurra na direção oposta ao olhar)
+        queuedSlashAfterSlice = queuedSliceAfterSlash = false;
+
         int dir = isFacingRight ? -1 : 1;
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(new Vector2(dir * damagePushForceX, damagePushForceY), ForceMode2D.Impulse);
 
-        // Atualiza UI
-        var ui = FindAnyObjectByType<VidaUIController>();
-        if (ui != null) ui.UpdateVida();
-
-        if (currentHealth <= 0)
-            StartCoroutine(Die());
-        else
-            StartCoroutine(RecoverFromDamage(0.5f));
+        StartCoroutine(RecoverFromDamage(0.5f));
     }
 
-    private System.Collections.IEnumerator RecoverFromDamage(float delay)
+    private IEnumerator RecoverFromDamage(float delay)
     {
         yield return new WaitForSeconds(delay);
         isTakingDamage = false;
     }
 
-    private System.Collections.IEnumerator Die()
+    private IEnumerator Die()
     {
         isDead = true;
+        queuedSlashAfterSlice = queuedSliceAfterSlash = false;
+        isSlashActive = isSliceFrozen = isComboDashing = false;
+
         animator.SetTrigger("Die");
         gameObject.layer = LayerMask.NameToLayer("Dead");
 
-        // Pequeno atraso para garantir execução da animação
         yield return new WaitForSeconds(0.2f);
-        enabled = false; // Desativa este script
+        enabled = false;
     }
+    #endregion
 
-    // ---------------- Colisão com Inimigos ----------------
-    private void OnCollisionEnter2D(Collision2D collision)
+    #region === Colisão com Inimigos ===
+    private void OnCollisionEnter2D(Collision2D col)
     {
-        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("EnemyAttack"))
+        if (col.collider.CompareTag("Enemy") || col.collider.CompareTag("EnemyAttack"))
             TakeDamage();
     }
+    #endregion
 
-    // ---------------- Utilidades ----------------
+    #region === Flip ===
     private void HandleFlip()
     {
-        if (isDashing || isWallJumping || isSliceFrozen || isTakingDamage) return;
-        if (moveInput.x > 0 && !isFacingRight) Flip();
-        else if (moveInput.x < 0 && isFacingRight) Flip();
+        if (IsAttacking() || isWallJumping || isDashing) return;
+
+        if (moveInput.x > 0 && !isFacingRight)      Flip();
+        else if (moveInput.x < 0 && isFacingRight)  Flip();
     }
 
     private void Flip()
     {
         isFacingRight = !isFacingRight;
-        transform.localScale = new Vector3(
-            transform.localScale.x * -1f,
-            transform.localScale.y,
-            transform.localScale.z);
+        Vector3 s = transform.localScale;
+        s.x *= -1f;
+        transform.localScale = s;
     }
     #endregion
 
     #region === Gizmos ===
     private void OnDrawGizmosSelected()
     {
-        if (groundCheck != null)
+        if (groundCheck)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
         }
-        if (wallCheck != null)
+        if (wallCheck)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(wallCheck.position, wallCheckSize);
         }
-        if (attackPoint != null)
+        if (sliceAttackPoint)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(sliceAttackPoint.position, sliceBoxSize);
+        }
+        if (slashAttackPoint)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(attackPoint.position, attackBoxSize);
+            Gizmos.DrawWireCube(slashAttackPoint.position, slashBoxSize);
         }
+    }
+    #endregion
+
+    #region === OnGUI (debug/demo) ===
+    private void OnGUI()
+    {
+        GUI.Label(
+            new Rect(10, 10, 540, 20),
+            "Left Click: Slice ↔ Slash (subindo = Slash, caindo = Slice) — combo com dash curto no chão | Right Click: Dash"
+        );
     }
     #endregion
 }
