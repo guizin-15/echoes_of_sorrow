@@ -6,7 +6,7 @@ public class VidaUIController : MonoBehaviour
     public Image[] fragmentos;
     public Sprite fragmentoCheio;
     public Sprite fragmentoVazio;
-    public PlayerController player;
+    public PlayerController2D player;
 
     public void UpdateVida()
     {

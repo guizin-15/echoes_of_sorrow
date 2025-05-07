@@ -1,12 +1,19 @@
-// PlayerController2D.cs (v1.2)
+// PlayerController2D.cs (v1.5 – Movimento, Ataque e Dano)
 // -----------------------------------------------------------------------------
-// + Adicionado suporte a **Pulo Duplo**.
-//   • Campo [Header("Pulo Duplo")] → `extraJumps` (quantos saltos extras no ar).
-//   • Controle interno `jumpsLeft` reseta ao tocar o chão e decrementa ao usar
-//     o pulo extra.
-//   • Toda a lógica principal, comentários e estrutura foram preservados.
+// Controlador 2D completo: movimentação, pulo duplo, wall-slide, dash,
+// dois ataques (Slice & Slash), sistema de vida/dano e dano em inimigos.
 // -----------------------------------------------------------------------------
-// Demais instruções de uso permanecem exatamente as mesmas.
+// Parametros esperados no Animator Controller (case-sensitive):
+// • float   Speed
+// • bool    IsGrounded
+// • bool    IsFalling
+// • bool    IsWallSliding
+// • trigger Jump
+// • trigger Dash
+// • trigger Slice
+// • trigger Slash
+// • trigger Damage
+// • trigger Die
 // -----------------------------------------------------------------------------
 
 using UnityEngine;
@@ -17,20 +24,19 @@ public class PlayerController2D : MonoBehaviour
 {
     #region === Configurações no Inspector ===
     [Header("Movimentação")]
-    [SerializeField] private float runMaxSpeed = 8f;           // Velocidade‑alvo máxima
-    [SerializeField] private float runAcceleration = 60f;      // Aceleração no chão
-    [SerializeField] private float runDeceleration = 48f;      // Desaceleração no chão
-    [SerializeField, Range(0f, 1f)] private float accelInAir = .45f; // Acel. no ar
-    [SerializeField, Range(0f, 1f)] private float decelInAir = .45f; // Desacel. no ar
+    [SerializeField] private float runMaxSpeed = 8f;
+    [SerializeField] private float runAcceleration = 60f;
+    [SerializeField] private float runDeceleration = 48f;
+    [SerializeField, Range(0f, 1f)] private float accelInAir = .45f;
+    [SerializeField, Range(0f, 1f)] private float decelInAir = .45f;
 
     [Header("Pulo")]
-    [SerializeField] private float jumpForce = 16f;            // Força do pulo (Impulse)
-    [SerializeField] private float coyoteTime = 0.15f;         // "Tempo do coiote"
-    [SerializeField] private float jumpBufferTime = 0.15f;     // Buffer de input
-    [SerializeField, Range(0f, 1f)] private float jumpCutMultiplier = 0.5f; // Corte de pulo
+    [SerializeField] private float jumpForce = 16f;
+    [SerializeField] private float coyoteTime = 0.15f;
+    [SerializeField] private float jumpBufferTime = 0.15f;
+    [SerializeField, Range(0f, 1f)] private float jumpCutMultiplier = 0.5f;
 
     [Header("Pulo Duplo")]
-    [Tooltip("Número de saltos extras permitidos no ar (1 = duplo pulo)")]
     [SerializeField] private int extraJumps = 1;
 
     [Header("Dash")]
@@ -41,27 +47,49 @@ public class PlayerController2D : MonoBehaviour
     [Header("Wall Slide & Jump")]
     [SerializeField] private float wallSlideSpeed = 3f;
     [SerializeField] private Vector2 wallJumpForce = new Vector2(14f, 16f);
-    [SerializeField] private float wallJumpTime = 0.2f;        // Controle horizontal reduzido
+    [SerializeField] private float wallJumpTime = 0.2f;
 
-    [Header("Checagens (Empty Children)")]
-    [SerializeField] private Transform groundCheck = null;     // Centro da caixa
+    [Header("Checagens (Empty Children)")]
+    [SerializeField] private Transform groundCheck = null;
     [SerializeField] private Vector2 groundCheckSize = new Vector2(0.2f, 0.05f);
     [Space(4)]
-    [SerializeField] private Transform wallCheck = null;       // Lado que o player olha
+    [SerializeField] private Transform wallCheck = null;
     [SerializeField] private Vector2 wallCheckSize = new Vector2(0.05f, 0.2f);
     [Space(4)]
     [SerializeField] private LayerMask groundLayer;
+
+    // === ATAQUES ============================================================
+    [Header("Ataque")]
+    [SerializeField] private float sliceCooldown = 0.9f;           // Cooldown Slice
+    [SerializeField] private float sliceFreezeTime = 0.6f;         // Congelamento Slice
+    [SerializeField] private float slashCooldown = 0.35f;          // Cooldown Slash
+    [SerializeField] private Transform attackPoint = null;         // Pivô da hitbox
+    [SerializeField] private Vector2 attackBoxSize = new Vector2(1f, 0.5f);
+    [SerializeField] private LayerMask enemyLayer;
+
+    // === VIDA / DANO ========================================================
+    [Header("Vida")]
+    public int maxHealth = 4;
+    public int currentHealth;
+    private bool isDead = false;
+    private bool isTakingDamage = false;
+
+    [Header("Reação a Dano")]
+    [SerializeField] private float damagePushForceX = 5f;
+    [SerializeField] private float damagePushForceY = 2f;
     #endregion
 
     #region === Variáveis internas ===
     private Rigidbody2D rb;
+    private Animator animator;
     private bool isFacingRight = true;
 
-    private Vector2 moveInput;                 // Entrada de eixo (–1 a 1)
-    private float lastOnGroundTime;            // Timer de coyote
-    private float jumpBufferCounter;           // Timer de buffer
+    private Vector2 moveInput;
+    private float lastOnGroundTime;
+    private float jumpBufferCounter;
 
     // Estados
+    private bool isGrounded;                 // usado pelo Animator
     private bool isJumping;
     private bool isWallSliding;
     private bool isWallJumping;
@@ -69,42 +97,55 @@ public class PlayerController2D : MonoBehaviour
     private bool canDash = true;
     private bool isDashing;
 
-    // Pulo Duplo
-    private int jumpsLeft;                     // Saltos extras restantes
+    private int jumpsLeft;                   // pulo duplo
+
+    // Ataques
+    private float lastSliceTime;
+    private float lastSlashTime;
+    private bool  isSliceFrozen;
     #endregion
 
     #region === Inicialização ===
     private void Awake()
     {
-        // Verifica (ou adiciona) Rigidbody2D
         rb = GetComponent<Rigidbody2D>() ?? gameObject.AddComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
-        // Configurações padrão recomendadas
         rb.gravityScale = 4f;
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-        jumpsLeft = extraJumps; // inicializa contador de pulo duplo
+        jumpsLeft = extraJumps;
+
+        // Vida
+        currentHealth = maxHealth;
     }
     #endregion
 
     #region === Loop principal ===
     private void Update()
     {
+        if (isDead) return;          // Personagem morto - nenhuma lógica roda
         HandleTimers();
-        ReadInput();
+
+        if (!isTakingDamage)        // Durante dano, ignora entrada do jogador
+            ReadInput();
+        else
+            moveInput.x = 0f;
+
         CheckCollisions();
         HandleJump();
         HandleFlip();
+        UpdateAnimator();
+        HandleAttacks();
     }
 
     private void FixedUpdate()
     {
-        if (isDashing) return;               // Dash bloqueia movimento padrão
-
-        ApplyHorizontalMovement();           // Acelera/desacelera suavemente
-        ApplyWallSlide();                    // Limita velocidade de queda na parede
+        if (isDashing) return;
+        ApplyHorizontalMovement();
+        ApplyWallSlide();
     }
     #endregion
 
@@ -114,7 +155,6 @@ public class PlayerController2D : MonoBehaviour
     {
         lastOnGroundTime -= Time.deltaTime;
         jumpBufferCounter -= Time.deltaTime;
-
         if (isWallJumping) wallJumpCounter -= Time.deltaTime;
     }
 
@@ -123,56 +163,54 @@ public class PlayerController2D : MonoBehaviour
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
 
-        // Buffer de pulo
         if (Input.GetKeyDown(KeyCode.Space))
             jumpBufferCounter = jumpBufferTime;
 
-        // Corte de pulo: reduz velocidade ao soltar espaço
-        if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0f)
+        if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0f && !isWallJumping)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
 
-        // Dash
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        // Dash só é permitido se não estiver em wall-slide
+        if (Input.GetMouseButtonDown(1) && canDash && !isWallSliding)
             StartCoroutine(Dash());
     }
 
     // ----------- Checagens de colisão -----------
     private void CheckCollisions()
     {
-        bool grounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
-        bool onWall   = Physics2D.OverlapBox(wallCheck.position,   wallCheckSize,   0f, groundLayer);
+        bool groundedNow = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
+        bool onWall = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, groundLayer);
 
-        if (grounded)
+        if (groundedNow)
         {
             lastOnGroundTime = coyoteTime;
-            jumpsLeft = extraJumps; // reseta pulo duplo ao tocar o chão
+            jumpsLeft = extraJumps;
+            canDash = true;
         }
 
-        // Wall Slide = encostado na parede, não no chão e caindo
-        if (onWall && !grounded && rb.linearVelocity.y < 0f && !isWallJumping)
-            isWallSliding = true;
-        else
-            isWallSliding = false;
+        isGrounded = groundedNow;
+        isWallSliding = onWall && !groundedNow && rb.linearVelocity.y < 0f && !isWallJumping;
     }
 
     // ---------------- Movimentação ----------------
     private void ApplyHorizontalMovement()
     {
+        if (isSliceFrozen || isTakingDamage) return;  // Slice ou Dano bloqueiam movimento
+        if (isWallJumping) return;
+
         bool onWall = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, groundLayer);
         if (onWall && !isWallJumping)
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-            return; // impede qualquer aceleração lateral
+            return;
         }
 
         float targetSpeed = moveInput.x * runMaxSpeed;
-        float accelRate   = (Mathf.Abs(targetSpeed) > 0.01f) ? runAcceleration : runDeceleration;
+        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? runAcceleration : runDeceleration;
         if (lastOnGroundTime <= 0f)
             accelRate *= (Mathf.Abs(targetSpeed) > 0.01f) ? accelInAir : decelInAir;
 
         float speedDiff = targetSpeed - rb.linearVelocity.x;
-        float movement  = speedDiff * accelRate;
-        rb.AddForce(movement * Vector2.right, ForceMode2D.Force);
+        rb.AddForce(speedDiff * accelRate * Vector2.right, ForceMode2D.Force);
     }
 
     private void ApplyWallSlide()
@@ -184,30 +222,27 @@ public class PlayerController2D : MonoBehaviour
         }
     }
 
-    // ---------------- Pulo & Wall Jump ----------------
+    // ---------------- Pulo & Wall Jump ----------------
     private void HandleJump()
     {
-        // Condições para pular (ground / wall / extra jump)
+        if (isDashing || isSliceFrozen || isTakingDamage) return; // Bloqueios
+
         if (jumpBufferCounter > 0f)
         {
-            // ---- PULO NO CHÃO OU COYOTE ----
             if (lastOnGroundTime > 0f)
             {
                 PerformGroundJump();
             }
-            // ---- WALL JUMP ----
             else if (isWallSliding)
             {
                 PerformWallJump();
             }
-            // ---- PULO DUPLO ----
             else if (jumpsLeft > 0)
             {
                 PerformDoubleJump();
             }
         }
 
-        // Tempo de controle reduzido após wall jump expirar
         if (isWallJumping && wallJumpCounter <= 0f)
             isWallJumping = false;
     }
@@ -220,6 +255,7 @@ public class PlayerController2D : MonoBehaviour
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        animator.SetTrigger("Jump");
     }
 
     private void PerformWallJump()
@@ -229,23 +265,23 @@ public class PlayerController2D : MonoBehaviour
         wallJumpCounter = wallJumpTime;
         jumpBufferCounter = 0f;
 
-        int dir = isFacingRight ? -1 : 1; // Direção oposta à parede
-
+        int dir = isFacingRight ? -1 : 1;
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(new Vector2(wallJumpForce.x * dir, wallJumpForce.y), ForceMode2D.Impulse);
 
-        if ((dir > 0 && !isFacingRight) || (dir < 0 && isFacingRight))
-            Flip();
+        if ((dir > 0 && !isFacingRight) || (dir < 0 && isFacingRight)) Flip();
+        animator.SetTrigger("Jump");
     }
 
     private void PerformDoubleJump()
     {
         isJumping = true;
         jumpBufferCounter = 0f;
-        jumpsLeft--; // consome um pulo extra
+        jumpsLeft--;
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        animator.SetTrigger("Jump");
     }
 
     // ---------------- Dash ----------------
@@ -253,6 +289,7 @@ public class PlayerController2D : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
+        animator.SetTrigger("Dash");
 
         float dashDir = isFacingRight ? 1f : -1f;
         float startTime = Time.time;
@@ -265,16 +302,127 @@ public class PlayerController2D : MonoBehaviour
 
         rb.gravityScale = storedGravity;
         isDashing = false;
+    }
 
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
+    // ---------------- Animator ----------------
+    private void UpdateAnimator()
+    {
+        animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        animator.SetBool("IsGrounded", isGrounded);
+        animator.SetBool("IsFalling", rb.linearVelocity.y < -0.1f && !isGrounded);
+        animator.SetBool("IsWallSliding", isWallSliding);
+    }
+
+    // -------------- Ataques (Slice / Slash) --------------
+    private void HandleAttacks()
+    {
+        // Restrição: não pode atacar se estiver em wall-slide ou sofrendo dano
+        if (Input.GetMouseButtonDown(0) && !isWallSliding && !isTakingDamage)
+        {
+            if (isGrounded)
+            {
+                // --- SLICE --------------------------------------------------------------
+                if (Time.time >= lastSliceTime + sliceCooldown)
+                {
+                    animator.SetTrigger("Slice");
+                    lastSliceTime = Time.time;
+                    PerformAttack();
+                    StartCoroutine(FreezeDuringSlice());
+                }
+            }
+            else
+            {
+                // --- SLASH --------------------------------------------------------------
+                if (Time.time >= lastSlashTime + slashCooldown)
+                {
+                    animator.SetTrigger("Slash");
+                    lastSlashTime = Time.time;
+                    PerformAttack();
+                }
+            }
+        }
+    }
+
+    // Área de dano do ataque
+    private void PerformAttack()
+    {
+        if (attackPoint == null) return;
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            attackPoint.position,
+            attackBoxSize,
+            0f,
+            enemyLayer);
+
+        foreach (Collider2D hit in hits)
+            hit.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+    }
+
+    // Congela movimentação horizontal durante parte do Slice
+    private System.Collections.IEnumerator FreezeDuringSlice()
+    {
+        isSliceFrozen = true;
+
+        // Zera velocidade horizontal
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        moveInput.x = 0f;
+
+        yield return new WaitForSeconds(sliceFreezeTime);
+        isSliceFrozen = false;
+    }
+
+    // ---------------- Vida / Dano ----------------
+    public void TakeDamage()
+    {
+        if (isDead || isTakingDamage) return;
+
+        currentHealth--;
+        animator.SetTrigger("Damage");
+        isTakingDamage = true;
+
+        // Knockback (empurra na direção oposta ao olhar)
+        int dir = isFacingRight ? -1 : 1;
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(new Vector2(dir * damagePushForceX, damagePushForceY), ForceMode2D.Impulse);
+
+        // Atualiza UI
+        var ui = FindAnyObjectByType<VidaUIController>();
+        if (ui != null) ui.UpdateVida();
+
+        if (currentHealth <= 0)
+            StartCoroutine(Die());
+        else
+            StartCoroutine(RecoverFromDamage(0.5f));
+    }
+
+    private System.Collections.IEnumerator RecoverFromDamage(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isTakingDamage = false;
+    }
+
+    private System.Collections.IEnumerator Die()
+    {
+        isDead = true;
+        animator.SetTrigger("Die");
+        gameObject.layer = LayerMask.NameToLayer("Dead");
+
+        // Pequeno atraso para garantir execução da animação
+        yield return new WaitForSeconds(0.2f);
+        enabled = false; // Desativa este script
+    }
+
+    // ---------------- Colisão com Inimigos ----------------
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("EnemyAttack"))
+            TakeDamage();
     }
 
     // ---------------- Utilidades ----------------
     private void HandleFlip()
     {
-        if (isDashing || isWallJumping) return; // Evita flip durante estas ações
-
+        if (isDashing || isWallJumping || isSliceFrozen || isTakingDamage) return;
         if (moveInput.x > 0 && !isFacingRight) Flip();
         else if (moveInput.x < 0 && isFacingRight) Flip();
     }
@@ -282,11 +430,14 @@ public class PlayerController2D : MonoBehaviour
     private void Flip()
     {
         isFacingRight = !isFacingRight;
-        transform.localScale = new Vector3(transform.localScale.x * -1f, transform.localScale.y, transform.localScale.z);
+        transform.localScale = new Vector3(
+            transform.localScale.x * -1f,
+            transform.localScale.y,
+            transform.localScale.z);
     }
     #endregion
 
-    #region === Gizmos (editor) ===
+    #region === Gizmos ===
     private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
@@ -298,6 +449,11 @@ public class PlayerController2D : MonoBehaviour
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(wallCheck.position, wallCheckSize);
+        }
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(attackPoint.position, attackBoxSize);
         }
     }
     #endregion
