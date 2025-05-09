@@ -1,13 +1,8 @@
-// PlayerController2D.cs ─ v2.2
+// PlayerController2D.cs ─ v2.4
 // -----------------------------------------------------------------------------
-// • Movimento 2D completo (run, jump, double-jump, wall-slide, wall-jump)       |
-// • Dash normal (RMB) – bloqueado se o jogador estiver atacando                |
-// • Ataques Slice ↔ Slash em ciclo                                             |
-// • Combo: Slice → dash curto (comboDash) → Slash (parado)                     |
-// • Ataques aéreos condicionais: subindo = Slash | caindo = Slice              |
-// • Movimento horizontal só é congelado quando atacando NO CHÃO                |
-// • Hitboxes independentes para Slice e Slash                                  |
-// • Vida, dano, morte, cancelamento de combos ao sofrer dano                   |
+// - Dash infinito NO CHÃO, mas somente 1 dash por salto aéreo
+// - Cooldown (dashCooldown) respeitado em qualquer situação
+// - Demais sistemas (combo-dash, ataques, wall-slide, etc.) inalterados & seguros
 // -----------------------------------------------------------------------------
 
 using System.Collections;
@@ -18,73 +13,73 @@ using UnityEngine;
 public class PlayerController2D : MonoBehaviour
 {
     #region === Configurações no Inspector ===
-    /* ---------- Movimento / Aceleração ---------- */
+    /* -------- Movimento -------- */
     [Header("Movimentação")]
-    [SerializeField] private float runMaxSpeed     = 8f;
+    [SerializeField] private float runMaxSpeed = 8f;
     [SerializeField] private float runAcceleration = 60f;
     [SerializeField] private float runDeceleration = 48f;
     [SerializeField, Range(0f, 1f)] private float accelInAir = .45f;
     [SerializeField, Range(0f, 1f)] private float decelInAir = .45f;
 
     [Header("Pulo")]
-    [SerializeField] private float jumpForce      = 16f;
-    [SerializeField] private float coyoteTime     = 0.15f;
+    [SerializeField] private float jumpForce = 16f;
+    [SerializeField] private float coyoteTime = 0.15f;
     [SerializeField] private float jumpBufferTime = 0.15f;
     [SerializeField, Range(0f, 1f)] private float jumpCutMultiplier = 0.5f;
 
     [Header("Pulo Duplo")]
     [SerializeField] private int extraJumps = 1;
 
-    /* ---------- Dash normal ---------- */
+    /* -------- Dash -------- */
     [Header("Dash")]
-    [SerializeField] private float dashSpeed    = 22f;
+    [SerializeField] private float dashSpeed = 22f;
     [SerializeField] private float dashDuration = 0.18f;
     [SerializeField] private float dashCooldown = 0.8f;
 
-    /* ---------- Dash do combo ---------- */
+    /* -------- Combo Dash -------- */
     [Header("Combo Dash (antes do Slash)")]
-    [SerializeField] private float comboDashSpeed    = 10f;
+    [SerializeField] private float comboDashSpeed = 10f;
     [SerializeField] private float comboDashDuration = 0.2f;
 
-    /* ---------- Wall-slide / Wall-jump ---------- */
+    /* -------- Wall / Jump -------- */
     [Header("Wall Slide & Jump")]
-    [SerializeField] private float  wallSlideSpeed = 3f;
+    [SerializeField] private float wallSlideSpeed = 3f;
     [SerializeField] private Vector2 wallJumpForce = new Vector2(14f, 16f);
-    [SerializeField] private float  wallJumpTime   = 0.2f;
+    [SerializeField] private float wallJumpTime = 0.2f;
 
-    /* ---------- Checagens ---------- */
+    /* -------- Checagens -------- */
     [Header("Checagens (Empty Children)")]
-    [SerializeField] private Transform groundCheck   = null;
-    [SerializeField] private Vector2   groundCheckSize = new Vector2(0.2f, 0.05f);
+    [SerializeField] private Transform groundCheck = null;
+    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.2f, 0.05f);
     [Space(4)]
-    [SerializeField] private Transform wallCheck     = null;
-    [SerializeField] private Vector2   wallCheckSize = new Vector2(0.05f, 0.2f);
+    [SerializeField] private Transform wallCheck = null;
+    [SerializeField] private Vector2 wallCheckSize = new Vector2(0.05f, 0.2f);
     [Space(4)]
     [SerializeField] private LayerMask groundLayer;
 
-    /* ---------- Ataques ---------- */
+    /* -------- Ataques -------- */
     [Header("Slice")]
-    [SerializeField] private float sliceCooldown   = 0.9f;
+    [SerializeField] private float sliceCooldown = 0.9f;
     [SerializeField] private float sliceFreezeTime = 0.6f;
 
     [Header("Slash")]
-    [SerializeField] private float slashCooldown   = 0.35f;
-    [SerializeField] private float slashDuration   = 0.3f;
+    [SerializeField] private float slashCooldown = 0.35f;
+    [SerializeField] private float slashDuration = 0.3f;
 
-    /* ---------- Hitboxes ---------- */
+    /* -------- Hitboxes -------- */
     [Header("Hitboxes")]
     [SerializeField] private Transform sliceAttackPoint = null;
-    [SerializeField] private Vector2   sliceBoxSize     = new Vector2(1.2f, 0.6f);
+    [SerializeField] private Vector2 sliceBoxSize = new Vector2(1.2f, 0.6f);
     [Space(4)]
     [SerializeField] private Transform slashAttackPoint = null;
-    [SerializeField] private Vector2   slashBoxSize     = new Vector2(1.0f, 1.0f);
+    [SerializeField] private Vector2 slashBoxSize = new Vector2(1.0f, 1.0f);
     [SerializeField] private LayerMask enemyLayer;
 
-    /* ---------- Vida ---------- */
+    /* -------- Vida -------- */
     [Header("Vida")]
-    public  int  maxHealth = 4;
-    public  int  currentHealth;
-    private bool isDead         = false;
+    public int maxHealth = 4;
+    public int currentHealth;
+    private bool isDead = false;
     private bool isTakingDamage = false;
 
     [Header("Reação a Dano")]
@@ -94,33 +89,30 @@ public class PlayerController2D : MonoBehaviour
 
     #region === Variáveis internas ===
     private Rigidbody2D rb;
-    private Animator    animator;
+    private Animator animator;
     private bool isFacingRight = true;
 
     private Vector2 moveInput;
-    private float   lastOnGroundTime;
-    private float   jumpBufferCounter;
+    private float lastOnGroundTime;
+    private float jumpBufferCounter;
 
     /* Movimento */
-    private bool  isGrounded;
-    private bool  isJumping;
-    private bool  isWallSliding;
-    private bool  isWallJumping;
+    private bool isGrounded, isJumping, isWallSliding, isWallJumping;
     private float wallJumpCounter;
-    private bool  canDash = true;
-    private bool  isDashing;
-    private bool  isComboDashing;
-    private int   jumpsLeft;
+    private int jumpsLeft;
+
+    /* Dash */
+    private bool isDashing;
+    private bool isComboDashing;
+    private bool isDashCoroutineActive;
+    private float lastDashTime;
+    private bool hasDashedInAir;        // <-- NOVO : controla 1 dash aéreo
 
     /* Ataques */
-    private float lastSliceTime;
-    private float lastSlashTime;
-    private bool  isSliceFrozen;
-    private bool  isSlashActive;
-    private bool  queuedSlashAfterSlice;
-    private bool  queuedSliceAfterSlash;
-    private bool  isPerformingSlice;
-    private bool  isPerformingSlash;
+    private float lastSliceTime, lastSlashTime;
+    private bool isSliceFrozen, isSlashActive;
+    private bool queuedSlashAfterSlice, queuedSliceAfterSlash;
+    private bool isPerformingSlice, isPerformingSlash;
     #endregion
 
     #region === Inicialização & Loop ===
@@ -129,9 +121,9 @@ public class PlayerController2D : MonoBehaviour
         rb       = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        rb.gravityScale   = 4f;
+        rb.gravityScale = 4f;
         rb.freezeRotation = true;
-        rb.interpolation  = RigidbodyInterpolation2D.Interpolate;
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
         currentHealth = maxHealth;
@@ -186,9 +178,22 @@ public class PlayerController2D : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0f && !isWallJumping)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
 
-        /* Dash normal bloqueado se atacando */
-        if (Input.GetMouseButtonDown(1) && canDash && !isWallSliding && !IsAttacking())
-            StartCoroutine(Dash());
+        /* ---------- DASH ---------- */
+        bool dashPressed = Input.GetMouseButtonDown(1);
+        bool cdOK        = Time.time >= lastDashTime + dashCooldown;
+
+        if (dashPressed && cdOK && !isDashCoroutineActive && !isWallSliding && !IsAttacking())
+        {
+            if (isGrounded)                           // dashes ilimitados no chão (respeita cooldown)
+            {
+                StartCoroutine(Dash());
+            }
+            else if (!hasDashedInAir)                 // 1 dash por salto
+            {
+                StartCoroutine(Dash());
+                hasDashedInAir = true;
+            }
+        }
     }
     #endregion
 
@@ -198,11 +203,15 @@ public class PlayerController2D : MonoBehaviour
         bool groundedNow = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
         bool onWall      = Physics2D.OverlapBox(wallCheck.position,  wallCheckSize,  0f, groundLayer);
 
+        if (groundedNow && !isGrounded)               // acabou de aterrar
+        {
+            hasDashedInAir = false;                  // reseta dash aéreo
+        }
+
         if (groundedNow)
         {
             lastOnGroundTime = coyoteTime;
-            jumpsLeft  = extraJumps;
-            canDash    = true;
+            jumpsLeft        = extraJumps;
         }
 
         isGrounded    = groundedNow;
@@ -213,7 +222,6 @@ public class PlayerController2D : MonoBehaviour
     #region === Movimento Horizontal & Wall Slide ===
     private void ApplyHorizontalMovement()
     {
-        /* Bloqueia somente se estiver atacando E no chão */
         if (isGrounded && IsAttacking() || isTakingDamage) return;
         if (isWallJumping)                                 return;
 
@@ -299,24 +307,29 @@ public class PlayerController2D : MonoBehaviour
     }
     #endregion
 
-    #region === Dash normal ===
+    #region === DASH normal (protegido) ===
     private IEnumerator Dash()
     {
-        canDash   = false;
+        if (isDashCoroutineActive) yield break;
+        isDashCoroutineActive = true;
+        lastDashTime          = Time.time;
+
         isDashing = true;
         animator.SetTrigger("Dash");
 
-        rb.linearVelocity = Vector2.zero;
+        Vector2 originalVelocity = rb.linearVelocity;
+        float   originalGravity  = rb.gravityScale;
 
-        float dir = isFacingRight ? 1f : -1f;
-        float storedGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        rb.linearVelocity = new Vector2(dir * dashSpeed, 0f);
+        rb.gravityScale   = 0f;
+        rb.linearVelocity = new Vector2((isFacingRight ? 1f : -1f) * dashSpeed, 0f);
 
         yield return new WaitForSeconds(dashDuration);
 
-        rb.gravityScale = storedGravity;
-        isDashing = false;
+        rb.gravityScale   = originalGravity;
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+
+        isDashing             = false;
+        isDashCoroutineActive = false;
     }
     #endregion
 
@@ -330,27 +343,27 @@ public class PlayerController2D : MonoBehaviour
     }
     #endregion
 
-    #region === Ataques ===
+    #region === Ataques (Slice ↔ Slash) ===
     private void HandleAttacks()
     {
         if (!Input.GetMouseButtonDown(0) || isWallSliding || isTakingDamage) return;
 
-        if (isSliceFrozen)                        { queuedSlashAfterSlice = true; return; }
-        if (isSlashActive || isComboDashing)      { queuedSliceAfterSlash = true; return; }
+        if (isSliceFrozen)                    { queuedSlashAfterSlice = true; return; }
+        if (isSlashActive || isComboDashing)  { queuedSliceAfterSlash = true; return; }
 
-        if (isGrounded)            TryExecuteSlice();         // chão = Slice
-        else if (rb.linearVelocity.y > 0.1f) TryExecuteSlash();   // subindo = Slash
-        else                       TryExecuteSlice();         // caindo = Slice
+        if (isGrounded)                      TryExecuteSlice();
+        else if (rb.linearVelocity.y > 0.1f) TryExecuteSlash();
+        else                                 TryExecuteSlice();
     }
 
-    /* ---------- Slice ---------- */
+    /* --- Slice (sem mudanças) --- */
     private void TryExecuteSlice()
     {
         if (Time.time < lastSliceTime + sliceCooldown || isSlashActive) return;
 
-        isPerformingSlice  = true;
-        isPerformingSlash  = false;
-        lastSliceTime      = Time.time;
+        isPerformingSlice = true;
+        isPerformingSlash = false;
+        lastSliceTime     = Time.time;
         animator.SetTrigger("Slice");
 
         PerformAttack();
@@ -382,7 +395,7 @@ public class PlayerController2D : MonoBehaviour
         isPerformingSlice = false;
     }
 
-    /* ---------- Slash ---------- */
+    /* --- Slash (sem mudanças) --- */
     private void TryExecuteSlash()
     {
         if (Time.time < lastSlashTime + slashCooldown || isSliceFrozen) return;
@@ -417,7 +430,7 @@ public class PlayerController2D : MonoBehaviour
         queuedSliceAfterSlash = false;
     }
 
-    /* ---------- Combo Dash → Slash ---------- */
+    /* --- Combo Dash → Slash (sem mudanças) --- */
     private IEnumerator ComboDashThenSlash()
     {
         float waitCD = Mathf.Max(0f, (lastSlashTime + slashCooldown) - Time.time);
@@ -426,18 +439,17 @@ public class PlayerController2D : MonoBehaviour
         isComboDashing = true;
         float dir = isFacingRight ? 1f : -1f;
         float storedGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        rb.linearVelocity = new Vector2(dir * comboDashSpeed, 0f);
+        rb.gravityScale     = 0f;
+        rb.linearVelocity   = new Vector2(dir * comboDashSpeed, 0f);
 
         yield return new WaitForSeconds(comboDashDuration);
 
         rb.gravityScale = storedGravity;
-        isComboDashing = false;
+        isComboDashing  = false;
 
         ExecuteSlash();  // Slash parado
     }
 
-    /* ---------- Aux ---------- */
     private IEnumerator ExecuteSliceAfterCooldown()
     {
         float wait = Mathf.Max(0f, (lastSliceTime + sliceCooldown) - Time.time);
@@ -446,7 +458,7 @@ public class PlayerController2D : MonoBehaviour
     }
     #endregion
 
-    #region === Hitbox ===
+    #region === Hitbox (sem mudanças) ===
     private void PerformAttack()
     {
         Collider2D[] hits = null;
@@ -462,7 +474,7 @@ public class PlayerController2D : MonoBehaviour
     }
     #endregion
 
-    #region === Vida / Dano / Morte ===
+    #region === Vida / Dano / Morte (sem mudanças) ===
     public void TakeDamage()
     {
         if (isDead || isTakingDamage) return;
@@ -497,7 +509,7 @@ public class PlayerController2D : MonoBehaviour
     {
         isDead = true;
         queuedSlashAfterSlice = queuedSliceAfterSlash = false;
-        isSlashActive = isSliceFrozen = isComboDashing = false;
+        isSlashActive = isSliceFrozen = isComboDashing = isDashing = false;
 
         animator.SetTrigger("Die");
         gameObject.layer = LayerMask.NameToLayer("Dead");
@@ -559,12 +571,12 @@ public class PlayerController2D : MonoBehaviour
     }
     #endregion
 
-    #region === OnGUI (debug/demo) ===
+    #region === OnGUI (debug) ===
     private void OnGUI()
     {
         GUI.Label(
-            new Rect(10, 10, 540, 20),
-            "Left Click: Slice ↔ Slash (subindo = Slash, caindo = Slice) — combo com dash curto no chão | Right Click: Dash"
+            new Rect(10, 10, 580, 20),
+            "LMB: Slice/Slash (subindo=Slash, caindo=Slice) | RMB: Dash (ilimitado no chão, 1 no ar, cooldown 0.8s)"
         );
     }
     #endregion
