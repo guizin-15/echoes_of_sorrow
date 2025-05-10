@@ -50,7 +50,7 @@ public class PlayerController2D : MonoBehaviour
     /* -------- Checagens -------- */
     [Header("Checagens (Empty Children)")]
     [SerializeField] private Transform groundCheck = null;
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.2f, 0.05f);
+    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.15f, 0.04f);
     [Space(4)]
     [SerializeField] private Transform wallCheck = null;
     [SerializeField] private Vector2 wallCheckSize = new Vector2(0.05f, 0.2f);
@@ -199,8 +199,11 @@ public class PlayerController2D : MonoBehaviour
 
     #region === Checagens de Colisão ===
     private void CheckCollisions()
-    {
-        bool groundedNow = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
+    {  
+        int maskSemBarrier = groundLayer & ~LayerMask.GetMask("Barrier");
+        bool groundedNow = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, maskSemBarrier);
+
+
         bool onWall      = Physics2D.OverlapBox(wallCheck.position,  wallCheckSize,  0f, groundLayer);
 
         if (groundedNow && !isGrounded)               // acabou de aterrar
