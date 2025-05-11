@@ -4,18 +4,18 @@ using UnityEngine;
 public class CoinUIController : MonoBehaviour
 {
     public TextMeshProUGUI coinText;
-    private PlayerController player;
+    private PlayerController2D player;
 
     void Start()
     {
-        player = FindAnyObjectByType<PlayerController>();
+        player = FindAnyObjectByType<PlayerController2D>();
     }
 
     void Update()
     {
         if (player != null)
         {
-            coinText.text = "x" + player.coinsCollected;
+            coinText.text = "" + player.coinsCollected;
         }
     }
 }

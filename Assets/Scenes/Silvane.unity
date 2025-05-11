@@ -2177,7 +2177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f948f695e75645aabf0547b99d6eb11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1002761856}
+  player: {fileID: 1643627323}
   followSpeed: 5
 --- !u!4 &852650349
 Transform:
@@ -2269,7 +2269,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 761479435
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0.03333336, y: 0.03333336, z: 0}
@@ -5021,11 +5021,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!4 &1002761856 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4693905658233623752, guid: 7ba14da1d61484363aa4146d2919c4f8, type: 3}
-  m_PrefabInstance: {fileID: 2062154492}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1135170188
 GameObject:
   m_ObjectHideFlags: 0
@@ -5151,7 +5146,7 @@ MonoBehaviour:
   - {fileID: 2028063052}
   fragmentoCheio: {fileID: 2598849717660255997, guid: 5bb307bb5c6baac42906a355c388a8b4, type: 3}
   fragmentoVazio: {fileID: 4590961213960091577, guid: b2975c9ab7da4a341bf1c421c92ddbca, type: 3}
-  player: {fileID: 2036030162}
+  player: {fileID: 0}
 --- !u!1 &1140684536
 GameObject:
   m_ObjectHideFlags: 0
@@ -23448,17 +23443,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028063050}
   m_CullTransparentMesh: 1
---- !u!114 &2036030162 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8115552501538075440, guid: ec29aa935ba184313b82403857367116, type: 3}
-  m_PrefabInstance: {fileID: 1587773131}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1702776784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a8644c39597340a1bfaa6f91ff17e84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &2036030167
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23669,6 +23653,10 @@ PrefabInstance:
     - target: {fileID: 8828102112900534064, guid: 7ba14da1d61484363aa4146d2919c4f8, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828102112900534064, guid: 7ba14da1d61484363aa4146d2919c4f8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

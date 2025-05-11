@@ -13,7 +13,7 @@ public class SpiderProjectile : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<PlayerController>()?.TakeDamage();
+            collision.GetComponent<PlayerController2D>()?.TakeDamage();
             Destroy(gameObject);
         }
     }

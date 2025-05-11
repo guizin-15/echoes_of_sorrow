@@ -82,6 +82,9 @@ public class PlayerController2D : MonoBehaviour
     private bool isDead = false;
     private bool isTakingDamage = false;
 
+    [Header("Coleta de Moedas")]
+    public int coinsCollected = 0;
+
     [Header("Reação a Dano")]
     [SerializeField] private float damagePushForceX = 5f;
     [SerializeField] private float damagePushForceY = 2f;
