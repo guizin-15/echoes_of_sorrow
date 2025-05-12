@@ -15,7 +15,7 @@ public class CoinUIController : MonoBehaviour
     {
         if (player != null)
         {
-            coinText.text = "" + player.coinsCollected;
+            coinText.text = $"{player.coinsCollected}";
         }
     }
 }
