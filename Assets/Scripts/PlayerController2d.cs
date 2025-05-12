@@ -56,6 +56,7 @@ public class PlayerController2D : MonoBehaviour
     [SerializeField] private Vector2 wallCheckSize = new Vector2(0.05f, 0.2f);
     [Space(4)]
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask barrierLayer;
 
     /* -------- Ataques -------- */
     [Header("Slice")]
@@ -207,7 +208,8 @@ public class PlayerController2D : MonoBehaviour
         bool groundedNow = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, maskSemBarrier);
 
 
-        bool onWall      = Physics2D.OverlapBox(wallCheck.position,  wallCheckSize,  0f, groundLayer);
+        bool onWall = Physics2D.OverlapBox(wallCheck.position,  wallCheckSize,  0f, groundLayer);
+        bool onBarrier = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, barrierLayer);
 
         if (groundedNow && !isGrounded)               // acabou de aterrar
         {
@@ -221,7 +223,7 @@ public class PlayerController2D : MonoBehaviour
         }
 
         isGrounded    = groundedNow;
-        isWallSliding = onWall && !groundedNow && rb.linearVelocity.y < 0f && !isWallJumping;
+        isWallSliding = (onWall || onBarrier) && !groundedNow && rb.linearVelocity.y < 0f && !isWallJumping;
     }
     #endregion
 
@@ -232,7 +234,9 @@ public class PlayerController2D : MonoBehaviour
         if (isWallJumping)                                 return;
 
         bool onWall = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, groundLayer);
-        if (onWall && !isWallJumping)
+        bool onBarrier = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, barrierLayer);
+
+        if ((onBarrier || onWall) && !isWallJumping)
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             return;
@@ -265,8 +269,8 @@ public class PlayerController2D : MonoBehaviour
         if (jumpBufferCounter > 0f)
         {
             if (lastOnGroundTime > 0f)      PerformGroundJump();
-            else if (isWallSliding)         PerformWallJump();
-            else if (jumpsLeft > 0)         PerformDoubleJump();
+            else if (isWallSliding && Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, groundLayer)) PerformWallJump();
+            else if (jumpsLeft > 0 && !Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, barrierLayer)) PerformDoubleJump();
         }
 
         if (isWallJumping && wallJumpCounter <= 0f)
