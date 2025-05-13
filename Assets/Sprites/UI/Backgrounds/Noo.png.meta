@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: db961fd5c7f97408580312108182ef81
+guid: add6492cc60e646188a961a1937f1695
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -204593464165063775
-    second: UI - Words9_0
+      213: 1246060172142967971
+    second: Noo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UI - Words9_0
+      name: Noo_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 93
-        height: 33
+        width: 1920
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a3231d0453292df0800000000000000
-      internalID: -204593464165063775
+      spriteID: 3acf759ef15ea4110800000000000000
+      internalID: 1246060172142967971
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UI - Words9_0: -204593464165063775
+      Noo_0: 1246060172142967971
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

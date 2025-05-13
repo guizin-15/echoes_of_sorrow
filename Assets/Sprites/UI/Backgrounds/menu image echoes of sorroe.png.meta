@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: db961fd5c7f97408580312108182ef81
+guid: fa56ff17a7728415d987a9f19868868e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -204593464165063775
-    second: UI - Words9_0
+      213: 3519247131676155852
+    second: menu image echoes of sorroe_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UI - Words9_0
+      name: menu image echoes of sorroe_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 93
-        height: 33
+        width: 1536
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a3231d0453292df0800000000000000
-      internalID: -204593464165063775
+      spriteID: ccf9e58de90e6d030800000000000000
+      internalID: 3519247131676155852
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UI - Words9_0: -204593464165063775
+      menu image echoes of sorroe_0: 3519247131676155852
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
