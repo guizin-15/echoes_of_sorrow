@@ -55,7 +55,9 @@ public class UIButtonFX : MonoBehaviour,
     {
         if (ev.button != PointerEventData.InputButton.Left) return;
         if (clickClip) sfx.PlayOneShot(clickClip,sfxVolume);
-        StartCoroutine(FadeAndLoad());
+
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(FadeAndLoad());
     }
 
     /* ---------------- Fade / Load ---------------- */
