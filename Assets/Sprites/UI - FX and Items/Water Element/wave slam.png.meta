@@ -1,0 +1,1493 @@
+fileFormatVersion: 2
+guid: 6de628256a9764c26ac179ba0166e5be
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1584296649473376971
+    second: wave slam_0
+  - first:
+      213: 2016388714340756634
+    second: wave slam_1
+  - first:
+      213: 1356721944013083535
+    second: wave slam_2
+  - first:
+      213: -1197034026892556774
+    second: wave slam_3
+  - first:
+      213: -5243726183392828279
+    second: wave slam_4
+  - first:
+      213: 4379626149320666143
+    second: wave slam_5
+  - first:
+      213: 3310206658630175928
+    second: wave slam_6
+  - first:
+      213: 3543461609999097844
+    second: wave slam_7
+  - first:
+      213: 4476192586532122651
+    second: wave slam_8
+  - first:
+      213: 5913586234314465929
+    second: wave slam_9
+  - first:
+      213: 4186525860275492174
+    second: wave slam_10
+  - first:
+      213: -6236257810495369425
+    second: wave slam_11
+  - first:
+      213: 6046364325426698711
+    second: wave slam_12
+  - first:
+      213: -7836906400583777935
+    second: wave slam_13
+  - first:
+      213: 1998439420347795184
+    second: wave slam_14
+  - first:
+      213: -193547139141774248
+    second: wave slam_15
+  - first:
+      213: 8630432468364245916
+    second: wave slam_16
+  - first:
+      213: 5263321375283297289
+    second: wave slam_17
+  - first:
+      213: -135565455557282748
+    second: wave slam_18
+  - first:
+      213: 8420601027077747263
+    second: wave slam_19
+  - first:
+      213: -5946242224199300837
+    second: wave slam_20
+  - first:
+      213: -3628880366095383663
+    second: wave slam_21
+  - first:
+      213: -4949905680188801654
+    second: wave slam_22
+  - first:
+      213: 5160233032903418570
+    second: wave slam_23
+  - first:
+      213: 6685317675318067566
+    second: wave slam_24
+  - first:
+      213: -3939950236260976239
+    second: wave slam_25
+  - first:
+      213: -6094909010112109115
+    second: wave slam_26
+  - first:
+      213: 6494465859050521286
+    second: wave slam_27
+  - first:
+      213: 3468051970501620964
+    second: wave slam_28
+  - first:
+      213: 7809891028888128519
+    second: wave slam_29
+  - first:
+      213: -8769555827074308027
+    second: wave slam_30
+  - first:
+      213: -8652966541723469722
+    second: wave slam_31
+  - first:
+      213: -8566070826060382750
+    second: wave slam_32
+  - first:
+      213: -7882010054628243009
+    second: wave slam_33
+  - first:
+      213: -8924763620350174395
+    second: wave slam_34
+  - first:
+      213: 4851239439546722752
+    second: wave slam_35
+  - first:
+      213: 712472612435109390
+    second: wave slam_36
+  - first:
+      213: -849625325049374202
+    second: wave slam_37
+  - first:
+      213: -5402923989446580805
+    second: wave slam_38
+  - first:
+      213: 6793875611079224881
+    second: wave slam_39
+  - first:
+      213: -1735020187803679003
+    second: wave slam_40
+  - first:
+      213: 6383507890835841895
+    second: wave slam_41
+  - first:
+      213: 2043465149337721504
+    second: wave slam_42
+  - first:
+      213: -6467622546004564095
+    second: wave slam_43
+  - first:
+      213: 2132173270670847117
+    second: wave slam_44
+  - first:
+      213: 2948865619883743930
+    second: wave slam_45
+  - first:
+      213: -6747074631981959091
+    second: wave slam_46
+  - first:
+      213: -6562205478609085585
+    second: wave slam_47
+  - first:
+      213: -2736860226562092332
+    second: wave slam_48
+  - first:
+      213: -2512424318542864612
+    second: wave slam_49
+  - first:
+      213: 2866364105531237753
+    second: wave slam_50
+  - first:
+      213: 844474631501364497
+    second: wave slam_51
+  - first:
+      213: -3201628162353245107
+    second: wave slam_52
+  - first:
+      213: -6837069330418602069
+    second: wave slam_53
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wave slam_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 843
+        width: 25
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53d3c4d5792730ae0800000000000000
+      internalID: -1584296649473376971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 801
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9c23673ad6abfb10800000000000000
+      internalID: 2016388714340756634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 801
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8390eb7b6b04d210800000000000000
+      internalID: 1356721944013083535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_3
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 759
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a16830b05e7436fe0800000000000000
+      internalID: -1197034026892556774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_4
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 759
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 984a47391da8a37b0800000000000000
+      internalID: -5243726183392828279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_5
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 717
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1c254f47ce87cc30800000000000000
+      internalID: 4379626149320666143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_6
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 717
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bcc8c4fa6730fd20800000000000000
+      internalID: 3310206658630175928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 675
+        width: 16
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ffda3b6f87ec2130800000000000000
+      internalID: 3543461609999097844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_8
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 675
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b10fb7a0171ae1e30800000000000000
+      internalID: 4476192586532122651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 652
+        width: 29
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98224fc3957411250800000000000000
+      internalID: 5913586234314465929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_10
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 648
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4515b8b617891a30800000000000000
+      internalID: 4186525860275492174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 636
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2f0badff8c5479a0800000000000000
+      internalID: -6236257810495369425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_12
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 633
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d917a7a15009e350800000000000000
+      internalID: 6046364325426698711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_13
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 603
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 171083f7627bd3390800000000000000
+      internalID: -7836906400583777935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_14
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 611
+        width: 25
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f6c7fa8012ebbb10800000000000000
+      internalID: 1998439420347795184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_15
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 591
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 854592407e1605df0800000000000000
+      internalID: -193547139141774248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_16
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 565
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9b39de9a9475c770800000000000000
+      internalID: 8630432468364245916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_17
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 576
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90c3b7097e21b0940800000000000000
+      internalID: 5263321375283297289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_18
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 569
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 444b1b9bfef5e1ef0800000000000000
+      internalID: -135565455557282748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_19
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 549
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f323246150cfbd470800000000000000
+      internalID: 8420601027077747263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_20
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 521
+        width: 32
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b190c2e9334ba7da0800000000000000
+      internalID: -5946242224199300837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_21
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 493
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 193ce7e9880a3adc0800000000000000
+      internalID: -3628880366095383663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_22
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 496
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8d78a472076e4bb0800000000000000
+      internalID: -4949905680188801654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_23
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 466
+        width: 34
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac2e1747a94dc9740800000000000000
+      internalID: 5160233032903418570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_24
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 465
+        width: 16
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6149ff510507cc50800000000000000
+      internalID: 6685317675318067566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_25
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 451
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 199b2f6822c7259c0800000000000000
+      internalID: -3939950236260976239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_26
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 441
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c5a0f92c888a6ba0800000000000000
+      internalID: -6094909010112109115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_27
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 439
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c2cb962a4af02a50800000000000000
+      internalID: 6494465859050521286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_28
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 437
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e4b75484eef02030800000000000000
+      internalID: 3468051970501620964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_29
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 423
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70c036f138e426c60800000000000000
+      internalID: 7809891028888128519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_30
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 423
+        width: 41
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 548674930774c4680800000000000000
+      internalID: -8769555827074308027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_31
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 393
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6687b3396cc7ae780800000000000000
+      internalID: -8652966541723469722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_32
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 393
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ed75dbf7f33f1980800000000000000
+      internalID: -8566070826060382750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_33
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 397
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb983d1bd997d9290800000000000000
+      internalID: -7882010054628243009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_34
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 381
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54bd2b0d5ced42480800000000000000
+      internalID: -8924763620350174395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_35
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 381
+        width: 41
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c92c8a3190135340800000000000000
+      internalID: 4851239439546722752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_36
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 339
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e06a360f01633e900800000000000000
+      internalID: 712472612435109390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_37
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 339
+        width: 47
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60a9144b4468534f0800000000000000
+      internalID: -849625325049374202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_38
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 352
+        width: 10
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb5a99ce145f405b0800000000000000
+      internalID: -5402923989446580805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_39
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 350
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13e219e6fd1b84e50800000000000000
+      internalID: 6793875611079224881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_40
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 297
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e684dbe458fbe7e0800000000000000
+      internalID: -1735020187803679003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_41
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 297
+        width: 26
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7636c2efa96c69850800000000000000
+      internalID: 6383507890835841895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_42
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 307
+        width: 21
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0aa5a210ab8db5c10800000000000000
+      internalID: 2043465149337721504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_43
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 305
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1872714bf836e36a0800000000000000
+      internalID: -6467622546004564095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_44
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 297
+        width: 29
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8c2bedfa40079d10800000000000000
+      internalID: 2132173270670847117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_45
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 255
+        width: 50
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aba588358a97ce820800000000000000
+      internalID: 2948865619883743930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_46
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 265
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d487aa7ae539d52a0800000000000000
+      internalID: -6747074631981959091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_47
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 255
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6b1260a2ec5ee4a0800000000000000
+      internalID: -6562205478609085585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_48
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 3
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d21fdbdf18b40ad0800000000000000
+      internalID: -2736860226562092332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_49
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 45
+        width: 21
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1f1338c463122dd0800000000000000
+      internalID: -2512424318542864612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_50
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 87
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 975ae13a7fe57c720800000000000000
+      internalID: 2866364105531237753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_51
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 171
+        width: 22
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11db770043d28bb00800000000000000
+      internalID: 844474631501364497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_52
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 129
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d445c0836288193d0800000000000000
+      internalID: -3201628162353245107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave slam_53
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 3
+        width: 89
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baf6ea71ba9dd11a0800000000000000
+      internalID: -6837069330418602069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
