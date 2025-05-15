@@ -410,7 +410,18 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Fire Dash without VFX_0: -6750952128787493523
+      Fire Dash without VFX_1: -9000233328704670621
+      Fire Dash without VFX_10: -351379558605044008
+      Fire Dash without VFX_2: -2824434678499034761
+      Fire Dash without VFX_3: -1961734094269235591
+      Fire Dash without VFX_4: -9100704050122623298
+      Fire Dash without VFX_5: -8125624125621640521
+      Fire Dash without VFX_6: -3187837341977843122
+      Fire Dash without VFX_7: 5839218968400762184
+      Fire Dash without VFX_8: 7645365584140480050
+      Fire Dash without VFX_9: 1486551964795388044
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

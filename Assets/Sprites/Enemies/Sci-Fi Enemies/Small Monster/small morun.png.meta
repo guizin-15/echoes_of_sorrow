@@ -385,7 +385,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      small morun_0: 5398724381529672359
+      small morun_1: -8681667749748361095
+      small morun_2: 5698939219512124695
+      small morun_3: -1618741885757312767
+      small morun_4: 2424718405262673509
+      small morun_5: -3539914442746292117
+      small morun_6: -2232624669187401405
+      small morun_7: 7436326530038430751
+      small morun_8: -8780803004818786395
+      small morun_9: -581903663354438949
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -785,7 +785,33 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      VFX for fire dash_0: 7454958081490365557
+      VFX for fire dash_1: 4842758130287086845
+      VFX for fire dash_10: -8783863180439840882
+      VFX for fire dash_11: -8894841645989930245
+      VFX for fire dash_12: -786982129883142162
+      VFX for fire dash_13: 1998126585715068307
+      VFX for fire dash_14: 3337841318310834080
+      VFX for fire dash_15: -825866726976975031
+      VFX for fire dash_16: 5091533291055459951
+      VFX for fire dash_17: -850588812231687824
+      VFX for fire dash_18: 7418980779081219528
+      VFX for fire dash_19: 8632300349823103974
+      VFX for fire dash_2: 6656895235501786867
+      VFX for fire dash_20: -5753873455573263178
+      VFX for fire dash_21: 4575929488044253292
+      VFX for fire dash_22: -5321792267437456630
+      VFX for fire dash_23: 3697539104584966986
+      VFX for fire dash_24: -1941726757744670850
+      VFX for fire dash_25: 7858229813103318223
+      VFX for fire dash_3: -2259835026775979209
+      VFX for fire dash_4: 5278133858977837343
+      VFX for fire dash_5: -5906440872058843419
+      VFX for fire dash_6: -9022239008250764251
+      VFX for fire dash_7: -1655143251849125046
+      VFX for fire dash_8: -4180983682771101359
+      VFX for fire dash_9: -1456185869710807412
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

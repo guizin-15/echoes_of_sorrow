@@ -835,7 +835,35 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      archer golbin_0: 170704406517432718
+      archer golbin_1: -2803999974668719456
+      archer golbin_10: -4786004369748173744
+      archer golbin_11: -1206419607849968810
+      archer golbin_12: 8538278938998750300
+      archer golbin_13: -723771367272272124
+      archer golbin_14: 1026328034740611999
+      archer golbin_15: -4676530514427971669
+      archer golbin_16: 3106489402474826951
+      archer golbin_17: -2233858332560117386
+      archer golbin_18: 793103798194714173
+      archer golbin_19: 797210684707234969
+      archer golbin_2: 1251789349510635888
+      archer golbin_20: -5134239911140006972
+      archer golbin_21: -3521654157180948820
+      archer golbin_22: 5018311574662873430
+      archer golbin_23: -9157632871126984023
+      archer golbin_24: -2916956814282625342
+      archer golbin_25: 7000540918531654284
+      archer golbin_26: -6244283779968277554
+      archer golbin_27: 3045369970845918714
+      archer golbin_3: 6286167943412668916
+      archer golbin_4: 1033564692127076348
+      archer golbin_5: -6166384210351171875
+      archer golbin_6: -178357381444666474
+      archer golbin_7: 4700259876901250801
+      archer golbin_8: -4083507551563197649
+      archer golbin_9: 2790718852657216586
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

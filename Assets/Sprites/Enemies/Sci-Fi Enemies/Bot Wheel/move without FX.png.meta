@@ -335,7 +335,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      move without FX_0: -5971323820831194143
+      move without FX_1: -1994883173953188356
+      move without FX_2: -5697584222091510793
+      move without FX_3: 5112677893957975055
+      move without FX_4: -318667713633249025
+      move without FX_5: -2747942563754766781
+      move without FX_6: -2031559689966745925
+      move without FX_7: 7500395634619151725
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

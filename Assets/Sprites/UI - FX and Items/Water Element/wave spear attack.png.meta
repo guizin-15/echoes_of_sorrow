@@ -410,7 +410,18 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wave spear attack_0: -1990285063372796
+      wave spear attack_1: -7380313825555803355
+      wave spear attack_10: -2216234602700825791
+      wave spear attack_2: 3751192945209798897
+      wave spear attack_3: 6892573806821665903
+      wave spear attack_4: 914618738442875948
+      wave spear attack_5: 2770095142535435610
+      wave spear attack_6: -2660884961959448762
+      wave spear attack_7: -4406823577292118023
+      wave spear attack_8: -4275437506863733050
+      wave spear attack_9: -5246536468703641631
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

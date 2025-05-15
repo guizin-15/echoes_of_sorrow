@@ -835,7 +835,35 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      spearGolbin_0: -2981195734526756562
+      spearGolbin_1: 4817981408955123183
+      spearGolbin_10: -7830440793896763383
+      spearGolbin_11: 241507437563369031
+      spearGolbin_12: -6468810700833500433
+      spearGolbin_13: 128449861010144765
+      spearGolbin_14: 7520721221151469722
+      spearGolbin_15: -7067682715076441836
+      spearGolbin_16: 5880638478595477755
+      spearGolbin_17: -3418984637039683411
+      spearGolbin_18: -5879130177571207447
+      spearGolbin_19: 3014893016826123917
+      spearGolbin_2: 3009528498632782237
+      spearGolbin_20: 9144085864157732499
+      spearGolbin_21: 7809755350056526911
+      spearGolbin_22: -4426689637033028350
+      spearGolbin_23: 3533177130996569090
+      spearGolbin_24: 989250160344643544
+      spearGolbin_25: -8361193592909154633
+      spearGolbin_26: -1883182790874092336
+      spearGolbin_27: -2068229166903583247
+      spearGolbin_3: -2147847333661495059
+      spearGolbin_4: 4406905567172961261
+      spearGolbin_5: 6228833629647316848
+      spearGolbin_6: -7637150928870674493
+      spearGolbin_7: 7575001332678271538
+      spearGolbin_8: -4349713562877659535
+      spearGolbin_9: -6356099685269316505
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

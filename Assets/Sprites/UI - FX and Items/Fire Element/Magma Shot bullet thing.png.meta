@@ -285,7 +285,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Magma Shot bullet thing_0: -6755731592957363015
+      Magma Shot bullet thing_1: 8914283758268884274
+      Magma Shot bullet thing_2: 1331853128388886531
+      Magma Shot bullet thing_3: 1336244009945081008
+      Magma Shot bullet thing_4: 2575785210087402883
+      Magma Shot bullet thing_5: -8550547711899846564
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

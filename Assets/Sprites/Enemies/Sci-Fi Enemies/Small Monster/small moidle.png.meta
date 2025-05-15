@@ -310,7 +310,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      small moidle_0: 986990665555126824
+      small moidle_1: -1181028397838798806
+      small moidle_2: -7904986888300728068
+      small moidle_3: -3547854767964792096
+      small moidle_4: 5557545930483406258
+      small moidle_5: 8451570905908477144
+      small moidle_6: -3960155440946923074
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

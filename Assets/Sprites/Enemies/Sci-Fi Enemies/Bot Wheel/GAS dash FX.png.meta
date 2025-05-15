@@ -410,7 +410,18 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      GAS dash FX_0: -819411092030215607
+      GAS dash FX_1: 3932138519395407361
+      GAS dash FX_10: -7388797990577952315
+      GAS dash FX_2: 114194705682405319
+      GAS dash FX_3: 4074288834972177711
+      GAS dash FX_4: 4969180421085188871
+      GAS dash FX_5: -3361489511542471223
+      GAS dash FX_6: 3940563226986044779
+      GAS dash FX_7: -8624605351552022982
+      GAS dash FX_8: 5895674144001699657
+      GAS dash FX_9: 4590370221892902052
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -285,7 +285,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Rage without VFX_0: 6905273756831790608
+      Rage without VFX_1: 5206779516663874580
+      Rage without VFX_2: 2706046810569275176
+      Rage without VFX_3: 6187244698019911870
+      Rage without VFX_4: -5058466553286687847
+      Rage without VFX_5: -1342333806579702148
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

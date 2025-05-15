@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      shoot without FX_0: 4522395010558116628
+      shoot without FX_1: -7115495911490821210
+      shoot without FX_2: 389432124836857997
+      shoot without FX_3: -2925714849427103101
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

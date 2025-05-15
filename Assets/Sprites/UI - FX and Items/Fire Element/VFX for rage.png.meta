@@ -535,7 +535,23 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      VFX for rage_0: -3189094071829541012
+      VFX for rage_1: 1558433855759377979
+      VFX for rage_10: 5963129131505503498
+      VFX for rage_11: -5049260929715611660
+      VFX for rage_12: 2425085674503654158
+      VFX for rage_13: -3760639278805475125
+      VFX for rage_14: -7618419716396282888
+      VFX for rage_15: -5659595201194994008
+      VFX for rage_2: 3293176330374472360
+      VFX for rage_3: 5899256601394230863
+      VFX for rage_4: 4460656431518180276
+      VFX for rage_5: 333476832639243600
+      VFX for rage_6: -1333628630647630997
+      VFX for rage_7: -4703800243898622306
+      VFX for rage_8: -7061312156988886964
+      VFX for rage_9: -4049460870933426046
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

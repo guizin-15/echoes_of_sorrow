@@ -2135,7 +2135,87 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      All 96x32 Sprite Sheet_0: 5895265280523015087
+      All 96x32 Sprite Sheet_1: -491563874411472957
+      All 96x32 Sprite Sheet_10: 6183061071925886514
+      All 96x32 Sprite Sheet_11: 4044142171533945830
+      All 96x32 Sprite Sheet_12: 912399114358054317
+      All 96x32 Sprite Sheet_13: 3003580220019540769
+      All 96x32 Sprite Sheet_14: 5595489114165662812
+      All 96x32 Sprite Sheet_15: 3739806602852112469
+      All 96x32 Sprite Sheet_16: 1599084542583499718
+      All 96x32 Sprite Sheet_17: -4356295793041779129
+      All 96x32 Sprite Sheet_18: 8721554330454299446
+      All 96x32 Sprite Sheet_19: 1397763551438601679
+      All 96x32 Sprite Sheet_2: -872886297000521351
+      All 96x32 Sprite Sheet_20: -8631710494650226652
+      All 96x32 Sprite Sheet_21: -6241604027200042665
+      All 96x32 Sprite Sheet_22: -8367090449140911752
+      All 96x32 Sprite Sheet_23: 5957556404042437775
+      All 96x32 Sprite Sheet_24: -2872565187651491258
+      All 96x32 Sprite Sheet_25: -7226812842847253789
+      All 96x32 Sprite Sheet_26: 3870045906918236325
+      All 96x32 Sprite Sheet_27: -656497181512773715
+      All 96x32 Sprite Sheet_28: -842549008259846772
+      All 96x32 Sprite Sheet_29: 6330005220652512339
+      All 96x32 Sprite Sheet_3: 7142944264521838434
+      All 96x32 Sprite Sheet_30: 3173682700049524008
+      All 96x32 Sprite Sheet_31: -3066065721564613300
+      All 96x32 Sprite Sheet_32: 7811766367521442151
+      All 96x32 Sprite Sheet_33: -5865331156357976968
+      All 96x32 Sprite Sheet_34: 3251703716025986049
+      All 96x32 Sprite Sheet_35: 1542202706849276841
+      All 96x32 Sprite Sheet_36: 4478531859966551411
+      All 96x32 Sprite Sheet_37: 6123725267298641597
+      All 96x32 Sprite Sheet_38: 714068917169436070
+      All 96x32 Sprite Sheet_39: 1823733746050491126
+      All 96x32 Sprite Sheet_4: 704160942345545967
+      All 96x32 Sprite Sheet_40: -7597104774977778349
+      All 96x32 Sprite Sheet_41: -4799586192727826042
+      All 96x32 Sprite Sheet_42: 6582787814977286736
+      All 96x32 Sprite Sheet_43: -8752774831995235378
+      All 96x32 Sprite Sheet_44: -5659241312448344317
+      All 96x32 Sprite Sheet_45: 7222477284056921662
+      All 96x32 Sprite Sheet_46: 3861085864170704834
+      All 96x32 Sprite Sheet_47: 4013433241278040067
+      All 96x32 Sprite Sheet_48: 6682675564663497248
+      All 96x32 Sprite Sheet_49: 3849160041444898217
+      All 96x32 Sprite Sheet_5: -7999571770450103592
+      All 96x32 Sprite Sheet_50: 1317526500250323651
+      All 96x32 Sprite Sheet_51: -1469047978537459753
+      All 96x32 Sprite Sheet_52: 2746326955720558741
+      All 96x32 Sprite Sheet_53: 1460672614213056506
+      All 96x32 Sprite Sheet_54: 170236234157514219
+      All 96x32 Sprite Sheet_55: 3821137564611609853
+      All 96x32 Sprite Sheet_56: 4800543230737839253
+      All 96x32 Sprite Sheet_57: 5163713399415928440
+      All 96x32 Sprite Sheet_58: -5743903242158340523
+      All 96x32 Sprite Sheet_59: 668347158150409166
+      All 96x32 Sprite Sheet_6: -1114345618981550992
+      All 96x32 Sprite Sheet_60: 218925197112981142
+      All 96x32 Sprite Sheet_61: -2644291661039474738
+      All 96x32 Sprite Sheet_62: -3735518517874406233
+      All 96x32 Sprite Sheet_63: -1532835053563496112
+      All 96x32 Sprite Sheet_64: -1094658301025851406
+      All 96x32 Sprite Sheet_65: -4116142906488605372
+      All 96x32 Sprite Sheet_66: -8872164710498015915
+      All 96x32 Sprite Sheet_67: -6233270206146159130
+      All 96x32 Sprite Sheet_68: 1800896017546394264
+      All 96x32 Sprite Sheet_69: -2885922768787772227
+      All 96x32 Sprite Sheet_7: -4703008372654906178
+      All 96x32 Sprite Sheet_70: -4688876947895623467
+      All 96x32 Sprite Sheet_71: 6971112568647004291
+      All 96x32 Sprite Sheet_72: 1455659781538476658
+      All 96x32 Sprite Sheet_73: -5573457251239886693
+      All 96x32 Sprite Sheet_74: 2236015588997731262
+      All 96x32 Sprite Sheet_75: 418592771904493205
+      All 96x32 Sprite Sheet_76: -7002315507340292022
+      All 96x32 Sprite Sheet_77: -708380572644723663
+      All 96x32 Sprite Sheet_78: 5683870697519278289
+      All 96x32 Sprite Sheet_79: -3748627287972230097
+      All 96x32 Sprite Sheet_8: -2121930909058292639
+      All 96x32 Sprite Sheet_9: 2883022338975123929
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

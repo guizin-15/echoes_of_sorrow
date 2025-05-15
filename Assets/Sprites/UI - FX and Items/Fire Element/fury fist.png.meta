@@ -410,7 +410,18 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      fury fist_0: -3820643808088544247
+      fury fist_1: 8110115892190316030
+      fury fist_10: -3980964321086843985
+      fury fist_2: -6337722484105103050
+      fury fist_3: 206631818469507446
+      fury fist_4: 826483465809868739
+      fury fist_5: -4984641578037806477
+      fury fist_6: 1537102227285189998
+      fury fist_7: -357171303387870130
+      fury fist_8: -64928510438715993
+      fury fist_9: -4298727589345009642
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
