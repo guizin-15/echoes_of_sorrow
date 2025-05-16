@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum CardEffect
 {
-    Heal,
+    Health,
     Damage,
     SpeedBoost,
     Shield
