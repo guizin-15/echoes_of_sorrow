@@ -250,6 +250,8 @@ MonoBehaviour:
   dashSpeed: 22
   dashDuration: 0.18
   dashCooldown: 0.2
+  comboDashSpeed: 10
+  comboDashDuration: 0.2
   wallSlideSpeed: 3
   wallJumpForce: {x: 12, y: 18}
   wallJumpTime: 0.2
@@ -260,11 +262,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  barrierLayer:
+    serializedVersion: 2
+    m_Bits: 512
   sliceCooldown: 0.9
   sliceFreezeTime: 0.9
   slashCooldown: 0.4
-  slashPushForceAir: 5
-  groundedSlashPushForce: 6
   slashDuration: 0.3
   sliceAttackPoint: {fileID: 0}
   sliceBoxSize: {x: 1.2, y: 0.6}
@@ -275,8 +278,16 @@ MonoBehaviour:
     m_Bits: 128
   maxHealth: 4
   currentHealth: 4
+  isDead: 0
+  isTakingDamage: 0
+  healthBar: {fileID: 0}
+  coinsCollected: 0
   damagePushForceX: 5
   damagePushForceY: 2
+  isGrounded: 0
+  isJumping: 0
+  isWallSliding: 0
+  isWallJumping: 0
 --- !u!50 &3566897616075305044
 Rigidbody2D:
   serializedVersion: 5

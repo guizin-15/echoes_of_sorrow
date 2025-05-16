@@ -231,6 +231,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  barrierLayer:
+    serializedVersion: 2
+    m_Bits: 512
   sliceCooldown: 0.9
   sliceFreezeTime: 0.9
   slashCooldown: 0.4
@@ -242,10 +245,18 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
-  maxHealth: 4
-  currentHealth: 4
+  maxHealth: 100
+  currentHealth: 100
+  isDead: 0
+  isTakingDamage: 0
+  healthBar: {fileID: 0}
+  coinsCollected: 0
   damagePushForceX: 5
   damagePushForceY: 2
+  isGrounded: 0
+  isJumping: 0
+  isWallSliding: 0
+  isWallJumping: 0
 --- !u!50 &8147973628399466866
 Rigidbody2D:
   serializedVersion: 5

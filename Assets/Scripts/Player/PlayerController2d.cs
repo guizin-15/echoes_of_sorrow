@@ -78,10 +78,13 @@ public class PlayerController2D : MonoBehaviour
 
     /* -------- Vida -------- */
     [Header("Vida")]
-    public int maxHealth = 4;
+    public int maxHealth = 100;
     public int currentHealth;
     public bool isDead = false;
     public bool isTakingDamage = false;
+
+    [Header("Barra de Vida")]
+    [SerializeField] HealthBar healthBar; // arraste seu prefab/objeto HealthBar aqui
 
     [Header("Coleta de Moedas")]
     public int coinsCollected = 0;
@@ -131,7 +134,8 @@ public class PlayerController2D : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
         currentHealth = maxHealth;
-        jumpsLeft     = extraJumps;
+        if (healthBar) healthBar.SetMaxHealth(maxHealth);
+        jumpsLeft = extraJumps;
     }
 
     private void Update()
@@ -501,16 +505,16 @@ public class PlayerController2D : MonoBehaviour
     #endregion
 
     #region === Vida / Dano / Morte (sem mudanças) ===
-    public void TakeDamage()
+    public void TakeDamage(int dmg = 10)
     {
         if (isDead || isTakingDamage) return;
 
-        bool willDie = currentHealth <= 1;
-        currentHealth--;
+        currentHealth = Mathf.Max(currentHealth - dmg, 0);
 
-        var ui = FindAnyObjectByType<VidaUIController>();
-        if (ui) ui.UpdateVida();
+        // Atualiza barra de vida
+        if (healthBar) healthBar.SetHealth(currentHealth);
 
+        bool willDie = currentHealth <= 0;
         if (willDie) { StartCoroutine(Die()); return; }
 
         animator.SetTrigger("Damage");
@@ -520,7 +524,8 @@ public class PlayerController2D : MonoBehaviour
 
         int dir = isFacingRight ? -1 : 1;
         rb.linearVelocity = Vector2.zero;
-        rb.AddForce(new Vector2(dir * damagePushForceX, damagePushForceY), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(dir * damagePushForceX, damagePushForceY),
+                    ForceMode2D.Impulse);
 
         StartCoroutine(RecoverFromDamage(0.5f));
     }
