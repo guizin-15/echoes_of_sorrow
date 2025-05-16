@@ -80,8 +80,8 @@ public class PlayerController2D : MonoBehaviour
     [Header("Vida")]
     public int maxHealth = 4;
     public int currentHealth;
-    private bool isDead = false;
-    private bool isTakingDamage = false;
+    public bool isDead = false;
+    public bool isTakingDamage = false;
 
     [Header("Coleta de Moedas")]
     public int coinsCollected = 0;
@@ -101,7 +101,7 @@ public class PlayerController2D : MonoBehaviour
     private float jumpBufferCounter;
 
     /* Movimento */
-    private bool isGrounded, isJumping, isWallSliding, isWallJumping;
+    public bool isGrounded, isJumping, isWallSliding, isWallJumping;
     private float wallJumpCounter;
     private int jumpsLeft;
 
@@ -478,9 +478,25 @@ public class PlayerController2D : MonoBehaviour
         else if (isPerformingSlash && slashAttackPoint)
             hits = Physics2D.OverlapBoxAll(slashAttackPoint.position, slashBoxSize, 0f, enemyLayer);
 
-        if (hits == null) return;
-        foreach (Collider2D h in hits)
-            h.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+        // if (hits == null) return;
+        // foreach (Collider2D h in hits)
+        //     h.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+
+        // Debug.Log("Ataque executado!");
+
+        if (hits == null || hits.Length == 0)
+        {
+            Debug.Log("⚠️ Nenhum inimigo atingido.");
+        }
+        else
+        {
+            foreach (Collider2D h in hits)
+            {
+                Debug.Log($"🎯 Acertou: {h.name} (Tag: {h.tag})");
+                h.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+            }
+        }
+
     }
     #endregion
 
@@ -526,6 +542,8 @@ public class PlayerController2D : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
         enabled = false;
+
+        FindAnyObjectByType<GameManager>().PlayerMorreu();
     }
     #endregion
 

@@ -12,7 +12,15 @@ public class MenuController : MonoBehaviour
 
     public void IniciarJogo()
     {
-        SceneManager.LoadScene(nomeCenaDoJogo);
+        if (SaveSystem.HasSave())
+        {
+            SaveData data = SaveSystem.LoadGame();
+            SceneManager.LoadScene(data.sceneName);
+        }
+        else
+        {
+            SceneManager.LoadScene(nomeCenaDoJogo);
+        }
     }
 
     public void SairDoJogo()

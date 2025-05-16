@@ -22,6 +22,7 @@ public abstract class EnemyBase : MonoBehaviour
     [Header("Vida")]
     public int maxHealth = 2;
     protected int currentHealth;
+    private int startingHealth;
 
     protected Rigidbody2D rb;
     protected Animator anim;
@@ -35,12 +36,12 @@ public abstract class EnemyBase : MonoBehaviour
     protected bool isPlayerDetected;
     protected bool isTakingDamage = false;
     protected bool isDead = false;
-    // Se verdadeiro, o colisor será desativado quando o inimigo morrer.
+
     [SerializeField] protected bool disableColliderOnDeath = true;
 
     [Header("Drops")]
-    public GameObject coinPrefab;   // Prefab da moeda (opcional)
-    public int coinsToDrop = 1;     // Quantidade de moedas a dropar
+    public GameObject coinPrefab;
+    public int coinsToDrop = 1;
 
     protected virtual void Start()
     {
@@ -56,17 +57,16 @@ public abstract class EnemyBase : MonoBehaviour
         }
 
         currentHealth = maxHealth;
+        startingHealth = maxHealth;
     }
 
     protected virtual void Update()
     {
-
         isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
         anim.SetBool("IsGrounded", isGrounded);
 
         if (isDead) return;
 
-        // Enquanto estiver tomando dano, bloqueia movimentação e flip
         if (isTakingDamage)
         {
             if (isGrounded && Mathf.Abs(rb.linearVelocity.y) < 0.01f)
@@ -76,7 +76,7 @@ public abstract class EnemyBase : MonoBehaviour
             }
             else
             {
-                return; // interrompe Update até fim do knockback
+                return;
             }
         }
 
@@ -119,10 +119,9 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Die()
     {
         if (isDead) return;
-        isDead = true;   // <-- AQUI!!
-        anim.SetTrigger("Death"); // <-- já toca animação aqui
+        isDead = true;
+        anim.SetTrigger("Death");
 
-        // --- Drop de moedas -----------------------------------------//
         if (coinPrefab != null && coinsToDrop > 0)
         {
             for (int i = 0; i < coinsToDrop; i++)
@@ -130,7 +129,6 @@ public abstract class EnemyBase : MonoBehaviour
                 Vector2 offset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(0.1f, 0.3f));
                 GameObject coin = Instantiate(coinPrefab, (Vector2)transform.position + offset, Quaternion.identity);
 
-                // Aplica pequena força para espalhar (se tiver Rigidbody2D)
                 Rigidbody2D crb = coin.GetComponent<Rigidbody2D>();
                 if (crb != null)
                 {
@@ -140,21 +138,16 @@ public abstract class EnemyBase : MonoBehaviour
             }
         }
 
-        OnDeath();       // chama comportamento customizado
+        OnDeath();
     }
 
-    // Método virtual que cada inimigo vai poder sobrescrever
-    protected virtual void OnDeath()
-    {
-        // Nada aqui. Deixa para os filhos fazerem algo.
-    }
-
+    protected virtual void OnDeath() { }
 
     public virtual void TakeDamage()
     {
         if (isDead) return;
 
-        if (currentHealth > 1) // ainda tem vida depois de tomar dano
+        if (currentHealth > 1)
         {
             anim.SetTrigger("Damage");
             anim.SetBool("IsTakingDamage", true);
@@ -163,34 +156,19 @@ public abstract class EnemyBase : MonoBehaviour
 
         currentHealth--;
 
-        rb.linearVelocity = Vector2.zero;                 // zera movimento atual
+        rb.linearVelocity = Vector2.zero;
 
-        // +1 se o player está à direita, -1 se está à esquerda
         float pushDirection = Mathf.Sign(transform.position.x - player.position.x);
-
-        Vector2 pushForce;
-
-        if (currentHealth <= 0)
-        {
-            pushForce = new Vector2(pushDirection * 5f, 0f);  // morte: só X
-        }
-        else
-        {
-            pushForce = new Vector2(pushDirection * 5f, 5f);  // dano normal: X e Y
-        }
-
+        Vector2 pushForce = currentHealth <= 0 ? new Vector2(pushDirection * 5f, 0f) : new Vector2(pushDirection * 5f, 5f);
         rb.AddForce(pushForce, ForceMode2D.Impulse);
 
         if (currentHealth <= 0)
         {
-            Die();  // <-- agora sim, depois de empurrar!
+            Die();
         }
     }
 
-    protected virtual bool CanMove()
-    {
-        return true;
-    }
+    protected virtual bool CanMove() => true;
 
     protected void Flip()
     {
@@ -223,4 +201,29 @@ public abstract class EnemyBase : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
+
+public virtual void ResetEnemy()
+{
+    if (anim == null) anim = GetComponent<Animator>();
+    if (rb == null) rb = GetComponent<Rigidbody2D>();
+    if (col == null) col = GetComponent<Collider2D>();
+
+    currentHealth = startingHealth;
+    isDead = false;
+    isTakingDamage = false;
+
+    anim.Play("Idle");
+
+    foreach (var c in GetComponents<Collider2D>())
+        c.enabled = true;
+
+    if (rb != null)
+        rb.simulated = true;
+
+    gameObject.layer = LayerMask.NameToLayer("Enemy"); 
+
+    gameObject.tag = "Enemy";
+    enabled = true;
+}
+
 }

@@ -84,13 +84,20 @@ public class Coin : MonoBehaviour
     /* ---------- Coleta (gatilho) ---------- */
     private void OnTriggerEnter2D(Collider2D col)
     {
+        Debug.Log("Trigger entrou com: " + col.name);
+
         if (!col.CompareTag("Player")) return;
-        
-        if (Time.time < spawnTime + collectionDelay) return;   // espera delay
+        Debug.Log("É o Player!");
+
+        if (Time.time < spawnTime + collectionDelay) return;
 
         if (col.TryGetComponent(out PlayerController2D pc))
+        {
             pc.coinsCollected++;
+            Debug.Log("Moeda coletada!");
+        }
 
         Destroy(gameObject);
     }
+
 }
