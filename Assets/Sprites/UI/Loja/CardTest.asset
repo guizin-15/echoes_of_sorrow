@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04342e0bef94f3f258185482526339ed, type: 3}
-  m_Name: CardEthalur
+  m_Name: CardTest
   m_EditorClassIdentifier: 
-  cardName: 
-  description: "O escudo de Ethalur bloqueia o pr\xF3ximo golpe recebido"
-  artwork: {fileID: -1677677942250754595, guid: 81a221f9d7cda43efa52a80df20b3ac5, type: 3}
-  effect: 0
+  cardName: Card
+  description: sldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlk
+  artwork: {fileID: 6871739105407526601, guid: 6094abd33192741c7bcf8b51b0948a6f, type: 3}
+  effect: 1

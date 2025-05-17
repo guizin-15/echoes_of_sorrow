@@ -1,12 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-///  • A moeda agora possui **dois** colliders:
-///    1.  **physicsCol  (isTrigger = false)**  → lida com a Física (gravidade / chão / paredes).  
-///    2.  **triggerCol  (isTrigger = true )**  → detecta o jogador para coleta.
-///  • Dessa forma ela cai, quica/para naturalmente no solo **e** continua podendo ser coletada
-///    por _trigger_ sem interferir na colisão com o cenário.
-/// </summary>
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class Coin : MonoBehaviour
 {
