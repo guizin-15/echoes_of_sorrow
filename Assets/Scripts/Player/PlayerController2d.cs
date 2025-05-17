@@ -603,14 +603,4 @@ public class PlayerController2D : MonoBehaviour
         }
     }
     #endregion
-
-    #region === OnGUI (debug) ===
-    private void OnGUI()
-    {
-        GUI.Label(
-            new Rect(10, 10, 580, 20),
-            "LMB: Slice/Slash (subindo=Slash, caindo=Slice) | RMB: Dash (ilimitado no chão, 1 no ar, cooldown 0.8s)"
-        );
-    }
-    #endregion
 }
