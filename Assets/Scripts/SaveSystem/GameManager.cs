@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
 {
     public PlayerController2D player;
     public DeathUIController deathUI;
+    public HealthBar healthBar;
+
 
     void Start()
     {
@@ -80,7 +82,17 @@ public class GameManager : MonoBehaviour
 
         player.GetComponent<Animator>().Play("Idle");
 
-        FindAnyObjectByType<VidaUIController>()?.UpdateVida();
+        if (healthBar == null)
+        {
+            healthBar = FindObjectOfType<HealthBar>();
+        }
+
+        if (healthBar != null)
+        {
+            healthBar.SetMaxHealth(player.maxHealth);
+            healthBar.SetHealth(player.currentHealth);
+        }
+
     }
 
     public void TesteRespawnBotao()
