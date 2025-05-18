@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Linq;
 
 public class ChangeScene : MonoBehaviour
 {
@@ -25,6 +26,12 @@ public class ChangeScene : MonoBehaviour
     {
         if (jogadorNaArea && Input.GetKeyDown(teclaTroca))
         {
+            var player = FindAnyObjectByType<PlayerController2D>();
+            if (player != null && GameSession.Instance != null)
+            {
+                GameSession.Instance.SalvarEstado(player);
+            }
+
             SceneManager.LoadScene(cenaAlvo);
         }
     }
