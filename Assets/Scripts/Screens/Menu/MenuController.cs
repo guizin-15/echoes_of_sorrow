@@ -57,6 +57,13 @@ public class MenuController : MonoBehaviour
         optionsPanel.SetActive(false);
         menuPanel.SetActive(true);
     }
+    
+    public void VoltarAoMenuViaBotao()
+    {
+        Debug.Log("🔙 Botão Voltar ao Menu clicado!");
+        screenFader.FadeOutAndLoadScene("Menu");
+    }
+
 
     /// <summary>
     /// Encerra o jogo.
