@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;   // apenas para deixar claro que usa CanvasGroup
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class ScreenFader : MonoBehaviour
@@ -26,6 +27,12 @@ public class ScreenFader : MonoBehaviour
     /* ----------------------------------------------------------------------- */
     /*  PROPRIEDADES PÚBLICAS                                                  */
     /* ----------------------------------------------------------------------- */
+
+    public void FadeOutAndLoadScene(string sceneName)
+    {
+        FadeOut(() => SceneManager.LoadScene(sceneName));
+    }
+
 
     /// <summary>Tempo (segundos) usado por todos os fades.</summary>
     public float FadeDuration => fadeDuration;

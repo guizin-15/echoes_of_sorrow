@@ -150,7 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuPanel: {fileID: 1239659750}
   optionsPanel: {fileID: 1452535986}
-  nomeCenaDoJogo: 
+  nomeCenaDoJogo: Silvane
+  screenFader: {fileID: 352619226}
 --- !u!4 &64624131
 Transform:
   m_ObjectHideFlags: 0
@@ -2338,9 +2339,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 64624130}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: IniciarJogo
+        m_MethodName: ContinueGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2504,7 +2505,7 @@ MonoBehaviour:
   sfxVolume: 1
   fadeCanvas: {fileID: 352619229}
   bgmSource: {fileID: 922181641}
-  sceneToLoad: Silvane
+  sceneToLoad: 
 --- !u!1 &1221752205
 GameObject:
   m_ObjectHideFlags: 0
@@ -3611,9 +3612,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 64624130}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: IniciarJogo
+        m_MethodName: NewJourney
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3777,7 +3778,7 @@ MonoBehaviour:
   sfxVolume: 1
   fadeCanvas: {fileID: 352619229}
   bgmSource: {fileID: 922181641}
-  sceneToLoad: Silvane
+  sceneToLoad: 
 --- !u!1 &1914860739
 GameObject:
   m_ObjectHideFlags: 0
