@@ -4,6 +4,7 @@ public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Movimentação")]
     public float moveSpeed = 2f;
+    private Vector3 initialPosition;
 
     [Header("Detecção de chão e parede")]
     public Transform groundCheck;
@@ -58,6 +59,8 @@ public abstract class EnemyBase : MonoBehaviour
 
         currentHealth = maxHealth;
         startingHealth = maxHealth;
+
+        initialPosition = transform.position;
     }
 
     protected virtual void Update()
@@ -202,28 +205,30 @@ public abstract class EnemyBase : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 
-public virtual void ResetEnemy()
-{
-    if (anim == null) anim = GetComponent<Animator>();
-    if (rb == null) rb = GetComponent<Rigidbody2D>();
-    if (col == null) col = GetComponent<Collider2D>();
+    public virtual void ResetEnemy()
+    {
+        if (anim == null) anim = GetComponent<Animator>();
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        if (col == null) col = GetComponent<Collider2D>();
 
-    currentHealth = startingHealth;
-    isDead = false;
-    isTakingDamage = false;
+        currentHealth = startingHealth;
+        isDead = false;
+        isTakingDamage = false;
 
-    anim.Play("Idle");
+        // REPOSICIONA O INIMIGO
+        transform.position = initialPosition;
 
-    foreach (var c in GetComponents<Collider2D>())
-        c.enabled = true;
+        anim.Play("Idle");
 
-    if (rb != null)
-        rb.simulated = true;
+        foreach (var c in GetComponents<Collider2D>())
+            c.enabled = true;
 
-    gameObject.layer = LayerMask.NameToLayer("Enemy"); 
+        if (rb != null)
+            rb.simulated = true;
 
-    gameObject.tag = "Enemy";
-    enabled = true;
-}
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
+        gameObject.tag = "Enemy";
+        enabled = true;
+    }
 
 }
