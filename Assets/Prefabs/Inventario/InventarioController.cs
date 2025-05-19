@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using System.Collections.Generic; 
+
 
 public class InventarioController : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class InventarioController : MonoBehaviour
     [Header("Inventory UI Prefab")]
     [Tooltip("Prefab containing the inventory UI (root GameObject) with slots configured as children.")]
     [SerializeField] private GameObject inventoryPrefab;
-
+    
     [Header("Gameplay References")]
     [SerializeField] private PlayerController2D playerController;
 
@@ -27,51 +29,61 @@ public class InventarioController : MonoBehaviour
     private ItemSlot selectedInventorySlot;
     private ItemSlot selectedConsumeSlot;
     private bool    isInventoryOpen;
+    private List<CardData> inventoryCards;
+
 
     private void Awake()
+{
+    // Singleton setup
+    if (Instance != null && Instance != this)
     {
-        // Singleton setup
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        // Instantiate inventory UI prefab if needed
-        if (inventoryPrefab == null)
-        {
-            Debug.LogError("[InventarioController] inventoryPrefab is not assigned!");
-            return;
-        }
-        inventoryRoot = Instantiate(inventoryPrefab);
-        DontDestroyOnLoad(inventoryRoot);
-        inventoryRoot.SetActive(false);
-
-        // Find references inside the instantiated UI
-        descPanel   = inventoryRoot.GetComponentInChildren<DescriptionPanel>();
-        equipButton = inventoryRoot.GetComponentsInChildren<Button>(true)
-    .FirstOrDefault(b => b.name.ToLower().Contains("equip"));
-
-        if (descPanel == null)   Debug.LogError("[InventarioController] DescriptionPanel not found in inventoryPrefab");
-        if (equipButton == null) Debug.LogError("[InventarioController] Equip Button not found in inventoryPrefab");
-
-        // Setup button listener
-        if (equipButton != null)
-        {
-            equipButton.onClick.RemoveAllListeners();
-            equipButton.onClick.AddListener(EquipSelectedItem);
-            equipButton.interactable = false;
-        }
-
-        // Listen for scene changes
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        // Initial slot refresh and equip array init
-        RefreshSlots();
-        equippedCards = new CardData[consumeSlots.Length];
-        RefreshSlots();
+        Destroy(gameObject);
+        return;
     }
+    Instance = this;
+    DontDestroyOnLoad(gameObject);
+
+    // Inicializa a “base” do inventário
+    inventoryCards = new List<CardData>();
+
+    // Instancia e configura a UI de inventário
+    if (inventoryPrefab == null)
+    {
+        Debug.LogError("[InventarioController] inventoryPrefab não atribuído!");
+        return;
+    }
+    inventoryRoot = Instantiate(inventoryPrefab);
+    DontDestroyOnLoad(inventoryRoot);
+    inventoryRoot.SetActive(false);
+
+    // Encontra o painel de descrição e o botão de equipar
+    descPanel = inventoryRoot.GetComponentInChildren<DescriptionPanel>();
+    equipButton = inventoryRoot
+        .GetComponentsInChildren<Button>(true)
+        .FirstOrDefault(b => b.name.ToLower().Contains("equip"));
+
+    if (descPanel == null)
+        Debug.LogError("[InventarioController] DescriptionPanel não encontrado no prefab");
+    if (equipButton == null)
+        Debug.LogError("[InventarioController] Botão de equipar não encontrado no prefab");
+
+    // Associa listener ao botão de equipar
+    if (equipButton != null)
+    {
+        equipButton.onClick.RemoveAllListeners();
+        equipButton.onClick.AddListener(EquipSelectedItem);
+        equipButton.interactable = false;
+    }
+
+    // Sempre que uma cena for carregada, atualiza slots e esconde UI
+    SceneManager.sceneLoaded += OnSceneLoaded;
+
+    // Inicializa slots e array de consumíveis
+    RefreshSlots();
+    equippedCards = new CardData[consumeSlots.Length];
+    RefreshSlots();
+}
+
 
     private void OnDestroy()
     {
@@ -142,17 +154,35 @@ public class InventarioController : MonoBehaviour
     }
 
     public void AddCard(CardData cardData)
+{
+    // guarda no “banco” antes de desenhar na UI
+    inventoryCards.Add(cardData);
+
+    // debug dos slots
+    for (int i = 0; i < inventorySlots.Length; i++)
+        Debug.Log($"[AddCard] slot[{i}] {inventorySlots[i].name} isFull={inventorySlots[i].isFull}");
+
+    // tenta colocar no primeiro slot vazio
+    foreach (var slot in inventorySlots)
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
-            Debug.Log($"[AddCard] slot[{i}] {inventorySlots[i].name} isFull={inventorySlots[i].isFull}");
-        foreach (var slot in inventorySlots)
-            if (!slot.isFull)
-            {
-                slot.AddItem(cardData.cardName, cardData.artwork, cardData.description, cardData);
-                return;
-            }
-        Debug.LogWarning("Inventário cheio!");
+        if (!slot.isFull)
+        {
+            slot.AddItem(
+                cardData.cardName,      // 1º argumento
+                cardData.artwork,       // 2º argumento
+                cardData.description,   // 3º argumento
+                cardData               // 4º argumento
+            );                         // ← aqui fecha o AddItem(...)
+            return;
+        }
     }
+
+    Debug.LogWarning("Inventário cheio!");
+}
+
+
+
+
 
     public void SelectSlot(ItemSlot slot)
     {
