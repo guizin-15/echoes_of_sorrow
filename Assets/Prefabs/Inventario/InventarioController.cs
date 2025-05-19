@@ -1,187 +1,209 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Linq;
-using System.Collections.Generic;  // para List<T>
 
-/// <summary>Gerencia slots, seleção, equipar e painel de descrição.</summary>
 public class InventarioController : MonoBehaviour
 {
-    [Header("Referências na UI")]
-    [SerializeField] private DescriptionPanel descPanel; // painel à direita
+    public static InventarioController Instance { get; private set; }
 
-    [Header("Referências de Jogo")]
+    [Header("Inventory UI Prefab")]
+    [Tooltip("Prefab containing the inventory UI (root GameObject) with slots configured as children.")]
+    [SerializeField] private GameObject inventoryPrefab;
+
+    [Header("Gameplay References")]
     [SerializeField] private PlayerController2D playerController;
-    private CardData currentEquippedCard;
-    
-    [Header("Slots de inventário (6)")]
-    public ItemSlot[] inventorySlots;
 
-    [Header("Slots de consumo (3)")]
-    public ItemSlot[] consumeSlots;
+    private GameObject inventoryRoot;
 
-    // slots atualmente selecionados
+    // Persist equipped cards per consume slot index
+    private CardData[] equippedCards;
+    private DescriptionPanel descPanel;
+    private Button equipButton;
+
+    private ItemSlot[] inventorySlots;
+    private ItemSlot[] consumeSlots;
+
     private ItemSlot selectedInventorySlot;
     private ItemSlot selectedConsumeSlot;
+    private bool    isInventoryOpen;
 
-    // =====================================================================
-    #region  Adicionar item (chamado por Item.cs)
     private void Awake()
     {
-        // 1) localiza todos os slots de cada tipo em toda a cena
-        inventorySlots = FindObjectsOfType<ItemSlot>()
+        // Singleton setup
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Instantiate inventory UI prefab if needed
+        if (inventoryPrefab == null)
+        {
+            Debug.LogError("[InventarioController] inventoryPrefab is not assigned!");
+            return;
+        }
+        inventoryRoot = Instantiate(inventoryPrefab);
+        DontDestroyOnLoad(inventoryRoot);
+        inventoryRoot.SetActive(false);
+
+        // Find references inside the instantiated UI
+        descPanel   = inventoryRoot.GetComponentInChildren<DescriptionPanel>();
+        equipButton = inventoryRoot.GetComponentsInChildren<Button>(true)
+    .FirstOrDefault(b => b.name.ToLower().Contains("equip"));
+
+        if (descPanel == null)   Debug.LogError("[InventarioController] DescriptionPanel not found in inventoryPrefab");
+        if (equipButton == null) Debug.LogError("[InventarioController] Equip Button not found in inventoryPrefab");
+
+        // Setup button listener
+        if (equipButton != null)
+        {
+            equipButton.onClick.RemoveAllListeners();
+            equipButton.onClick.AddListener(EquipSelectedItem);
+            equipButton.interactable = false;
+        }
+
+        // Listen for scene changes
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        // Initial slot refresh and equip array init
+        RefreshSlots();
+        equippedCards = new CardData[consumeSlots.Length];
+        RefreshSlots();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        RefreshSlots();
+        inventoryRoot.SetActive(false);
+    }
+
+    private void RefreshSlots()
+    {
+        // Find slots under the inventoryRoot to avoid stale references
+        inventorySlots = inventoryRoot.GetComponentsInChildren<ItemSlot>(true)
             .Where(s => s.kind == ItemSlot.Kind.Inventory)
             .ToArray();
-
-        consumeSlots = FindObjectsOfType<ItemSlot>()
+        consumeSlots   = inventoryRoot.GetComponentsInChildren<ItemSlot>(true)
             .Where(s => s.kind == ItemSlot.Kind.Consume)
             .ToArray();
 
-        Debug.Log($"Achei {inventorySlots.Length} slots de inventário e {consumeSlots.Length} slots de consumo", this);
+        Debug.Log($"[InventarioController] Found {inventorySlots.Length} inventory and {consumeSlots.Length} consume slots", this);
 
-        // 2) limpa TODOS os slots logo de cara
-        foreach (var inv in inventorySlots)
-            inv.Clear();    // inv é cada ItemSlot de inventário
-
-        foreach (var con in consumeSlots)
-            con.Clear();    // con é cada ItemSlot de consumo
-    }
-
-
-
-
-    public void AddItem(string nome, Sprite sprite, string descricao)
-    {
+        // Clear inventory slots
         foreach (var slot in inventorySlots)
+            slot.Clear();
+
+        // Clear consume slots then reapply equipped
+        for (int i = 0; i < consumeSlots.Length; i++)
         {
-            if (!slot.isFull)
+            consumeSlots[i].Clear();
+            if (equippedCards != null && i < equippedCards.Length && equippedCards[i] != null)
             {
-                slot.AddItem(nome, sprite, descricao);
-                return;
+                var cardData = equippedCards[i];
+                consumeSlots[i].AddItem(
+                    cardData.cardName,
+                    cardData.artwork,
+                    cardData.description,
+                    cardData);
             }
         }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+            ToggleInventory();
+    }
+
+    private void ToggleInventory()
+    {
+        isInventoryOpen = !isInventoryOpen;
+        inventoryRoot.SetActive(isInventoryOpen);
+        if (playerController != null)
+            playerController.enabled = !isInventoryOpen;
+        if (!isInventoryOpen)
+            DeselectAll();
+
+        Debug.Log($"[InventarioController] Inventory open={isInventoryOpen}");
+    }
+
+    public void AddItem(string name, Sprite sprite, string description)
+    {
+        foreach (var slot in inventorySlots)
+            if (!slot.isFull) { slot.AddItem(name, sprite, description); return; }
         Debug.LogWarning("Inventário cheio!");
     }
 
-    #endregion
-    // =====================================================================
-    #region  Seleção de slots
-
-public void SelectSlot(ItemSlot slot)
-{
-    Debug.Log($"[SelectSlot] clicou em {slot.name} (kind={slot.kind})", this);
-
-    if (slot.kind == ItemSlot.Kind.Inventory)
+    public void AddCard(CardData cardData)
     {
-        if (selectedInventorySlot != null)
-            selectedInventorySlot.SetSelected(false);
-        selectedInventorySlot = slot;
-        selectedInventorySlot.SetSelected(true);
-    }
-    else
-    {
-        if (selectedConsumeSlot != null)
-            selectedConsumeSlot.SetSelected(false);
-        selectedConsumeSlot = slot;
-        selectedConsumeSlot.SetSelected(true);
+        for (int i = 0; i < inventorySlots.Length; i++)
+            Debug.Log($"[AddCard] slot[{i}] {inventorySlots[i].name} isFull={inventorySlots[i].isFull}");
+        foreach (var slot in inventorySlots)
+            if (!slot.isFull)
+            {
+                slot.AddItem(cardData.cardName, cardData.artwork, cardData.description, cardData);
+                return;
+            }
+        Debug.LogWarning("Inventário cheio!");
     }
 
-    Debug.Log($"   ▶ selecionados → inv: {selectedInventorySlot?.name} | cons: {selectedConsumeSlot?.name}", this);
-    descPanel.Show(slot);
-}
+    public void SelectSlot(ItemSlot slot)
+    {
+        if (slot.kind == ItemSlot.Kind.Inventory)
+        {
+            selectedInventorySlot?.SetSelected(false);
+            selectedInventorySlot = slot;
+            slot.SetSelected(true);
+        }
+        else
+        {
+            selectedConsumeSlot?.SetSelected(false);
+            selectedConsumeSlot = slot;
+            slot.SetSelected(true);
+        }
 
-
+        descPanel?.Show(slot);
+        if (equipButton != null)
+            equipButton.interactable = selectedInventorySlot != null && selectedConsumeSlot != null;
+    }
 
     public void DeselectAll()
     {
-        if (selectedInventorySlot) selectedInventorySlot.SetSelected(false);
-        if (selectedConsumeSlot)   selectedConsumeSlot.SetSelected(false);
-
-        selectedInventorySlot = null;
-        selectedConsumeSlot   = null;
-
-        descPanel.Show(null); // limpa painel
+        selectedInventorySlot?.SetSelected(false);
+        selectedConsumeSlot?.SetSelected(false);
+        selectedInventorySlot = selectedConsumeSlot = null;
+        descPanel?.Show(null);
+        if (equipButton != null)
+            equipButton.interactable = false;
     }
 
-    #endregion
-    // =====================================================================
-    #region  Equipar
-
-    /// <summary>Chamado no botão “EQUIPAR”.</summary>
-
-public void EquipSelectedItem()
-{
-    Debug.Log($"[Equip] Inv={(selectedInventorySlot?.name)} | Cons={(selectedConsumeSlot?.name)}", this);
-
-    // validações
-    if (selectedInventorySlot == null || selectedConsumeSlot == null)
+    public void EquipSelectedItem()
     {
-        Debug.LogWarning("Selecione um slot de inventário e um de consumo.", this);
-        return;
+        Debug.Log($"[Equip] Inv={(selectedInventorySlot?.name)} Cons={(selectedConsumeSlot?.name)}", this);
+        if (selectedInventorySlot == null || selectedConsumeSlot == null) return;
+        if (!selectedInventorySlot.isFull) return;
+
+        // Remove old effect
+        selectedConsumeSlot.storedCard?.RemoveEffect(playerController);
+        // Assign new
+        selectedConsumeSlot.AddItem(
+            selectedInventorySlot.itemName,
+            selectedInventorySlot.itemSprite,
+            selectedInventorySlot.description,
+            selectedInventorySlot.storedCard);
+        // Apply new effect
+        selectedInventorySlot.storedCard?.ApplyEffect(playerController);
+        // Persist equipped card
+        int idx = System.Array.IndexOf(consumeSlots, selectedConsumeSlot);
+        if (idx >= 0)
+            equippedCards[idx] = selectedInventorySlot.storedCard;
+        DeselectAll();
     }
-    if (!selectedInventorySlot.isFull)
-    {
-        Debug.LogWarning("O slot de inventário selecionado está vazio.", this);
-        return;
-    }
-
-    // 1) Remove efeito da carta previamente equipada NESTE slot, se houver
-    var oldCard = selectedConsumeSlot.storedCard;
-    if (oldCard != null)
-    {
-        Debug.Log($"[Equip] Removendo efeito da carta antiga '{oldCard.cardName}' do slot {selectedConsumeSlot.name}", this);
-        oldCard.RemoveEffect(playerController);
-    }
-
-    // 2) Copia a nova carta para o slot de consumo
-    selectedConsumeSlot.AddItem(
-        selectedInventorySlot.itemName,
-        selectedInventorySlot.itemSprite,
-        selectedInventorySlot.description,
-        selectedInventorySlot.storedCard
-    );
-
-    // 3) Aplica o efeito da nova carta
-    var newCard = selectedInventorySlot.storedCard;
-    if (newCard != null)
-    {
-        Debug.Log($"[Equip] Aplicando efeito da nova carta '{newCard.cardName}' no slot {selectedConsumeSlot.name}", this);
-        newCard.ApplyEffect(playerController);
-    }
-    else
-    {
-        Debug.LogError("[Equip] storedCard é null – nada a aplicar!", this);
-    }
-
-    // 4) Limpa seleção visual
-    DeselectAll();
-}
-
-
-
-public void AddCard(CardData cardData)
-{
-    // 1) LOGA o estado real de cada slot antes de qualquer coisa
-    for (int i = 0; i < inventorySlots.Length; i++)
-        Debug.Log($"[AddCard] slot[{i}] {inventorySlots[i].name}  isFull={inventorySlots[i].isFull}");
-
-    // 2) Tenta inserir normalmente
-    foreach (var slot in inventorySlots)
-    {
-        if (!slot.isFull)
-        {
-            Debug.Log($"[AddCard] Inserindo em {slot.name}");
-            slot.AddItem(cardData.cardName,
-                         cardData.artwork,
-                         cardData.description,
-                         cardData);
-            return;
-        }
-    }
-    Debug.LogWarning("Inventário cheio!");
-}
-
-
-
-
-
-    #endregion
 }
