@@ -84,7 +84,7 @@ public class PlayerController2D : MonoBehaviour
     public bool isTakingDamage = false;
 
     [Header("Barra de Vida")]
-    [SerializeField] HealthBar healthBar; // arraste seu prefab/objeto HealthBar aqui
+    [SerializeField] public HealthBar healthBar; // arraste seu prefab/objeto HealthBar aqui
 
     [Header("Coleta de Moedas")]
     public int coinsCollected = 0;
