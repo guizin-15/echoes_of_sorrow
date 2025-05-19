@@ -14,7 +14,6 @@ public class ShopMenu : MonoBehaviour
     public Button              buyButton;
 
     [Header("Referências de Jogo")]
-    public InventarioController inventoryController;  // seu script de inventário
     public PlayerController2D  playerController;     // script que guarda coinsCollected
 
     private ItemSlotLoja[]     allSlots;
@@ -59,29 +58,22 @@ public class ShopMenu : MonoBehaviour
             slot.Highlight(false);
     }
 
-    private void OnBuyButtonClicked()
-    {
-        if (selectedSlot == null) return;
-        playerController.coinsCollected = 1000;
-        // usa coinsCollected como "dinheiro"
-        if (playerController.coinsCollected >= selectedSlot.price)
-        {
-            // 1) adiciona a carta ao inventário
-            inventoryController.AddCard(selectedSlot.cardData);
+    public void OnBuyButtonClicked()
+{
+    if (selectedSlot == null) return;
 
-            // 2) debita as moedas
-            playerController.coinsCollected -= selectedSlot.price;
+    // 1) adiciona o card ao InventoryManager
+    InventoryManager.Instance.AddCard(selectedSlot.cardData);
 
-            // 3) marca slot como vendido e limpa seleção
-            selectedSlot.MarkAsSold();
-            ClearSlotHighlights();
-            ClearDetails();
-        }
-        else
-        {
-            Debug.LogWarning("Você não tem moedas suficientes!");
-        }
-    }
+    // 2) debita as moedas
+    playerController.coinsCollected -= selectedSlot.price;
+
+    // 3) marca slot como vendido e limpa seleção
+    selectedSlot.MarkAsSold();
+    ClearSlotHighlights();
+    ClearDetails();
+}
+
 
     private void ClearDetails()
     {

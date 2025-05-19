@@ -1,62 +1,55 @@
-// Assets/Scripts/UI/InventoryToggle.cs
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InventoryToggle : MonoBehaviour
 {
-    [Header("Referências")]
-    [SerializeField] GameObject inventarioRoot;      // painel do inventário
-    [SerializeField] PlayerController2D player;      // script de movimento
-
-    [Header("Input")]
-    [SerializeField] KeyCode openCloseKey = KeyCode.I;
-    [SerializeField] KeyCode closeKey     = KeyCode.Escape;
-
-    /* --------- cache --------- */
-    bool _open;
+    private GameObject          inventoryRoot;
+    private PlayerController2D  playerController;
 
     void Awake()
     {
-        Debug.Log("InventoryToggle Awake");
-        if (!player)
-            player = FindFirstObjectByType<PlayerController2D>();
-        if (inventarioRoot)
-            inventarioRoot.SetActive(false);         // garante fechado
+        // 1) Tenta achar pelo tag “InventoryUI”
+        inventoryRoot = GameObject.FindWithTag("InventoryUI");
+
+        // 2) Se não achar por tag, varre todos os roots cujo nome contenha “inventory”
+        if (inventoryRoot == null)
+        {
+            foreach (var root in SceneManager.GetActiveScene().GetRootGameObjects())
+            {
+                if (root.name.ToLower().Contains("inventory"))
+                {
+                    inventoryRoot = root;
+                    break;
+                }
+            }
+        }
+
+        if (inventoryRoot == null)
+            Debug.LogError("[InventoryToggle] inventoryRoot não encontrado! " +
+                "Marque o seu UI root com tag 'InventoryUI' ou certifique-se que o nome contenha 'inventory'.");
+
+        // 3) Acha o player pelo tag “Player”
+        var playerGO = GameObject.FindWithTag("Player");
+        if (playerGO != null)
+            playerController = playerGO.GetComponent<PlayerController2D>();
+        if (playerController == null)
+            Debug.LogError("[InventoryToggle] PlayerController2D não encontrado em objeto com tag 'Player'!");
     }
 
     void Update()
-{
-    if (Input.GetKeyDown(openCloseKey))
     {
-        if (_open)
+        if (inventoryRoot == null) 
+            return;
+
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            CloseInventory();
+            // Toggle inventário
+            bool isOpen = !inventoryRoot.activeSelf;
+            inventoryRoot.SetActive(isOpen);
+
+            // Desativa/ativa controle do player
+            if (playerController != null)
+                playerController.enabled = !isOpen;
         }
-        else
-        {
-            Debug.Log("Abrindo inventário");
-            OpenInventory();
-        }
-    }
-
-    if (_open && Input.GetKeyDown(closeKey))
-    {
-        CloseInventory();
-    }
-}
-
-
-    /* -------------------------------------------------------------- */
-    void OpenInventory()
-    {
-        if (inventarioRoot) inventarioRoot.SetActive(true);
-        if (player)         player.enabled = false;
-        _open = true;
-    }
-
-    void CloseInventory()
-    {
-        if (inventarioRoot) inventarioRoot.SetActive(false);
-        if (player)         player.enabled = true;
-        _open = false;
     }
 }

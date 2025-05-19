@@ -12,16 +12,7 @@ public class Item : MonoBehaviour
     private void Awake()
     {
         inventario = GameObject
-            .Find("Inventario")              
+            .Find("Inventory")              
             .GetComponent<InventarioController>();
-    }
-
-    private void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            inventario.AddItem(itemName, sprite, description);
-            Destroy(gameObject);              
-        }
     }
 }

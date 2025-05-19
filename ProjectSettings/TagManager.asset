@@ -6,6 +6,7 @@ TagManager:
   tags:
   - EnemyAttack
   - Enemy
+  - InventoryUI
   layers:
   - Default
   - TransparentFX
