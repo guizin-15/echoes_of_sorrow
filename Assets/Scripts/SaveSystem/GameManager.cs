@@ -3,10 +3,27 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    // Singleton pattern
+    public static GameManager Instance { get; private set; }
+
     public PlayerController2D player;
     public DeathUIController deathUI;
     public HealthBar healthBar;
 
+    private void Awake()
+    {
+        // Implementação do Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     void Start()
     {
@@ -35,14 +52,29 @@ public class GameManager : MonoBehaviour
 
     public void Respawn()
     {
-        deathUI.HideDeathScreen();
+        if (deathUI != null)
+            deathUI.HideDeathScreen();
         LoadGame();
     }
 
     public void PlayerMorreu()
     {
         Debug.Log("☠️ Jogador morreu!");
-        deathUI.ShowDeathScreen();
+        
+        // Buscar a referência do deathUI se for nula
+        if (deathUI == null)
+        {
+            deathUI = FindObjectOfType<DeathUIController>();
+        }
+        
+        if (deathUI != null)
+        {
+            deathUI.ShowDeathScreen();
+        }
+        else
+        {
+            Debug.LogError("DeathUIController não encontrado na cena!");
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -55,6 +87,17 @@ public class GameManager : MonoBehaviour
 
     private void ApplySaveData(SaveData data)
     {
+        // Buscar o player se for nulo
+        if (player == null)
+        {
+            player = FindObjectOfType<PlayerController2D>();
+            if (player == null)
+            {
+                Debug.LogError("PlayerController2D não encontrado na cena!");
+                return;
+            }
+        }
+
         player.transform.position = new Vector2(data.playerX, data.playerY);
         player.currentHealth = player.maxHealth;
         player.coinsCollected = 0;
@@ -92,14 +135,10 @@ public class GameManager : MonoBehaviour
             healthBar.SetMaxHealth(player.maxHealth);
             healthBar.SetHealth(player.currentHealth);
         }
-
     }
 
     public void TesteRespawnBotao()
     {
         Debug.Log("Botão funciona!");
     }
-
-
-
 }

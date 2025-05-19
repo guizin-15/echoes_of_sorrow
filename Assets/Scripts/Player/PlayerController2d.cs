@@ -558,7 +558,6 @@ public class PlayerController2D : MonoBehaviour
         yield return new WaitForSeconds(delay);
         isTakingDamage = false;
     }
-
     private IEnumerator Die()
     {
         isDead = true;
@@ -566,20 +565,36 @@ public class PlayerController2D : MonoBehaviour
         isSlashActive = isSliceFrozen = isComboDashing = isDashing = false;
 
         animator.SetTrigger("Die");
-        
+
         // Tocar som de morte
         if (audioSystem) audioSystem.PlayDeathSound();
-        
+
         gameObject.layer = LayerMask.NameToLayer("Dead");
 
         yield return new WaitForSeconds(0.2f);
         enabled = false;
 
-        FindAnyObjectByType<GameManager>().PlayerMorreu();
+        // Chamada segura para o GameManager usando o Singleton
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.PlayerMorreu();
+        }
+        else
+        {
+            Debug.LogError("GameManager não encontrado! Verifique se ele existe na cena inicial.");
+
+            // Tentativa de backup para encontrar o GameManager
+            GameManager gm = FindObjectOfType<GameManager>();
+            if (gm != null)
+            {
+                gm.PlayerMorreu();
+            }
+        }
     }
+
     #endregion
 
-    #region === Colisão com Inimigos ===
+        #region === Colisão com Inimigos ===
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.collider.CompareTag("Enemy") || col.collider.CompareTag("EnemyAttack"))
