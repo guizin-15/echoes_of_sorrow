@@ -16,6 +16,7 @@ public class InventoryToggle : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("InventoryToggle Awake");
         if (!player)
             player = FindFirstObjectByType<PlayerController2D>();
         if (inventarioRoot)
@@ -23,18 +24,26 @@ public class InventoryToggle : MonoBehaviour
     }
 
     void Update()
+{
+    if (Input.GetKeyDown(openCloseKey))
     {
-        /* --- abrir / fechar com I --- */
-        if (Input.GetKeyDown(openCloseKey))
+        if (_open)
         {
-            if (_open) CloseInventory();
-            else       OpenInventory();
-        }
-
-        /* --- fechar com ESC --- */
-        if (_open && Input.GetKeyDown(closeKey))
             CloseInventory();
+        }
+        else
+        {
+            Debug.Log("Abrindo inventário");
+            OpenInventory();
+        }
     }
+
+    if (_open && Input.GetKeyDown(closeKey))
+    {
+        CloseInventory();
+    }
+}
+
 
     /* -------------------------------------------------------------- */
     void OpenInventory()

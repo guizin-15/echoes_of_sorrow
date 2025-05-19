@@ -15,4 +15,6 @@ MonoBehaviour:
   cardName: Card
   description: sldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlksldasldksadlk
   artwork: {fileID: 6871739105407526601, guid: 6094abd33192741c7bcf8b51b0948a6f, type: 3}
-  effect: 1
+  effect: 0
+  amount: 1
+  duration: 50

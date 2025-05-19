@@ -7,67 +7,99 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     public enum Kind { Inventory, Consume }
     public Kind kind = Kind.Inventory;
 
-    // Dados
-    [HideInInspector] public string   itemName;
-    [HideInInspector] public Sprite   itemSprite;
-    [HideInInspector] public string   description;
-    [HideInInspector] public bool     isFull;
+    // Dados do slot
+    [HideInInspector] public string itemName;
+    [HideInInspector] public Sprite itemSprite;
+    [HideInInspector] public string description;
+    [HideInInspector] public bool isFull;
     [HideInInspector] public CardData storedCard;
 
-    // UI
-    [SerializeField] Image      itemImage;
-    [SerializeField] GameObject highlight;
+    [Header("UI References")]
+    [SerializeField] private Image itemImage;
+    [SerializeField] private GameObject highlight;  // painel ou imagem de seleção
 
-    InventarioController controller;
+    private InventarioController controller;
 
-    void Awake()
+    private void Awake()
     {
-        if (highlight == null || !highlight.transform.IsChildOf(transform))
+        // Encontra o InventarioController em qualquer lugar da cena
+        controller = FindObjectOfType<InventarioController>();
+        if (controller == null)
+            Debug.LogError("ItemSlot: não encontrou InventarioController na cena!", this);
+
+        // Se highlight não foi arrastado, busca por child chamado "itemSelecionado"
+        if (highlight == null)
             highlight = transform.Find("itemSelecionado")?.gameObject;
 
-        controller = GetComponentInParent<InventarioController>();
+        // Inicializa o slot vazio
         Clear();
     }
 
-    /* ---------- API pública ---------- */
-
-    // (1) VERSÃO USADA PELOS ITENS ANTIGOS
-    public void AddItem(string nome, Sprite sprite, string desc)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        AddItem(nome, sprite, desc, null);   // repassa para a de 4 parâmetros
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            Debug.Log($"[ItemSlot] {(itemName ?? name)} clicado (kind={kind})", this);
+            if (controller == null)
+            {
+                Debug.LogError("ItemSlot: controller é null, não posso selecionar.", this);
+                return;
+            }
+            controller.SelectSlot(this);
+        }
     }
 
-    // (2) VERSÃO COMPLETA, aceita CardData
-    public void AddItem(string nome, Sprite sprite, string desc, CardData card)
+    /// <summary>
+    /// Adiciona um item ao slot (vazio → cheio).
+    /// </summary>
+    public void AddItem(string name, Sprite sprite, string desc, CardData card = null)
     {
-        itemName    = nome;
+        itemName    = name;
         itemSprite  = sprite;
         description = desc;
         storedCard  = card;
 
-        itemImage.enabled = true;
-        itemImage.sprite  = sprite;
+        if (itemImage != null)
+        {
+            itemImage.sprite  = sprite;
+            itemImage.enabled = sprite != null;
+        }
+
         isFull = true;
     }
 
+    /// <summary>
+    /// Limpa o slot (cheio → vazio).
+    /// </summary>
     public void Clear()
     {
-        itemName = description = null;
-        itemSprite = null;
-        storedCard = null;
-        isFull = false;
+        itemName     = null;
+        itemSprite   = null;
+        description  = null;
+        storedCard   = null;
+        isFull       = false;
 
-        if (itemImage)  { itemImage.sprite = null;  itemImage.enabled = false; }
-        if (highlight)  highlight.SetActive(false);
+        if (itemImage != null)
+        {
+            itemImage.sprite  = null;
+            itemImage.enabled = false;
+        }
+
+        if (highlight != null)
+            highlight.SetActive(false);
     }
 
-    /* ---------- seleção ---------- */
-    public void OnPointerClick(PointerEventData e)
+    /// <summary>
+    /// Marca/desmarca o highlight de seleção.
+    /// </summary>
+    public void SetSelected(bool selected)
     {
-        if (e.button == PointerEventData.InputButton.Left)
-            Debug.Log($"Slot {itemName} clicado!");
-            controller.SelectSlot(this);
+        if (highlight != null)
+            highlight.SetActive(selected);
     }
 
-    public void SetSelected(bool on) => highlight?.SetActive(on);
+    /// <summary>
+    /// Helper caso queira usar ClearSlotHighlights() no controller.
+    /// </summary>
+    public void Highlight(bool on) => SetSelected(on);
 }
