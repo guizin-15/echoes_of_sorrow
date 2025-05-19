@@ -6,11 +6,11 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance { get; private set; }
 
     [Header("Configuração de UI")]
-    [Tooltip("O root do seu inventário (tagged InventoryUI)")]
-    [SerializeField] private GameObject inventoryRoot;
-
+    [SerializeField] private GameObject inventoryPrefab; 
+    private GameObject inventoryRoot;
     private InventarioController uiController;
-    private bool                 isOpen;
+    private PlayerController2D   playerController;
+    private bool                 isOpen;      // <— nosso estado único
 
     // Persistência de dados
     public List<CardData> InventoryCards { get; private set; }
@@ -19,42 +19,68 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int consumeSlotCount = 3;
 
     void Awake()
+{
+    // ——— Singleton ———
+    if (Instance != null && Instance != this)
     {
-        // singleton
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        Destroy(gameObject);
+        return;
+    }
+    Instance = this;
+    DontDestroyOnLoad(gameObject);
 
-        // init dados
-        InventoryCards = new List<CardData>();
-        EquippedCards  = new CardData[consumeSlotCount];
+    // ——— Inicializa dados ———
+    InventoryCards = new List<CardData>();
+    EquippedCards  = new CardData[consumeSlotCount];
 
-        // encontra a UI e o controller
-        if (inventoryRoot == null)
-            inventoryRoot = GameObject.FindWithTag("InventoryUI");
+    if (inventoryPrefab == null)
+    {
+        Debug.LogError("[InventoryManager] inventoryPrefab não foi atribuído!");
+        return;
+    }
+    inventoryRoot = Instantiate(inventoryPrefab);
+    inventoryRoot.tag = "InventoryUI";
+    DontDestroyOnLoad(inventoryRoot);
+    inventoryRoot.SetActive(false);
 
-        if (inventoryRoot == null)
-            Debug.LogError("[InventoryManager] inventoryRoot não atribuído nem encontrado por tag!");
+    uiController = inventoryRoot.GetComponent<InventarioController>();
+    if (uiController == null)
+        Debug.LogError("[InventoryManager] InventarioController não encontrado no prefab instanciado!");
 
-        inventoryRoot.SetActive(false);
-        DontDestroyOnLoad(inventoryRoot);
+    // ——— Localiza o jogador para bloquear controles ———
+    var playerGO = GameObject.FindWithTag("Player");
+    if (playerGO != null)
+        playerController = playerGO.GetComponent<PlayerController2D>();
+    if (playerController == null)
+        Debug.LogWarning("[InventoryManager] PlayerController2D não encontrado em objeto com tag 'Player'!");
+}
 
-        uiController = inventoryRoot.GetComponent<InventarioController>();
-        if (uiController == null)
-            Debug.LogError("[InventoryManager] InventarioController não encontrado no inventoryRoot!");
+    public void ToggleUI()
+    {
+        // Inverte o estado interno
+        isOpen = !isOpen;
+
+        // Reflete na UI
+        inventoryRoot.SetActive(isOpen);
+
+        // Pausa / despausa
+        Time.timeScale = isOpen ? 0f : 1f;
+
+        // Bloqueia / libera player
+        if (playerController != null)
+            playerController.enabled = !isOpen;
+
+        // Atualiza ou limpa
+        if (isOpen)
+            uiController.RefreshSlots();
+        else
+            uiController.DeselectAll();
     }
 
-    void Update()
+        void Update()
     {
-        // aqui tratamos o input “I” para abrir/fechar
-        if (Input.GetKeyDown(KeyCode.I) && inventoryRoot != null)
-        {
-            isOpen = !isOpen;
-            inventoryRoot.SetActive(isOpen);
-
-            // quando abrir, força a UI a recarregar
-            if (isOpen) uiController.RefreshSlots();
-        }
+        if (Input.GetKeyDown(KeyCode.I))
+            ToggleUI();
     }
 
     // métodos de dados (chamados pelo ShopMenu, CardPickup etc)

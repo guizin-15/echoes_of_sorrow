@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04342e0bef94f3f258185482526339ed, type: 3}
+  m_Name: CardHope
+  m_EditorClassIdentifier: 
+  cardName: Hope
+  description: "Hope a carta que representa a for\xE7a dos antigos guerreiros  +10
+    de vida"
+  artwork: {fileID: 813796157681362143, guid: 18eea38fe9fde44e492fd2330f8896f3, type: 3}
+  effect: 0
+  amount: 10
+  duration: 5

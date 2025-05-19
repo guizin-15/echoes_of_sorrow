@@ -56,16 +56,7 @@ public class InventarioController : MonoBehaviour
         removeButton.interactable = selectedInventorySlot != null;
     }
 
-    /// <summary> Chamado pelo InventoryManager para abrir/fechar UI </summary>
-    public void ToggleInventory()
-    {
-        bool open = !inventoryRoot.activeSelf;
-        inventoryRoot.SetActive(open);
-        if (open)
-            RefreshSlots();
-        else
-            DeselectAll();
-    }
+ 
 
     public void RefreshSlots()
     {
@@ -162,9 +153,9 @@ public class InventarioController : MonoBehaviour
     }
 
 
-    
 
-    private void DeselectAll()
+
+    public void DeselectAll()
     {
         foreach (var s in inventorySlots) s.SetSelected(false);
         foreach (var s in consumeSlots)   s.SetSelected(false);
