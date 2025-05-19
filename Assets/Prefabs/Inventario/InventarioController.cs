@@ -60,7 +60,7 @@ public class InventarioController : MonoBehaviour
     descPanel = inventoryRoot.GetComponentInChildren<DescriptionPanel>();
     equipButton = inventoryRoot
         .GetComponentsInChildren<Button>(true)
-        .FirstOrDefault(b => b.name.ToLower().Contains("equip"));
+        .FirstOrDefault(b => b.name.ToLower().Contains("Button"));
 
     if (descPanel == null)
         Debug.LogError("[InventarioController] DescriptionPanel não encontrado no prefab");
@@ -96,37 +96,53 @@ public class InventarioController : MonoBehaviour
         inventoryRoot.SetActive(false);
     }
 
-    private void RefreshSlots()
+private void RefreshSlots()
+{
+    // 1) Reobtenha referências aos slots
+    inventorySlots = inventoryRoot
+        .GetComponentsInChildren<ItemSlot>(true)
+        .Where(s => s.kind == ItemSlot.Kind.Inventory)
+        .ToArray();
+    consumeSlots = inventoryRoot
+        .GetComponentsInChildren<ItemSlot>(true)
+        .Where(s => s.kind == ItemSlot.Kind.Consume)
+        .ToArray();
+
+    Debug.Log($"[InventarioController] Found {inventorySlots.Length} inventory and {consumeSlots.Length} consume slots", this);
+
+    // 2) Limpa e repopula INVENTÁRIO
+    foreach (var slot in inventorySlots)
+        slot.Clear();
+    for (int i = 0; i < inventoryCards.Count && i < inventorySlots.Length; i++)
     {
-        // Find slots under the inventoryRoot to avoid stale references
-        inventorySlots = inventoryRoot.GetComponentsInChildren<ItemSlot>(true)
-            .Where(s => s.kind == ItemSlot.Kind.Inventory)
-            .ToArray();
-        consumeSlots   = inventoryRoot.GetComponentsInChildren<ItemSlot>(true)
-            .Where(s => s.kind == ItemSlot.Kind.Consume)
-            .ToArray();
+        var card = inventoryCards[i];
+        inventorySlots[i].AddItem(
+            card.cardName,
+            card.artwork,
+            card.description,
+            card
+        );
+    }
 
-        Debug.Log($"[InventarioController] Found {inventorySlots.Length} inventory and {consumeSlots.Length} consume slots", this);
-
-        // Clear inventory slots
-        foreach (var slot in inventorySlots)
-            slot.Clear();
-
-        // Clear consume slots then reapply equipped
-        for (int i = 0; i < consumeSlots.Length; i++)
+    // 3) Limpa e repopula CONSUMÍVEIS (equipados)
+    for (int i = 0; i < consumeSlots.Length; i++)
+    {
+        consumeSlots[i].Clear();
+        if (equippedCards != null
+            && i < equippedCards.Length
+            && equippedCards[i] != null)
         {
-            consumeSlots[i].Clear();
-            if (equippedCards != null && i < equippedCards.Length && equippedCards[i] != null)
-            {
-                var cardData = equippedCards[i];
-                consumeSlots[i].AddItem(
-                    cardData.cardName,
-                    cardData.artwork,
-                    cardData.description,
-                    cardData);
-            }
+            var card = equippedCards[i];
+            consumeSlots[i].AddItem(
+                card.cardName,
+                card.artwork,
+                card.description,
+                card
+            );
         }
     }
+}
+
 
     private void Update()
     {
