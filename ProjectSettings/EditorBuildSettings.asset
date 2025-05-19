@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuPrincipal.unity
     guid: 7d5765c6d155c104f8313ff5667d9ed8
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 5f2a75614f6279c47803a1fdfa25ebd1
+  - enabled: 1
     path: Assets/Scenes/Silvane.unity
     guid: a160b3677b29146f6bf11391cae4fa31
   - enabled: 1
@@ -17,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Castle.unity
     guid: 2e466f646c7bc8142b854fcd8ecc365c
+  - enabled: 1
+    path: Assets/Scenes/Boss.unity
+    guid: d89406864fef448f085daefb6cd83b8b
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: 0b1ee8c41eb1d7a4f852171c446fb694
