@@ -1,7 +1,8 @@
-// PlayerController2D.cs ─ v2.4
+// PlayerController2D.cs ─ v2.5
 // -----------------------------------------------------------------------------
 // - Dash infinito NO CHÃO, mas somente 1 dash por salto aéreo
 // - Cooldown (dashCooldown) respeitado em qualquer situação
+// - Sistema de sons integrado
 // - Demais sistemas (combo-dash, ataques, wall-slide, etc.) inalterados & seguros
 // -----------------------------------------------------------------------------
 
@@ -92,6 +93,9 @@ public class PlayerController2D : MonoBehaviour
     [Header("Reação a Dano")]
     [SerializeField] private float damagePushForceX = 5f;
     [SerializeField] private float damagePushForceY = 2f;
+
+    [Header("Sistema de Áudio")]
+    [SerializeField] private PlayerAudioSystem audioSystem;
     #endregion
 
     #region === Variáveis internas ===
@@ -113,11 +117,11 @@ public class PlayerController2D : MonoBehaviour
     private bool isComboDashing;
     private bool isDashCoroutineActive;
     private float lastDashTime;
-    private bool hasDashedInAir;        // <-- NOVO : controla 1 dash aéreo
+    private bool hasDashedInAir;        // <-- controla 1 dash aéreo
 
     /* Ataques */
     private float lastSliceTime, lastSlashTime;
-    private bool isSliceFrozen, isSlashActive;
+    public bool isSliceFrozen, isSlashActive;
     private bool queuedSlashAfterSlice, queuedSliceAfterSlash;
     private bool isPerformingSlice, isPerformingSlash;
     #endregion
@@ -127,6 +131,10 @@ public class PlayerController2D : MonoBehaviour
     {
         rb       = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        
+        // Verificar e obter referência ao sistema de áudio
+        if (audioSystem == null)
+            audioSystem = GetComponent<PlayerAudioSystem>();
 
         rb.gravityScale = 4f;
         rb.freezeRotation = true;
@@ -210,9 +218,7 @@ public class PlayerController2D : MonoBehaviour
     {  
         int maskSemBarrier = groundLayer & ~LayerMask.GetMask("Barrier");
         bool groundedNow = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, maskSemBarrier);
-
-
-        bool onWall = Physics2D.OverlapBox(wallCheck.position,  wallCheckSize,  0f, groundLayer);
+        bool onWall = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, groundLayer);
         bool onBarrier = Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, barrierLayer);
 
         if (groundedNow && !isGrounded)               // acabou de aterrar
@@ -290,6 +296,9 @@ public class PlayerController2D : MonoBehaviour
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         animator.SetTrigger("Jump");
+        
+        // Tocar som de pulo
+        if (audioSystem) audioSystem.PlayJumpSound();
     }
 
     private void PerformWallJump()
@@ -307,6 +316,9 @@ public class PlayerController2D : MonoBehaviour
             Flip();
 
         animator.SetTrigger("Jump");
+        
+        // Tocar som de pulo
+        if (audioSystem) audioSystem.PlayJumpSound();
     }
 
     private void PerformDoubleJump()
@@ -318,6 +330,9 @@ public class PlayerController2D : MonoBehaviour
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         animator.SetTrigger("Jump");
+        
+        // Tocar som de pulo
+        if (audioSystem) audioSystem.PlayJumpSound();
     }
     #endregion
 
@@ -330,6 +345,9 @@ public class PlayerController2D : MonoBehaviour
 
         isDashing = true;
         animator.SetTrigger("Dash");
+        
+        // Tocar som de dash
+        if (audioSystem) audioSystem.PlayDashSound();
 
         Vector2 originalVelocity = rb.linearVelocity;
         float   originalGravity  = rb.gravityScale;
@@ -370,7 +388,7 @@ public class PlayerController2D : MonoBehaviour
         else                                 TryExecuteSlice();
     }
 
-    /* --- Slice (sem mudanças) --- */
+    /* --- Slice --- */
     private void TryExecuteSlice()
     {
         if (Time.time < lastSliceTime + sliceCooldown || isSlashActive) return;
@@ -379,6 +397,9 @@ public class PlayerController2D : MonoBehaviour
         isPerformingSlash = false;
         lastSliceTime     = Time.time;
         animator.SetTrigger("Slice");
+        
+        // Tocar som de ataque slice
+        if (audioSystem) audioSystem.PlaySliceSound();
 
         PerformAttack();
 
@@ -409,7 +430,7 @@ public class PlayerController2D : MonoBehaviour
         isPerformingSlice = false;
     }
 
-    /* --- Slash (sem mudanças) --- */
+    /* --- Slash --- */
     private void TryExecuteSlash()
     {
         if (Time.time < lastSlashTime + slashCooldown || isSliceFrozen) return;
@@ -427,6 +448,9 @@ public class PlayerController2D : MonoBehaviour
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         animator.SetTrigger("Slash");
+        
+        // Tocar som de ataque slash
+        if (audioSystem) audioSystem.PlaySlashSound();
 
         PerformAttack();
         StartCoroutine(EndSlashAfterTime());
@@ -444,7 +468,7 @@ public class PlayerController2D : MonoBehaviour
         queuedSliceAfterSlash = false;
     }
 
-    /* --- Combo Dash → Slash (sem mudanças) --- */
+    /* --- Combo Dash → Slash --- */
     private IEnumerator ComboDashThenSlash()
     {
         float waitCD = Mathf.Max(0f, (lastSlashTime + slashCooldown) - Time.time);
@@ -455,6 +479,9 @@ public class PlayerController2D : MonoBehaviour
         float storedGravity = rb.gravityScale;
         rb.gravityScale     = 0f;
         rb.linearVelocity   = new Vector2(dir * comboDashSpeed, 0f);
+        
+        // Tocar som de dash para o combo-dash
+        if (audioSystem) audioSystem.PlayDashSound();
 
         yield return new WaitForSeconds(comboDashDuration);
 
@@ -472,7 +499,7 @@ public class PlayerController2D : MonoBehaviour
     }
     #endregion
 
-    #region === Hitbox (sem mudanças) ===
+    #region === Hitbox ===
     private void PerformAttack()
     {
         Collider2D[] hits = null;
@@ -481,12 +508,6 @@ public class PlayerController2D : MonoBehaviour
             hits = Physics2D.OverlapBoxAll(sliceAttackPoint.position, sliceBoxSize, 0f, enemyLayer);
         else if (isPerformingSlash && slashAttackPoint)
             hits = Physics2D.OverlapBoxAll(slashAttackPoint.position, slashBoxSize, 0f, enemyLayer);
-
-        // if (hits == null) return;
-        // foreach (Collider2D h in hits)
-        //     h.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
-
-        // Debug.Log("Ataque executado!");
 
         if (hits == null || hits.Length == 0)
         {
@@ -500,11 +521,10 @@ public class PlayerController2D : MonoBehaviour
                 h.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
             }
         }
-
     }
     #endregion
 
-    #region === Vida / Dano / Morte (sem mudanças) ===
+    #region === Vida / Dano / Morte ===
     public void TakeDamage(int dmg = 10)
     {
         if (isDead || isTakingDamage) return;
@@ -513,6 +533,9 @@ public class PlayerController2D : MonoBehaviour
 
         // Atualiza barra de vida
         if (healthBar) healthBar.SetHealth(currentHealth);
+        
+        // Tocar som de dano
+        if (audioSystem) audioSystem.PlayDamageSound();
 
         bool willDie = currentHealth <= 0;
         if (willDie) { StartCoroutine(Die()); return; }
@@ -543,6 +566,10 @@ public class PlayerController2D : MonoBehaviour
         isSlashActive = isSliceFrozen = isComboDashing = isDashing = false;
 
         animator.SetTrigger("Die");
+        
+        // Tocar som de morte
+        if (audioSystem) audioSystem.PlayDeathSound();
+        
         gameObject.layer = LayerMask.NameToLayer("Dead");
 
         yield return new WaitForSeconds(0.2f);
