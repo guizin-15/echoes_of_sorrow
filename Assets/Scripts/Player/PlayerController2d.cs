@@ -84,7 +84,7 @@ public class PlayerController2D : MonoBehaviour
     public bool isTakingDamage = false;
 
     [Header("Barra de Vida")]
-    [SerializeField] public HealthBar healthBar; // arraste seu prefab/objeto HealthBar aqui
+    [SerializeField] HealthBar healthBar; // arraste seu prefab/objeto HealthBar aqui
 
     [Header("Coleta de Moedas")]
     public int coinsCollected = 0;
@@ -134,9 +134,6 @@ public class PlayerController2D : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
         currentHealth = maxHealth;
-        if (GameSession.Instance != null)
-            GameSession.Instance.AplicarEstado(this);
-
         if (healthBar) healthBar.SetMaxHealth(maxHealth);
         jumpsLeft = extraJumps;
     }

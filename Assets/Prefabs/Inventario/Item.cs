@@ -12,7 +12,7 @@ public class Item : MonoBehaviour
     private void Awake()
     {
         inventario = GameObject
-            .Find("MenuInventario")              
+            .Find("Inventario")              
             .GetComponent<InventarioController>();
     }
 

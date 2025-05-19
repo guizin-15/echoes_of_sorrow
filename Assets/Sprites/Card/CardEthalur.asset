@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: 
   description: "O escudo de Ethalur bloqueia o pr\xF3ximo golpe recebido"
-  artwork: {fileID: -1677677942250754595, guid: 81a221f9d7cda43efa52a80df20b3ac5, type: 3}
+  artwork: {fileID: 0}
   effect: 0

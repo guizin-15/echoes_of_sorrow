@@ -52,7 +52,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -66,7 +66,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -145,9 +145,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 276
-        width: 83
-        height: 69
+        y: 261
+        width: 415
+        height: 84
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,10 +166,10 @@ TextureImporter:
       name: Blood Shop_1
       rect:
         serializedVersion: 2
-        x: 83
-        y: 276
-        width: 83
-        height: 69
+        x: 256
+        y: 329
+        width: 6
+        height: 6
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -188,10 +188,10 @@ TextureImporter:
       name: Blood Shop_2
       rect:
         serializedVersion: 2
-        x: 166
-        y: 276
-        width: 83
-        height: 69
+        x: 0
+        y: 198
+        width: 415
+        height: 63
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,10 +210,10 @@ TextureImporter:
       name: Blood Shop_3
       rect:
         serializedVersion: 2
-        x: 249
-        y: 276
-        width: 83
-        height: 69
+        x: 0
+        y: 126
+        width: 415
+        height: 72
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,9 +232,9 @@ TextureImporter:
       name: Blood Shop_4
       rect:
         serializedVersion: 2
-        x: 332
-        y: 276
-        width: 83
+        x: 0
+        y: 55
+        width: 415
         height: 69
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -255,9 +255,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 207
-        width: 83
-        height: 69
+        y: 0
+        width: 333
+        height: 57
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -272,407 +272,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Blood Shop_6
-      rect:
-        serializedVersion: 2
-        x: 83
-        y: 207
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6621d158d81fe4946afb6a98b6309293
-      internalID: -165601530
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_7
-      rect:
-        serializedVersion: 2
-        x: 166
-        y: 207
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fe90e8c0a1b57ed49a0263c72f26bc42
-      internalID: 959354158
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_8
-      rect:
-        serializedVersion: 2
-        x: 249
-        y: 207
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 02896c4fa9f7d384baeff748115a5d30
-      internalID: 1409341972
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_9
-      rect:
-        serializedVersion: 2
-        x: 332
-        y: 207
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e545685cba56a014889f76c5a51f438b
-      internalID: -2000856745
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_10
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 138
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 211fa7add9984674b8c32a7d2d505aad
-      internalID: 2115555538
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_11
-      rect:
-        serializedVersion: 2
-        x: 83
-        y: 138
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 38ca3383a27786b48ba7f0733bb9f97b
-      internalID: 56204654
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_12
-      rect:
-        serializedVersion: 2
-        x: 166
-        y: 138
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d34f3512260654240a839d6bcdc5341f
-      internalID: 427035983
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_13
-      rect:
-        serializedVersion: 2
-        x: 249
-        y: 138
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 000e7814d5505894593e0339148abb06
-      internalID: 323034365
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_14
-      rect:
-        serializedVersion: 2
-        x: 332
-        y: 138
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 991bf3f54d311ad4e8428ad4d91f18ee
-      internalID: 625794090
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_15
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 69
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 79f0887d43e753b4a8ca579b416559c0
-      internalID: 1862036049
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_16
-      rect:
-        serializedVersion: 2
-        x: 83
-        y: 69
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d3916b483c47131419b0ceaf9319c6f1
-      internalID: 1867533470
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_17
-      rect:
-        serializedVersion: 2
-        x: 166
-        y: 69
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8187674167f1e614d8dc6f945e5af6d0
-      internalID: 583177306
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_18
-      rect:
-        serializedVersion: 2
-        x: 249
-        y: 69
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 61869ce49c509c74b9d45b13e4b1e226
-      internalID: -1216407938
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_19
-      rect:
-        serializedVersion: 2
-        x: 332
-        y: 69
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2dcc3fafa7fbe274a9e84410c5018f51
-      internalID: 1358269918
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_20
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0ce1fa55930b9e343bfc7d36caca7afb
-      internalID: 1419826738
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_21
-      rect:
-        serializedVersion: 2
-        x: 83
-        y: 0
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d451ff4fdc002734496d8e210c51f09d
-      internalID: -758772736
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_22
-      rect:
-        serializedVersion: 2
-        x: 166
-        y: 0
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0108a2a6e94543847832b626c545d2a7
-      internalID: 2064379489
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blood Shop_23
-      rect:
-        serializedVersion: 2
-        x: 249
-        y: 0
-        width: 83
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d2864a9487876ee4ba8e4dbdc2c3b072
-      internalID: 1208387314
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3e8a55ec8b5e129479c8466750abf512
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -684,28 +288,10 @@ TextureImporter:
     nameFileIdTable:
       Blood Shop_0: -2305062657283403313
       Blood Shop_1: -8039101447351985170
-      Blood Shop_10: 2115555538
-      Blood Shop_11: 56204654
-      Blood Shop_12: 427035983
-      Blood Shop_13: 323034365
-      Blood Shop_14: 625794090
-      Blood Shop_15: 1862036049
-      Blood Shop_16: 1867533470
-      Blood Shop_17: 583177306
-      Blood Shop_18: -1216407938
-      Blood Shop_19: 1358269918
       Blood Shop_2: -682512524332845633
-      Blood Shop_20: 1419826738
-      Blood Shop_21: -758772736
-      Blood Shop_22: 2064379489
-      Blood Shop_23: 1208387314
       Blood Shop_3: -3226689724333129030
       Blood Shop_4: -8575266903361959383
       Blood Shop_5: -7853722381712140910
-      Blood Shop_6: -165601530
-      Blood Shop_7: 959354158
-      Blood Shop_8: 1409341972
-      Blood Shop_9: -2000856745
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
