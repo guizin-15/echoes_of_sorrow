@@ -17,10 +17,10 @@ public class Pause : MonoBehaviour
 
     [Header("Dependências")]
     [SerializeField] private PlayerController2D playerController;
-    [SerializeField] private MenuController    menuController;
+    [SerializeField] private MenuController menuController;
 
     private AudioSource audioSource;
-    private bool        isPaused;
+    private bool isPaused;
 
     void Awake()
     {
@@ -41,7 +41,7 @@ public class Pause : MonoBehaviour
             var gfx = buttonGO.GetComponent<Graphic>();
             if (gfx != null) gfx.raycastTarget = true;
 
-            var trigger = buttonGO.GetComponent<EventTrigger>() 
+            var trigger = buttonGO.GetComponent<EventTrigger>()
                           ?? buttonGO.AddComponent<EventTrigger>();
 
             // pointer enter
@@ -114,4 +114,12 @@ public class Pause : MonoBehaviour
         else
             Debug.LogError("MenuController não atribuído em Pause!");
     }
+    
+    public void IrParaMenu()
+    {
+        Debug.Log("[Pause] Indo para o menu via botão");
+        Time.timeScale = 1f; // garante que o tempo volte ao normal
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+    }
+
 }
