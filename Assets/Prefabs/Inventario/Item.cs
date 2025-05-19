@@ -7,8 +7,6 @@ public class Item : MonoBehaviour
     [SerializeField] private Sprite sprite;
     [TextArea]       [SerializeField] private string description;
 
-<<<<<<< HEAD
-=======
     private InventarioController inventario;
 
     private void Awake()
@@ -26,5 +24,4 @@ public class Item : MonoBehaviour
             Destroy(gameObject);              
         }
     }
->>>>>>> e543c21c407630be40b04fcc1213a7b4082c1367
 }
