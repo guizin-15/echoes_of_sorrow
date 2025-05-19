@@ -252,6 +252,14 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1783953715}
+    - target: {fileID: 1163364411296186739, guid: 3874a57eab93943ffb47e6bb4cae28d6, type: 3}
+      propertyPath: slashAttackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a7736c1763bd76c4eb0d52aaad581deb, type: 3}
+    - target: {fileID: 1163364411296186739, guid: 3874a57eab93943ffb47e6bb4cae28d6, type: 3}
+      propertyPath: sliceAttackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: c5955b1ca51d47245ae5e5e10395d910, type: 3}
     - target: {fileID: 4426076813368346228, guid: 3874a57eab93943ffb47e6bb4cae28d6, type: 3}
       propertyPath: m_Name
       value: Noon
