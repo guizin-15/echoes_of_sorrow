@@ -200,7 +200,7 @@ public class InventarioController : MonoBehaviour
             selectedInventorySlot.storedCard);
         // Apply new effect
         selectedInventorySlot.storedCard?.ApplyEffect(playerController);
-        // Persist equipped card
+        // Persist equipped 
         int idx = System.Array.IndexOf(consumeSlots, selectedConsumeSlot);
         if (idx >= 0)
             equippedCards[idx] = selectedInventorySlot.storedCard;
