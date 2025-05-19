@@ -11,6 +11,10 @@ public class InventarioController : MonoBehaviour
     [SerializeField] private Button equipButton;
     [SerializeField] private DescriptionPanel descPanel;
 
+    [Header("Botão Remover")]
+    [SerializeField] private Button removeButton;
+
+
     private ItemSlot[] inventorySlots;
     private ItemSlot[] consumeSlots;
 
@@ -37,6 +41,19 @@ public class InventarioController : MonoBehaviour
         equipButton.interactable = false;
 
         inventoryRoot.SetActive(false);
+
+        if (removeButton != null)
+        {
+            removeButton.onClick.RemoveAllListeners();
+            removeButton.onClick.AddListener(OnRemoveButtonClicked);
+            removeButton.interactable = false;
+        }
+    }
+
+    private void UpdateRemoveButton()
+    {
+        // só ativa se houver um slot de inventário selecionado
+        removeButton.interactable = selectedInventorySlot != null;
     }
 
     /// <summary> Chamado pelo InventoryManager para abrir/fechar UI </summary>
@@ -83,19 +100,30 @@ public class InventarioController : MonoBehaviour
     }
 
     public void SelectSlot(ItemSlot slot)
+{
+    // 1) Se for um slot de inventário, desmarca só o inventory antigo
+    if (slot.kind == ItemSlot.Kind.Inventory)
     {
         selectedInventorySlot?.SetSelected(false);
-        selectedConsumeSlot?.SetSelected(false);
-
-        if (slot.kind == ItemSlot.Kind.Inventory)
-            selectedInventorySlot = slot;
-        else
-            selectedConsumeSlot = slot;
-
-        slot.SetSelected(true);
-        descPanel.Show(slot);
-        equipButton.interactable = selectedInventorySlot != null && selectedConsumeSlot != null;
+        selectedInventorySlot = slot;
     }
+    // 2) Se for um slot de consumo, desmarca só o consume antigo
+    else
+    {
+        selectedConsumeSlot?.SetSelected(false);
+        selectedConsumeSlot = slot;
+    }
+
+    // 3) Marca o novo slot
+    slot.SetSelected(true);
+    
+    // 4) Atualiza painel de descrição e botão
+    descPanel.Show(slot);
+    equipButton.interactable = selectedInventorySlot != null
+                          && selectedConsumeSlot != null;
+    UpdateRemoveButton();
+}
+
 
     public void OnEquipButtonClicked()
     {
@@ -109,7 +137,32 @@ public class InventarioController : MonoBehaviour
 
         RefreshSlots();
         DeselectAll();
+        UpdateRemoveButton();
     }
+
+        private void OnRemoveButtonClicked()
+    {
+        if (selectedInventorySlot == null)
+            return;
+
+        // obtém o CardData a remover
+        var toRemove = selectedInventorySlot.storedCard;
+        if (toRemove != null)
+        {
+            // remove da lista persistente
+            InventoryManager.Instance.InventoryCards.Remove(toRemove);
+        }
+
+        // limpa seleção e repopula UI
+        DeselectAll();
+        RefreshSlots();
+
+        // desabilita o próprio botão
+        UpdateRemoveButton();
+    }
+
+
+    
 
     private void DeselectAll()
     {

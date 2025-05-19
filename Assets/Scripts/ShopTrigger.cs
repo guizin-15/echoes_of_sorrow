@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class ShopTrigger : MonoBehaviour
 {
-    [Header("Liga/Desliga Loja")]
-    [SerializeField] private ShopMenu shopMenu;         // arraste aqui o seu ShopMenu
-    [SerializeField] private KeyCode   openKey = KeyCode.E;
+    [SerializeField] private ShopMenu shopMenu;
+    [SerializeField] private KeyCode openKey = KeyCode.E;
+    [SerializeField] private GameObject openPromptUI;
 
-    [Header("UI")]
-    [SerializeField] private GameObject openPromptUI;   // arraste aqui o painel “Pressione E para abrir”
-
-    private bool playerInRange = false;
-    private bool shopOpen = false;                      // controla estado da loja
+    private bool playerInRange;
 
     void Awake()
     {
@@ -20,27 +16,14 @@ public class ShopTrigger : MonoBehaviour
 
     void Update()
     {
-        if (playerInRange && Input.GetKeyDown(openKey))
-        {
-            if (shopMenu == null)
-            {
-                Debug.LogError("[ShopTrigger] shopMenu não atribuído!", this);
-                return;
-            }
+        if (!playerInRange || shopMenu == null) return;
 
-            // Se a loja está fechada, abra; senão, feche
-            if (!shopOpen)
-            {
-                Debug.Log("[ShopTrigger] Abrindo loja", this);
-                shopMenu.OpenShop();
-                shopOpen = true;
-            }
-            else
-            {
-                Debug.Log("[ShopTrigger] Fechando loja", this);
+        if (Input.GetKeyDown(openKey))
+        {
+            if (shopMenu.IsOpen)
                 shopMenu.CloseShop();
-                shopOpen = false;
-            }
+            else
+                shopMenu.OpenShop();
         }
     }
 
@@ -49,7 +32,6 @@ public class ShopTrigger : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             playerInRange = true;
-            Debug.Log("[ShopTrigger] Jogador entrou na área da loja", this);
             if (openPromptUI != null)
                 openPromptUI.SetActive(true);
         }
@@ -60,18 +42,12 @@ public class ShopTrigger : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             playerInRange = false;
-            Debug.Log("[ShopTrigger] Jogador saiu da área da loja", this);
-
             if (openPromptUI != null)
                 openPromptUI.SetActive(false);
 
-            // fecha a loja se ainda estiver aberta
-            if (shopMenu != null && shopOpen)
-            {
+            if (shopMenu != null && shopMenu.IsOpen)
                 shopMenu.CloseShop();
-                shopOpen = false;
-                Debug.Log("[ShopTrigger] Loja fechada ao sair da área", this);
-            }
         }
     }
 }
+
