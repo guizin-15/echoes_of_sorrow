@@ -40694,7 +40694,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 775480221195655453, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1627400714969195704, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.x
@@ -46883,7 +46883,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 775480221195655453, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3085753012209347717, guid: 90bc83ec42bd947a5b971a704d3d61fe, type: 3}
       propertyPath: player
