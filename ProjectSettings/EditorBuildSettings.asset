@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Silvane.unity
     guid: a160b3677b29146f6bf11391cae4fa31
   - enabled: 1
-    path: Assets/Scenes/Sorrow City/SC1.unity
+    path: Assets/Scenes/Sorrow City.unity
     guid: c5b323668e14f2b46a7798086a2c112c
   - enabled: 1
     path: Assets/Scenes/Castle.unity
