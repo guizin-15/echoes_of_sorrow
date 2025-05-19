@@ -4,11 +4,20 @@ public class DocTrigger : MonoBehaviour
 {
     private bool playerInRange = false;
 
+    [SerializeField] private DocUI docUI; // Agora referenciamos localmente
+
+    void Start()
+    {
+        // Se não tiver setado no Inspector, busca no próprio prefab
+        if (docUI == null)
+            docUI = GetComponentInChildren<DocUI>();
+    }
+
     void Update()
     {
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            DocUI.Instance.ShowDocument(); 
+            docUI.ShowDocument(); 
         }
     }
 
@@ -17,7 +26,7 @@ public class DocTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            DocUI.Instance.ShowPrompt(true);
+            docUI.ShowPrompt(true);
         }
     }
 
@@ -26,7 +35,7 @@ public class DocTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            DocUI.Instance.ShowPrompt(false);
+            docUI.ShowPrompt(false);
         }
     }
 }

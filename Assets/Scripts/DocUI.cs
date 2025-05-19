@@ -4,8 +4,6 @@ using TMPro;
 
 public class DocUI : MonoBehaviour
 {
-    public static DocUI Instance;
-
     [Header("UI Elements")]
     public GameObject promptPanel;
     public GameObject docPanel;
@@ -13,7 +11,7 @@ public class DocUI : MonoBehaviour
     public Image documentImage;
     public TextMeshProUGUI contentText;
     public TextMeshProUGUI closeHintText;
-    public Button closeButton; 
+    public Button closeButton;
 
     [Header("Document Content")]
     [TextArea(5, 10)] public string documentText;
@@ -21,12 +19,6 @@ public class DocUI : MonoBehaviour
 
     private GameObject player;
     private PlayerController2D playerController;
-
-    void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-    }
 
     void Start()
     {
@@ -37,9 +29,9 @@ public class DocUI : MonoBehaviour
             playerController = player.GetComponent<PlayerController2D>();
         }
 
-        docPanel.SetActive(true);
+        docPanel.SetActive(true);  // Garante atualização do layout do texto
         contentText.ForceMeshUpdate();
-        docPanel.SetActive(false);
+        docPanel.SetActive(false); // Depois esconde
 
         closeButton.onClick.AddListener(() => HideDocument());
     }
