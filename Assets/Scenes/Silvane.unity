@@ -3486,11 +3486,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2034005506}
-  - {fileID: 1998486671}
   - {fileID: 1990324487}
-  - {fileID: 608179937}
-  - {fileID: 1788195904}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &369416701
@@ -12055,16 +12051,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608179936}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.35417977}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.4, y: 2.4, z: 2.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 337826876}
+  m_Father: {fileID: 1990324487}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 794.67236, y: 380.47357}
-  m_SizeDelta: {x: 351.9423, y: 50}
+  m_AnchoredPosition: {x: 0, y: -134.82321}
+  m_SizeDelta: {x: 217.9202, y: 21.2309}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &608179938
 MonoBehaviour:
@@ -46940,16 +46936,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788195903}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.35417977}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.4, y: 2.4, z: 2.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 337826876}
+  m_Father: {fileID: 1990324487}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 794.67236, y: 380.47357}
-  m_SizeDelta: {x: 351.9423, y: 50}
+  m_AnchoredPosition: {x: 795, y: 493.52307}
+  m_SizeDelta: {x: 109.1589, y: 21.2309}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1788195905
 MonoBehaviour:
@@ -46971,7 +46967,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Salvo
+  m_text: Jogo Salvo
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4d49172e015983f4f9d35947e54cbfd5, type: 2}
   m_sharedMaterial: {fileID: -924150163448368416, guid: 4d49172e015983f4f9d35947e54cbfd5, type: 2}
@@ -47349,7 +47345,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 608179937}
+  - {fileID: 1788195904}
+  - {fileID: 2034005506}
+  - {fileID: 1998486671}
   m_Father: {fileID: 337826876}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -47450,8 +47450,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a2f9918bae3a340aa27926a8095596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  savePromptUI: {fileID: 0}
-  saveFeedbackUI: {fileID: 0}
+  savePromptUI: {fileID: 608179936}
+  saveFeedbackUI: {fileID: 1788195903}
   feedbackDuration: 2
 --- !u!61 &1998486670
 BoxCollider2D:
@@ -47508,11 +47508,11 @@ Transform:
   m_GameObject: {fileID: 1998486668}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 54.17, y: 10.311743, z: 0.2226267}
+  m_LocalPosition: {x: -740.5024, y: -539.508, z: -0.13155307}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 337826876}
+  m_Father: {fileID: 1990324487}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2034005503
 GameObject:
@@ -47602,11 +47602,11 @@ Transform:
   m_GameObject: {fileID: 2034005503}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -145.82762, y: 10.281743, z: 0.2226267}
+  m_LocalPosition: {x: -940.5, y: -539.538, z: -0.13155307}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 337826876}
+  m_Father: {fileID: 1990324487}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2080682485
 GameObject:
@@ -48313,6 +48313,10 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 3734022171433053706}
+    - target: {fileID: 1459444161034530029, guid: cea569001adc48ee0b7b8d618dde958b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5588838766944092371, guid: cea569001adc48ee0b7b8d618dde958b, type: 3}
       propertyPath: m_Name
       value: PauseManager
