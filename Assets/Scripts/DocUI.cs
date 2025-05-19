@@ -9,8 +9,9 @@ public class DocUI : MonoBehaviour
     [Header("UI Elements")]
     public GameObject promptPanel;
     public GameObject docPanel;
+
+    public Image documentImage;
     public TextMeshProUGUI contentText;
-    public Image docImage;
     public TextMeshProUGUI closeHintText;
     public Button closeButton; 
 
@@ -60,8 +61,8 @@ public class DocUI : MonoBehaviour
     public void ShowDocument()
     {
         docPanel.SetActive(true);
+        documentImage.sprite = documentSprite != null ? documentSprite : null;
         contentText.text = documentText;
-        docImage.sprite = documentSprite;
         closeHintText.text = "";
 
         EnablePlayerControls(false);
