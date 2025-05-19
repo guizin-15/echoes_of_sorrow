@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,30 +8,46 @@ public class MenuController : MonoBehaviour
     public GameObject menuPanel;
     public GameObject optionsPanel;
 
+    [Header("Lore Intro (Inactive por padrão)")]
+    [Tooltip("Canvas que contém BlackPanel, LoreText, ContinueButton")]
+    public GameObject loreCanvas;
+    [Tooltip("Componente que faz typewriter + fade + LoadScene")]
+    public LoreIntroController loreController;
+    [TextArea(3,6)]
+    [Tooltip("Parágrafos de lore para mostrar no New Journey")]
+    public List<string> introParagraphs = new List<string>();
+
     [Header("Cena Inicial do Jogo")]
-    public string nomeCenaDoJogo = "CenaInicial"; // defina no Inspector
+    public string nomeCenaDoJogo = "CenaInicial";
 
-    [Header("Transição com Fade")]
-    public ScreenFader screenFader; // arraste no Inspector
+    [Header("Transição com Fade (Continuar/Load direto)")]
+    public ScreenFader screenFader;
 
-
-    /// <summary>
-    /// Começa uma nova jornada apagando qualquer save anterior.
-    /// </summary>
+    // ——— New Journey agora exibe lore antes de carregar cena ———
     public void NewJourney()
     {
         SaveSystem.DeleteSave();
-        screenFader.FadeOutAndLoadScene(nomeCenaDoJogo);
+
+        // 1) esconde o menu de opções/menu principal
+        menuPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+
+        // 2) ativa o Canvas de lore e dispara a sequência
+        loreCanvas.SetActive(true);
+
+        // passa o nome da cena para o controller, caso queira override via Inspector
+        loreController.nextSceneName = nomeCenaDoJogo;
+
+        // inicia o efeito typewriter / fade in + eventual LoadScene
+        loreController.StartLore(introParagraphs);
     }
 
-    /// <summary>
-    /// Continua a partir do último ponto salvo, se houver.
-    /// </summary>
+    // ——— ContinueGame permanece igual, vai direto pra cena salva ———
     public void ContinueGame()
     {
         if (SaveSystem.HasSave())
         {
-            SaveData data = SaveSystem.LoadGame();
+            var data = SaveSystem.LoadGame();
             screenFader.FadeOutAndLoadScene(data.sceneName);
         }
         else
@@ -39,35 +56,26 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    // ——— Resto dos métodos de menu/opções/sair… ———
 
-    /// <summary>
-    /// Abre o painel de opções.
-    /// </summary>
     public void AbrirOpcoes()
     {
         menuPanel.SetActive(false);
         optionsPanel.SetActive(true);
     }
 
-    /// <summary>
-    /// Retorna ao menu principal.
-    /// </summary>
     public void VoltarAoMenu()
     {
         optionsPanel.SetActive(false);
         menuPanel.SetActive(true);
     }
-    
+
     public void VoltarAoMenuViaBotao()
     {
         Debug.Log("🔙 Botão Voltar ao Menu clicado!");
         screenFader.FadeOutAndLoadScene("Menu");
     }
 
-
-    /// <summary>
-    /// Encerra o jogo.
-    /// </summary>
     public void SairDoJogo()
     {
         Application.Quit();
