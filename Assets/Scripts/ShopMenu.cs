@@ -48,20 +48,28 @@ public class ShopMenu : MonoBehaviour
     }
 
     void OnBuyButtonClicked()
+{
+    if (selectedSlot == null) return;
+
+    // Verifica se o player tem moedas suficientes
+    if (playerController.coinsCollected < selectedSlot.price)
     {
-        if (selectedSlot == null) return;
-
-        // 1) adiciona o card ao InventoryManager
-        InventoryManager.Instance.AddCard(selectedSlot.cardData);
-
-        // 2) debita as moedas
-        playerController.coinsCollected -= selectedSlot.price;
-
-        // 3) marca slot como vendido e limpa seleção
-        selectedSlot.MarkAsSold();
-        ClearSlotHighlights();
-        ClearDetails();
+        Debug.LogWarning("Você não tem moedas suficientes para comprar esta carta!");
+        return;
     }
+
+    // 1) adiciona o card ao InventoryManager
+    InventoryManager.Instance.AddCard(selectedSlot.cardData);
+
+    // 2) debita as moedas
+    playerController.coinsCollected -= selectedSlot.price;
+
+    // 3) marca slot como vendido e limpa seleção
+    selectedSlot.MarkAsSold();
+    ClearSlotHighlights();
+    ClearDetails();
+}
+
 
     public void SelectItem(ItemSlotLoja slot)
     {
