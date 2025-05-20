@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,34 +28,87 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if (SaveSystem.HasSave())
+        // Encontra referências importantes se forem nulas
+        if (player == null)
+            player = FindObjectOfType<PlayerController2D>();
+            
+        if (deathUI == null)
+            deathUI = FindObjectOfType<DeathUIController>();
+            
+        if (healthBar == null)
+            healthBar = FindObjectOfType<HealthBar>();
+        
+        // Se não houver save e estivermos na primeira cena do jogo, cria um save inicial
+        if (!SaveSystem.HasSave() && IsFirstScene())
+        {
+            if (player != null)
+            {
+                Debug.Log("🆕 Criando save inicial para novo jogo");
+                SaveSystem.SaveGame(player);
+            }
+        }
+        // Se houver save, carrega o jogo
+        else if (SaveSystem.HasSave())
         {
             LoadGame();
         }
     }
+    
+    // Verifica se estamos na primeira cena do jogo
+    private bool IsFirstScene()
+    {
+        // Substitua "SeuNomeDaPrimeiraCena" pelo nome real da sua primeira cena
+        return SceneManager.GetActiveScene().name == "Level1" || 
+               SceneManager.GetActiveScene().buildIndex == 0;
+    }
 
     public void LoadGame()
     {
+        Debug.Log("📥 Tentando carregar o jogo...");
         SaveData data = SaveSystem.LoadGame();
         if (data != null)
         {
+            Debug.Log($"📥 Dados carregados. Cena alvo: {data.sceneName}, Cena atual: {SceneManager.GetActiveScene().name}");
+            
             if (SceneManager.GetActiveScene().name != data.sceneName)
             {
+                Debug.Log($"🔄 Carregando cena: {data.sceneName}");
                 SceneManager.LoadScene(data.sceneName);
                 SceneManager.sceneLoaded += OnSceneLoaded;
             }
             else
             {
+                Debug.Log("🔄 Aplicando dados na cena atual");
                 ApplySaveData(data);
             }
+        }
+        else
+        {
+            Debug.LogError("❌ Falha ao carregar dados do save!");
         }
     }
 
     public void Respawn()
     {
+        Debug.Log("🔄 Método Respawn do GameManager chamado");
+        
         if (deathUI != null)
             deathUI.HideDeathScreen();
-        LoadGame();
+        else
+            Debug.LogWarning("⚠️ deathUI é nulo ao tentar esconder a tela de morte");
+            
+        // Verifica se existe um save antes de tentar carregar
+        if (SaveSystem.HasSave())
+        {
+            Debug.Log("📂 Save encontrado, carregando jogo...");
+            LoadGame();
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Nenhum save encontrado, reiniciando cena atual");
+            Scene currentScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(currentScene.name);
+        }
     }
 
     public void PlayerMorreu()
@@ -64,23 +118,72 @@ public class GameManager : MonoBehaviour
         // Buscar a referência do deathUI se for nula
         if (deathUI == null)
         {
+            Debug.Log("🔍 Buscando referência do DeathUIController");
             deathUI = FindObjectOfType<DeathUIController>();
         }
         
         if (deathUI != null)
         {
+            Debug.Log("🔄 Mostrando tela de morte");
             deathUI.ShowDeathScreen();
+            
+            // Certifique-se de que todos os botões na UI estão configurados
+            ConfigureDeathUIButtons();
         }
         else
         {
-            Debug.LogError("DeathUIController não encontrado na cena!");
+            Debug.LogError("❌ DeathUIController não encontrado na cena!");
+        }
+    }
+    
+    // Método para configurar os botões da UI de morte
+    private void ConfigureDeathUIButtons()
+    {
+        if (deathUI != null)
+        {
+            RespawnButton respawnBtn = deathUI.GetComponentInChildren<RespawnButton>(true);
+            if (respawnBtn == null)
+            {
+                Debug.LogWarning("⚠️ Script RespawnButton não encontrado na DeathUI");
+                
+                // Tenta encontrar botões regulares e configurá-los manualmente
+                Button[] buttons = deathUI.GetComponentsInChildren<Button>(true);
+                foreach (Button btn in buttons)
+                {
+                    if (btn.name.Contains("Respawn") || btn.name.Contains("Restart") || btn.name.Contains("Retry"))
+                    {
+                        Debug.Log($"🔄 Configurando botão {btn.name} manualmente");
+                        btn.onClick.RemoveAllListeners();
+                        btn.onClick.AddListener(() => Respawn());
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("✅ Script RespawnButton encontrado e configurado");
+            }
         }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log($"🔄 Cena carregada: {scene.name}");
+        
+        // Garante que as referências sejam encontradas na nova cena
+        player = FindObjectOfType<PlayerController2D>();
+        deathUI = FindObjectOfType<DeathUIController>();
+        healthBar = FindObjectOfType<HealthBar>();
+        
         SaveData data = SaveSystem.LoadGame();
-        ApplySaveData(data);
+        if (data != null)
+        {
+            Debug.Log("📥 Aplicando dados do save na nova cena");
+            ApplySaveData(data);
+        }
+        else
+        {
+            Debug.LogError("❌ Dados do save não encontrados após carregar cena!");
+        }
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }

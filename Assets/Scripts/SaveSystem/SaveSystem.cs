@@ -18,7 +18,7 @@ public static class SaveSystem
         PlayerPrefs.SetString("save", json);
         PlayerPrefs.Save();
 
-        Debug.Log("✅ Jogo salvo!");
+        Debug.Log($"✅ Jogo salvo! Cena: {data.sceneName}, Posição: ({data.playerX}, {data.playerY})");
     }
 
     public static SaveData LoadGame()
@@ -31,16 +31,41 @@ public static class SaveSystem
 
         string json = PlayerPrefs.GetString("save");
         SaveData data = JsonUtility.FromJson<SaveData>(json);
+        
+        // Log detalhado para debugging
+        Debug.Log($"📂 Carregando save: Cena: {data.sceneName}, Posição: ({data.playerX}, {data.playerY})");
+        
         return data;
     }
 
     public static bool HasSave()
     {
-        return PlayerPrefs.HasKey("save");
+        bool hasSave = PlayerPrefs.HasKey("save");
+        Debug.Log($"🔍 Verificando save: {(hasSave ? "Encontrado" : "Não encontrado")}");
+        return hasSave;
     }
 
     public static void DeleteSave()
     {
         PlayerPrefs.DeleteKey("save");
+        Debug.Log("🗑️ Save deletado!");
+    }
+    
+    // Método para debugging - mostra informações do save atual
+    public static void DebugSaveInfo()
+    {
+        if (HasSave())
+        {
+            SaveData data = LoadGame();
+            Debug.Log($"==== INFORMAÇÕES DO SAVE ATUAL ====\n" +
+                      $"Cena: {data.sceneName}\n" +
+                      $"Posição: ({data.playerX}, {data.playerY})\n" +
+                      $"Vida: {data.vidaAtual}\n" +
+                      $"================================");
+        }
+        else
+        {
+            Debug.Log("==== NENHUM SAVE ENCONTRADO ====");
+        }
     }
 }

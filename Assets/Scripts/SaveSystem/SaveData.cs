@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
+using UnityEngine;
 
-[Serializable]
+[System.Serializable]
 public class SaveData
 {
     public string sceneName;
