@@ -564,6 +564,23 @@ public class PlayerController2D : MonoBehaviour
         queuedSlashAfterSlice = queuedSliceAfterSlash = false;
         isSlashActive = isSliceFrozen = isComboDashing = isDashing = false;
 
+        // Zeramos as moedas quando o player morre
+        coinsCollected = 0;
+        
+        // Atualiza o GameSession para sincronizar as moedas zeradas
+        GameSession gameSession = GameSession.Instance;
+        if (gameSession != null)
+        {
+            gameSession.moedas = 0;
+        }
+
+        // Atualiza a UI de moedas
+        CoinUIController coinUI = FindObjectOfType<CoinUIController>();
+        if (coinUI != null)
+        {
+            coinUI.UpdateCoinText();
+        }
+
         animator.SetTrigger("Die");
 
         // Tocar som de morte

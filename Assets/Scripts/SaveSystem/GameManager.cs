@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
+
 public class GameManager : MonoBehaviour
 {
     // Singleton pattern
@@ -26,18 +28,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
+    public void Start()
     {
         // Encontra referências importantes se forem nulas
         if (player == null)
             player = FindObjectOfType<PlayerController2D>();
-            
+
         if (deathUI == null)
             deathUI = FindObjectOfType<DeathUIController>();
-            
+
         if (healthBar == null)
             healthBar = FindObjectOfType<HealthBar>();
-        
+
+        // Verifica se existe um GameSession e sincroniza moedas se necessário
+        GameSession gameSession = GameSession.Instance;
+        if (gameSession != null && player != null)
+        {
+            Debug.Log("💰 Sincronizando moedas com GameSession: " + gameSession.moedas);
+            // Se tivermos um save, vamos respeitar as moedas dele
+            // Caso contrário, sincronizamos do GameSession
+            if (!SaveSystem.HasSave())
+            {
+                player.coinsCollected = gameSession.moedas;
+            }
+        }
+
         // Se não houver save e estivermos na primeira cena do jogo, cria um save inicial
         if (!SaveSystem.HasSave() && IsFirstScene())
         {
@@ -53,12 +68,12 @@ public class GameManager : MonoBehaviour
             LoadGame();
         }
     }
-    
+
     // Verifica se estamos na primeira cena do jogo
     private bool IsFirstScene()
     {
         // Substitua "SeuNomeDaPrimeiraCena" pelo nome real da sua primeira cena
-        return SceneManager.GetActiveScene().name == "Level1" || 
+        return SceneManager.GetActiveScene().name == "Level1" ||
                SceneManager.GetActiveScene().buildIndex == 0;
     }
 
@@ -69,7 +84,7 @@ public class GameManager : MonoBehaviour
         if (data != null)
         {
             Debug.Log($"📥 Dados carregados. Cena alvo: {data.sceneName}, Cena atual: {SceneManager.GetActiveScene().name}");
-            
+
             if (SceneManager.GetActiveScene().name != data.sceneName)
             {
                 Debug.Log($"🔄 Carregando cena: {data.sceneName}");
@@ -91,12 +106,12 @@ public class GameManager : MonoBehaviour
     public void Respawn()
     {
         Debug.Log("🔄 Método Respawn do GameManager chamado");
-        
+
         if (deathUI != null)
             deathUI.HideDeathScreen();
         else
             Debug.LogWarning("⚠️ deathUI é nulo ao tentar esconder a tela de morte");
-            
+
         // Verifica se existe um save antes de tentar carregar
         if (SaveSystem.HasSave())
         {
@@ -114,19 +129,19 @@ public class GameManager : MonoBehaviour
     public void PlayerMorreu()
     {
         Debug.Log("☠️ Jogador morreu!");
-        
+
         // Buscar a referência do deathUI se for nula
         if (deathUI == null)
         {
             Debug.Log("🔍 Buscando referência do DeathUIController");
             deathUI = FindObjectOfType<DeathUIController>();
         }
-        
+
         if (deathUI != null)
         {
             Debug.Log("🔄 Mostrando tela de morte");
             deathUI.ShowDeathScreen();
-            
+
             // Certifique-se de que todos os botões na UI estão configurados
             ConfigureDeathUIButtons();
         }
@@ -135,7 +150,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError("❌ DeathUIController não encontrado na cena!");
         }
     }
-    
+
     // Método para configurar os botões da UI de morte
     private void ConfigureDeathUIButtons()
     {
@@ -145,7 +160,7 @@ public class GameManager : MonoBehaviour
             if (respawnBtn == null)
             {
                 Debug.LogWarning("⚠️ Script RespawnButton não encontrado na DeathUI");
-                
+
                 // Tenta encontrar botões regulares e configurá-los manualmente
                 Button[] buttons = deathUI.GetComponentsInChildren<Button>(true);
                 foreach (Button btn in buttons)
@@ -168,12 +183,12 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"🔄 Cena carregada: {scene.name}");
-        
+
         // Garante que as referências sejam encontradas na nova cena
         player = FindObjectOfType<PlayerController2D>();
         deathUI = FindObjectOfType<DeathUIController>();
         healthBar = FindObjectOfType<HealthBar>();
-        
+
         SaveData data = SaveSystem.LoadGame();
         if (data != null)
         {
@@ -183,6 +198,21 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("❌ Dados do save não encontrados após carregar cena!");
+
+            // Fallback: Se não tiver save mas tiver GameSession, pelo menos mantém as moedas
+            GameSession gameSession = GameSession.Instance;
+            if (gameSession != null && player != null)
+            {
+                Debug.Log("💰 Usando moedas do GameSession como fallback: " + gameSession.moedas);
+                player.coinsCollected = gameSession.moedas;
+
+                // Atualiza a UI de moedas
+                CoinUIController coinUI = FindObjectOfType<CoinUIController>();
+                if (coinUI != null && coinUI.coinText != null)
+                {
+                    coinUI.coinText.text = $"{player.coinsCollected}";
+                }
+            }
         }
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -237,6 +267,27 @@ public class GameManager : MonoBehaviour
         {
             healthBar.SetMaxHealth(player.maxHealth);
             healthBar.SetHealth(player.currentHealth);
+        }
+    }
+
+    public void SalvarAntesDeTrocarCena()
+    {
+        Debug.Log("🔄 Salvando estado antes de trocar de cena");
+        
+        if (player != null)
+        {
+            // Salva o estado atual incluindo moedas
+            SaveSystem.SaveGame(player);
+            
+            // Também atualiza o GameSession
+            GameSession gameSession = GameSession.Instance;
+            if (gameSession != null)
+            {
+                Debug.Log($"💰 Atualizando GameSession com {player.coinsCollected} moedas");
+                gameSession.moedas = player.coinsCollected;
+                gameSession.vida = player.currentHealth;
+                gameSession.SalvarEstado(player);
+            }
         }
     }
 
