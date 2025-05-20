@@ -7,7 +7,10 @@
  */
 using UnityEngine;
 
-[RequireComponent(typeof(Animator), typeof(Rigidbody2D), typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(AudioSource))]
 public class BossController : MonoBehaviour
 {
     /*──────────────── Movimento (ocioso) ─────────────*/
@@ -45,6 +48,21 @@ public class BossController : MonoBehaviour
     [SerializeField] KnifeProjectile[] knivesHigh;   // duas facas do "primeiro" disparo
     [SerializeField] KnifeProjectile[] knivesLow;    // duas facas do "segundo" disparo
 
+      /*──────────────── Audio ──────────────────────────*/
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [Tooltip("Som do ataque estacionário")]
+    [SerializeField] private AudioClip stationaryAttackClip;
+    [Tooltip("Som do ataque em movimento")]
+    [SerializeField] private AudioClip moveAttackClip;
+    [Tooltip("Som do air‑slam")]
+    [SerializeField] private AudioClip slamAttackClip;
+    [SerializeField, Range(0f,1f)] private float attackVolume = 1f;
+
+    [Tooltip("Som ao tomar dano")]
+    [SerializeField] private AudioClip damageTakenClip;
+    [SerializeField, Range(0f,1f)] private float damageTakenVolume = 1f;
+
     /*──────────────── Referências & estado ───────────*/
     Animator       anim;
     Rigidbody2D    rb;
@@ -69,6 +87,7 @@ public class BossController : MonoBehaviour
         anim = GetComponent<Animator>();
         rb   = GetComponent<Rigidbody2D>();
         sr   = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
 
         baseScaleX     = Mathf.Abs(transform.localScale.x);
         currentHealth  = maxHealth;
@@ -143,6 +162,11 @@ public class BossController : MonoBehaviour
         
         bool movingNow = Mathf.Abs(rb.linearVelocity.x) > 0.01f;
         anim.SetTrigger(movingNow ? "MoveAttackPrep" : "StationaryAttack");
+
+        // toca o som apropriado
+        AudioClip clip = movingNow ? moveAttackClip : stationaryAttackClip;
+        if (clip != null)
+            audioSource.PlayOneShot(clip, attackVolume);
     }
 
     public void TriggerSlam()                // AirAttackSlam
@@ -153,6 +177,9 @@ public class BossController : MonoBehaviour
         ForceOffAllAttackColliders();
         
         anim.SetTrigger("AirAttackSlam");
+
+        if (slamAttackClip != null)
+            audioSource.PlayOneShot(slamAttackClip, attackVolume);
     }
 
     /*──────────────── Vanish / Appear ───────────────*/
@@ -212,6 +239,10 @@ public class BossController : MonoBehaviour
     public void TakeDamage()                 // chamado pela IA
     {
         if (isDead) return;
+
+        // som de dano
+        if (damageTakenClip != null)
+            audioSource.PlayOneShot(damageTakenClip, damageTakenVolume);
 
         currentHealth = Mathf.Max(currentHealth - 1, 0);
         anim.SetTrigger("Hit");
