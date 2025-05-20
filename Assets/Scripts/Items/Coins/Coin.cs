@@ -10,6 +10,7 @@ public class Coin : MonoBehaviour
     [SerializeField] private float attractionRadius =  2f;   // Raio de ativação
     [SerializeField] private float collectionDelay  =  0.3f; // Tempo mínimo antes de poder coletar
     [SerializeField] private float attractionDelay  =  1f;   // Tempo para começar a atrair
+    [SerializeField] private int coinValue = 1;              // Valor da moeda (sempre 1)
     #endregion
 
     #region --- Internos ---
@@ -17,6 +18,7 @@ public class Coin : MonoBehaviour
     private Rigidbody2D rb;
     private bool  isAttracted;
     private float spawnTime;
+    private bool  isCollected = false;  // Flag para evitar coletas duplicadas
 
     private CircleCollider2D physicsCol;   // sólido
     private CircleCollider2D triggerCol;   // gatilho (player)
@@ -78,20 +80,37 @@ public class Coin : MonoBehaviour
     /* ---------- Coleta (gatilho) ---------- */
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Trigger entrou com: " + col.name);
-
+        // Verifica se já foi coletada
+        if (isCollected) return;
+        
         if (!col.CompareTag("Player")) return;
-        Debug.Log("É o Player!");
-
+        
         if (Time.time < spawnTime + collectionDelay) return;
 
+        // Marca como coletada para evitar duplicação
+        isCollected = true;
+        
+        // Adiciona a moeda (sempre valor 1)
         if (col.TryGetComponent(out PlayerController2D pc))
         {
-            pc.coinsCollected++;
-            Debug.Log("Moeda coletada!");
+            pc.coinsCollected += coinValue;
+            Debug.Log($"Moeda coletada! Total agora: {pc.coinsCollected}");
+            
+            // Atualiza o GameSession
+            GameSession gameSession = GameSession.Instance;
+            if (gameSession != null)
+            {
+                gameSession.moedas = pc.coinsCollected;
+            }
+            
+            // Tenta atualizar a UI diretamente
+            CoinUIController coinUI = FindObjectOfType<CoinUIController>();
+            if (coinUI != null)
+            {
+                coinUI.UpdateCoinText();
+            }
         }
 
         Destroy(gameObject);
     }
-
 }

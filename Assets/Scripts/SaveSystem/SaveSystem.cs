@@ -11,6 +11,7 @@ public static class SaveSystem
         data.playerX = player.transform.position.x;
         data.playerY = player.transform.position.y;
         data.vidaAtual = player.currentHealth;
+        data.moedasColetadas = player.coinsCollected;
 
         // data.itensColetados = inventario.GetItens();
 
@@ -18,7 +19,7 @@ public static class SaveSystem
         PlayerPrefs.SetString("save", json);
         PlayerPrefs.Save();
 
-        Debug.Log($"✅ Jogo salvo! Cena: {data.sceneName}, Posição: ({data.playerX}, {data.playerY})");
+        Debug.Log($"✅ Jogo salvo! Cena: {data.sceneName}, Posição: ({data.playerX}, {data.playerY}), Moedas: {data.moedasColetadas}");
     }
 
     public static SaveData LoadGame()
@@ -61,6 +62,7 @@ public static class SaveSystem
                       $"Cena: {data.sceneName}\n" +
                       $"Posição: ({data.playerX}, {data.playerY})\n" +
                       $"Vida: {data.vidaAtual}\n" +
+                      $"Moedas: {data.moedasColetadas}\n" +
                       $"================================");
         }
         else
