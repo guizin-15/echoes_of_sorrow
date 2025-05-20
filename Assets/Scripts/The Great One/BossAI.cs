@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BossController))]
 public class BossAI : MonoBehaviour
@@ -289,7 +290,16 @@ public class BossAI : MonoBehaviour
         Debug.Log("<color=red>=== BOSS KILLED ===</color>");
         phase = Phase.Dead;
         StopAllCoroutines();
-        ctrl.overrideMovement = true;   // garante que nunca mais se mova
+        ctrl.overrideMovement = true; // garante que nunca mais se mova
+
+        // Aguarda um tempo antes de trocar de cena
+        StartCoroutine(LoadCreditsAfterDelay(2f));
+    }
+
+    IEnumerator LoadCreditsAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene("Credits");
     }
 
     // MÉTODO NOVO: centraliza a lógica de iniciar o teleporte defensivo

@@ -3085,6 +3085,10 @@ PrefabInstance:
       value: The Great One
       objectReference: {fileID: 0}
     - target: {fileID: 7956008437530906785, guid: 43fca39b4d8e44a86aff77e4983eaf14, type: 3}
+      propertyPath: maxHealth
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7956008437530906785, guid: 43fca39b4d8e44a86aff77e4983eaf14, type: 3}
       propertyPath: bossHealthBar
       value: 
       objectReference: {fileID: 1955091943}

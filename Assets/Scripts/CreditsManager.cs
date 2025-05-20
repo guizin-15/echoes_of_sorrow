@@ -1,22 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CreditsManager : MonoBehaviour
 {
     public ScrollRect scrollRect;
-    public GameObject backButton;
+    public float delayBeforeMenu = 5f; // tempo após o fim do scroll
 
-    void Start()
-    {
-        backButton.SetActive(false); // Esconde no início
-    }
+    private bool hasReachedEnd = false;
 
     void Update()
     {
-        // Quando o scroll chega ao topo (0)
-        if (scrollRect.verticalNormalizedPosition <= 0.001f)
+        if (!hasReachedEnd && scrollRect.verticalNormalizedPosition <= 0.001f)
         {
-            backButton.SetActive(true);
+            hasReachedEnd = true;
+            Invoke(nameof(GoToMenu), delayBeforeMenu);
         }
+    }
+
+    void GoToMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }
