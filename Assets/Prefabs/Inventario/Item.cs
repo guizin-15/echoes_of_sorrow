@@ -9,10 +9,17 @@ public class Item : MonoBehaviour
 
     private InventarioController inventario;
 
-    private void Awake()
+    private void Start()
     {
-        inventario = GameObject
-            .Find("Inventory")              
-            .GetComponent<InventarioController>();
+        var root = GameObject.FindWithTag("InventoryUI");
+        if (root == null)
+        {
+            Debug.LogError("[Item] could not find InventoryUI root!");
+            return;
+        }
+
+        inventario = root.GetComponent<InventarioController>();
+        if (inventario == null)
+            Debug.LogError("[Item] InventarioController missing on InventoryUI!");
     }
 }
