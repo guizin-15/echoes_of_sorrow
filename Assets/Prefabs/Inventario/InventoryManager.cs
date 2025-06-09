@@ -77,17 +77,17 @@ public class InventoryManager : MonoBehaviour
             uiController.DeselectAll();
     }
 
-        void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-            ToggleUI();
-    }
 
     // métodos de dados (chamados pelo ShopMenu, CardPickup etc)
     public void AddCard(CardData card)
     {
         if (card != null)
             InventoryCards.Add(card);
+    }
+
+        public void OnInventoryButton()
+    {
+        ToggleUI();
     }
 
     public void EquipCard(int slotIndex, CardData card)

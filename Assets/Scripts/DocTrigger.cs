@@ -4,29 +4,28 @@ public class DocTrigger : MonoBehaviour
 {
     private bool playerInRange = false;
 
-    [SerializeField] private DocUI docUI; // Agora referenciamos localmente
+    [SerializeField] private DocUI docUI;
 
     void Start()
     {
-        // Se não tiver setado no Inspector, busca no próprio prefab
         if (docUI == null)
             docUI = GetComponentInChildren<DocUI>();
     }
 
-    void Update()
+    public void OnDocButton()
     {
-        if (playerInRange && Input.GetKeyDown(KeyCode.E))
-        {
-            docUI.ShowDocument(); 
-        }
+        if (playerInRange)
+            docUI.ShowDocument();
     }
+
+    // Remova todo o Update()
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            docUI.ShowPrompt(true);
+            docUI.ShowPrompt(true);  // aqui mostra o prompt (agora um botão)
         }
     }
 

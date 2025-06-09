@@ -185,32 +185,35 @@ public class PlayerController2D : MonoBehaviour
     }
 
     private void ReadInput()
+{
+    float keyboard  = Input.GetAxisRaw("Horizontal");
+    float touch     = (MobileInputManager.I.right ?  1f : 0f)
+                    - (MobileInputManager.I.left  ?  1f : 0f);
+    moveInput.x     = keyboard + touch;
+
+    if (Input.GetKeyDown(KeyCode.Space) || MobileInputManager.I.jump)
+        jumpBufferCounter = jumpBufferTime;
+
+    if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0f && !isWallJumping)
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
+
+    bool dashPressed = Input.GetMouseButtonDown(1)
+                || MobileInputManager.I.dash;
+    bool cdOK        = Time.time >= lastDashTime + dashCooldown;
+    if (dashPressed && cdOK && !isDashCoroutineActive && !isWallSliding && !IsAttacking())
     {
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            jumpBufferCounter = jumpBufferTime;
-
-        if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0f && !isWallJumping)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
-
-        /* ---------- DASH ---------- */
-        bool dashPressed = Input.GetMouseButtonDown(1);
-        bool cdOK        = Time.time >= lastDashTime + dashCooldown;
-
-        if (dashPressed && cdOK && !isDashCoroutineActive && !isWallSliding && !IsAttacking())
+        if (isGrounded)
         {
-            if (isGrounded)                           // dashes ilimitados no chão (respeita cooldown)
-            {
-                StartCoroutine(Dash());
-            }
-            else if (!hasDashedInAir)                 // 1 dash por salto
-            {
-                StartCoroutine(Dash());
-                hasDashedInAir = true;
-            }
+            StartCoroutine(Dash());
+        }
+        else if (!hasDashedInAir)
+        {
+            StartCoroutine(Dash());
+            hasDashedInAir = true;
         }
     }
+}
+
     #endregion
 
     #region === Checagens de Colisão ===

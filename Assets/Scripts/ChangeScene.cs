@@ -1,39 +1,32 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
-using System.Linq;
 
 public class ChangeScene : MonoBehaviour
 {
     [Header("Nome da próxima cena")]
     [SerializeField] private string cenaAlvo;
 
-    [Header("Tecla para trocar de fase")]
-    [SerializeField] private KeyCode teclaTroca = KeyCode.E;
-
-    [Header("UI de aviso")]
-    [SerializeField] private GameObject promptTexto;
+    [Header("UI de aviso (agora será um botão)")]
+    [SerializeField] private GameObject promptUI;
 
     private bool jogadorNaArea = false;
 
     void Start()
     {
-        if (promptTexto != null)
-            promptTexto.SetActive(false);
+        if (promptUI != null)
+            promptUI.SetActive(false);
     }
 
-    void Update()
+    // Este método será chamado pelo Button.OnClick()
+    public void OnChangeSceneButton()
     {
-        if (jogadorNaArea && Input.GetKeyDown(teclaTroca))
-        {
-            var player = FindAnyObjectByType<PlayerController2D>();
-            if (player != null && GameSession.Instance != null)
-            {
-                GameSession.Instance.SalvarEstado(player);
-            }
+        if (!jogadorNaArea) return;
 
-            SceneManager.LoadScene(cenaAlvo);
-        }
+        var player = FindAnyObjectByType<PlayerController2D>();
+        if (player != null && GameSession.Instance != null)
+            GameSession.Instance.SalvarEstado(player);
+
+        SceneManager.LoadScene(cenaAlvo);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -41,8 +34,8 @@ public class ChangeScene : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             jogadorNaArea = true;
-            if (promptTexto != null)
-                promptTexto.SetActive(true);
+            if (promptUI != null)
+                promptUI.SetActive(true);
         }
     }
 
@@ -51,8 +44,8 @@ public class ChangeScene : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             jogadorNaArea = false;
-            if (promptTexto != null)
-                promptTexto.SetActive(false);
+            if (promptUI != null)
+                promptUI.SetActive(false);
         }
     }
 }

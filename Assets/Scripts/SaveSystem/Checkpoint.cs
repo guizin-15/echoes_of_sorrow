@@ -11,26 +11,23 @@ public class Checkpoint : MonoBehaviour
     public GameObject saveFeedbackUI;
     public float feedbackDuration = 2f;
 
-    private void Update()
-    {
-        if (playerInRange && Input.GetKeyDown(KeyCode.F))
-        {
-            if (player != null)
-            {
-                SaveSystem.SaveGame(player);
-                Debug.Log("💾 Jogo salvo!");
+    // Remova todo o Update() que usava Input.GetKeyDown(KeyCode.F)
 
-                if (saveFeedbackUI != null)
-                {
-                    Debug.Log("✅ Mostrando mensagem de save!");
-                    StartCoroutine(ShowSaveMessage());
-                }
-                else
-                {
-                    Debug.LogWarning("⚠️ Campo SaveFeedbackUI está vazio!");
-                }
-            }
-        }
+    // 1) Esse método será chamado pelo seu Button.OnClick()
+    public void OnSaveButton()
+    {
+        if (!playerInRange || player == null) 
+            return;
+
+        // salva o jogo
+        SaveSystem.SaveGame(player);
+        Debug.Log("💾 Jogo salvo!");
+
+        // mostra feedback
+        if (saveFeedbackUI != null)
+            StartCoroutine(ShowSaveMessage());
+        else
+            Debug.LogWarning("⚠️ Campo SaveFeedbackUI está vazio!");
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -39,7 +36,6 @@ public class Checkpoint : MonoBehaviour
         {
             playerInRange = true;
             player = col.GetComponent<PlayerController2D>();
-
             if (savePromptUI != null)
                 savePromptUI.SetActive(true);
         }
@@ -51,7 +47,6 @@ public class Checkpoint : MonoBehaviour
         {
             playerInRange = false;
             player = null;
-
             if (savePromptUI != null)
                 savePromptUI.SetActive(false);
         }

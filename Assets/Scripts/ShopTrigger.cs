@@ -3,7 +3,6 @@ using UnityEngine;
 public class ShopTrigger : MonoBehaviour
 {
     [SerializeField] private ShopMenu shopMenu;
-    [SerializeField] private KeyCode openKey = KeyCode.E;
     [SerializeField] private GameObject openPromptUI;
 
     private bool playerInRange;
@@ -14,17 +13,15 @@ public class ShopTrigger : MonoBehaviour
             openPromptUI.SetActive(false);
     }
 
-    void Update()
+    // Este método será chamado pelo seu Button OnClick()
+    public void OnOpenShopButton()
     {
         if (!playerInRange || shopMenu == null) return;
 
-        if (Input.GetKeyDown(openKey))
-        {
-            if (shopMenu.IsOpen)
-                shopMenu.CloseShop();
-            else
-                shopMenu.OpenShop();
-        }
+        if (shopMenu.IsOpen)
+            shopMenu.CloseShop();
+        else
+            shopMenu.OpenShop();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -50,4 +47,3 @@ public class ShopTrigger : MonoBehaviour
         }
     }
 }
-

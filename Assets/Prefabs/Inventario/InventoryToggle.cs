@@ -1,8 +1,11 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class InventoryToggle : MonoBehaviour
+public class InventoryToggleButton : MonoBehaviour
 {
-    private GameObject          inventoryRoot;
-    private PlayerController2D  playerController;
+    // Este método vai no OnClick() do seu Button
+    public void OnClickToggleInventory()
+    {
+        if (InventoryManager.Instance != null)
+            InventoryManager.Instance.ToggleUI();
+    }
 }
