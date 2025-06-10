@@ -381,7 +381,10 @@ public class PlayerController2D : MonoBehaviour
     #region === Ataques (Slice ↔ Slash) ===
     private void HandleAttacks()
     {
-        if (!Input.GetMouseButtonDown(0) || isWallSliding || isTakingDamage) return;
+        // CORREÇÃO: Verifica tanto a tecla K quanto o input mobile
+        bool attackPressed = Input.GetKeyDown(KeyCode.K) || MobileInputManager.I.attack;
+        
+        if (!attackPressed || isWallSliding || isTakingDamage) return;
 
         if (isSliceFrozen)                    { queuedSlashAfterSlice = true; return; }
         if (isSlashActive || isComboDashing)  { queuedSliceAfterSlash = true; return; }

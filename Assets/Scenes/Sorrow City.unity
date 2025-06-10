@@ -86172,7 +86172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc90cda11fce5744bbbb5f3e66f8bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cenaAlvo: Castle
+  cenaAlvo: Ads 2
   promptUI: {fileID: 1406945698}
 --- !u!61 &1573383429
 BoxCollider2D:

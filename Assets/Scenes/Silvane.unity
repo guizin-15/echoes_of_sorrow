@@ -46185,7 +46185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc90cda11fce5744bbbb5f3e66f8bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cenaAlvo: Sorrow City
+  cenaAlvo: Ads
   promptUI: {fileID: 112903418}
 --- !u!61 &1700186294
 BoxCollider2D:
