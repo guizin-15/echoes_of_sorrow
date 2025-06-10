@@ -35,6 +35,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Ads.unity
     guid: bc4cd6ce93919415793311c0e7657788
+  - enabled: 1
+    path: Assets/Scenes/Ads 2.unity
+    guid: 35db2e8ab71a9477897dd8c0f71cfcfb
+  - enabled: 1
+    path: Assets/Scenes/Ads 3.unity
+    guid: 576ce50af18f64d4799688e324e04bd1
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
